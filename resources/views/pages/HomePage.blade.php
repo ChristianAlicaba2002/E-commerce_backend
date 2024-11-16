@@ -12,7 +12,7 @@
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
         .hero-section {
-            background: linear-gradient(rgba(255, 111, 0, 0.908), rgba(0, 0, 0, 0.804)),
+            background: linear-gradient( #FFA500, rgba(0, 0, 0, 0.804)),
                         url('/storage/coffee-bg.jpg') center/cover;
             /* background-image: url('/images/backgroundContact.jpg'); */
             height: 100vh;
@@ -54,20 +54,20 @@
     </style>
 </head>
 <body>
-    <!-- Navigation -->
+
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
             <a class="navbar-brand" href="{{'/'}}">
                 <img class="logo rounded-circle" src="/storage/logo.png" alt="Don Macchiatos Logo" height="40">
             </a>
             <div class="navbar-nav ms-auto">
-                <a class="nav-link" href="{{'DonMacPage'}}">Our Products</a>
+                <a class="nav-link" href="{{'DonMacPage'}}">Main Products</a>
                 <a class="nav-link" href="{{'SpecialProductPage'}}">Special Products</a>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
+  
     <section class="hero-section">
         <div class="container">
             <h1 class="display-1 mb-4" data-aos="fade-down">Don Macchiatos</h1>
@@ -77,7 +77,7 @@
         </div>
     </section>
 
-    <!-- About Section -->
+
     <section class="about-section">
         <div class="container">
             <div class="row">
@@ -112,7 +112,6 @@
         </div>
     </section>
 
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
@@ -121,10 +120,9 @@
             once: true
         });
 
-        // Add background to navbar on scroll
         window.addEventListener('scroll', function() {
             if (window.scrollY > 50) {
-                document.querySelector('.navbar').style.backgroundColor = '#000000e6';
+                document.querySelector('.navbar').style.backgroundColor = ' #FFA500';
             } else {
                 document.querySelector('.navbar').style.backgroundColor = 'transparent';
             }

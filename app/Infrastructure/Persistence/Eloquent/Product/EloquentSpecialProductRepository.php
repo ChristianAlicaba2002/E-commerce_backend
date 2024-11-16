@@ -14,9 +14,11 @@ class EloquentSpecialProductRepository implements SpecialRepository
         $productModel->id = $SpecialProduct->getId();
         $productModel->name = $SpecialProduct->getName();
         $productModel->price = $SpecialProduct->getPrice();
+        $productModel->description = $SpecialProduct->getDescription();
+        $productModel->category = $SpecialProduct->getCategory();
         $productModel->image = $SpecialProduct->getImage();
-        $productModel->created_at = $SpecialProduct->created_at();
-        $productModel->updated_at = $SpecialProduct->updated_at();
+        $productModel->created_at = $SpecialProduct->getCreated_at();
+        $productModel->updated_at = $SpecialProduct->getUpdated_at();
         $productModel->save();
     }
     
@@ -26,11 +28,19 @@ class EloquentSpecialProductRepository implements SpecialRepository
         $productModel->id = $SpecialProduct->getId();
         $productModel->name = $SpecialProduct->getName();
         $productModel->price = $SpecialProduct->getPrice();
+        $productModel->description = $SpecialProduct->getDescription();
+        $productModel->category = $SpecialProduct->getCategory();
         $productModel->image = $SpecialProduct->getImage();
-        $productModel->created_at = $SpecialProduct->created_at();
-        $productModel->updated_at = $SpecialProduct->updated_at();
+        $productModel->created_at = $SpecialProduct->getCreated_at();
+        $productModel->updated_at = $SpecialProduct->getUpdated_at();
         $productModel->save();
     }
+
+    public function delete(string $id): void
+    {
+        SpecialProductModel::where('id', $id)->delete();
+    }
+    
 
     public function findByID(string $id): ?SpecialProduct
     {
@@ -47,6 +57,8 @@ class EloquentSpecialProductRepository implements SpecialRepository
             id: $productModel->id,
             name: $productModel->name,
             price: $productModel->price,
+            description: $productModel->description,
+            category: $productModel->category,
             image: $productModel->image,
             created_at: $productModel->created_at,
             updated_at: $productModel->updated_at,
@@ -59,41 +71,78 @@ class EloquentSpecialProductRepository implements SpecialRepository
         if (!$productModel) {
             return null;
         }
-        return new SpecialProduct($productModel->id, $productModel->product_id, $productModel->name, $productModel->price, $productModel->created_at, $productModel->updated_at);
+        return new SpecialProduct(
+            id: $productModel->id,
+            name: $productModel->name,
+            price: $productModel->price,
+            description: $productModel->description,
+            category: $productModel->category,
+            image: $productModel->image,
+            created_at: $productModel->created_at,
+            updated_at: $productModel->updated_at
+        );
     }
 
-    public function searchProduct(string $search): array
+    public function searchProduct(string $search): array 
     {
-        $match = SpecialProductModel::where('product_id', $search)->orWhere('name', $search)->orWhere('price')->first();
+        // Cast price to string for comparison and ensure search term is treated as string
+        $searchTerm = (string) $search;
+        
+        $match = SpecialProductModel::where('product_id', $searchTerm)
+            ->orWhere('name', $searchTerm)
+            ->orWhere('price', $searchTerm) // Direct comparison instead of LIKE
+            ->first();
 
         $related = SpecialProductModel::where('id', '!=', $match?->id)
-            ->where('name', 'LIKE', "%{$search}%")
-            ->orWhere('product_id', 'LIKE', "%{$search}%")
-            ->orWhere('price', 'LIKE', "%{$search}%")->get();
+            ->where(function($query) use ($searchTerm) {
+                $query->where('name', 'LIKE', "%{$searchTerm}%")
+                    ->orWhere('product_id', 'LIKE', "%{$searchTerm}%")
+                    ->orWhere('price', $searchTerm); // Direct comparison for price
+            })
+            ->get();
 
         return [
             'match' => $match ? new SpecialProduct(
-                $match->id,
-                $match->product_id,
-                $match->name,
-                $match->price,
-                $match->image,
-                $match->created_at,
-                $match->updated_at,
+                id: $match->id,
+                name: $match->name,
+                price: $match->price,
+                description: $match->description,
+                category: $match->category,
+                image: $match->image,
+                created_at: $match->created_at,
+                updated_at: $match->updated_at
             ) : null,
             'related' => $related->map(
                 function ($product) {
                     return new SpecialProduct(
-                        $product->id,
-                        $product->product_id,
-                        $product->name,
-                        $product->price,
-                        $product->image,
-                        $product->created_at,
-                        $product->updated_at,
+                        id: $product->id,
+                        name: $product->name,
+                        price: $product->price,
+                        description: $product->description,
+                        category: $product->category,
+                        image: $product->image,
+                        created_at: $product->created_at,
+                        updated_at: $product->updated_at
                     );
                 }
             )->toArray()
         ];
-    }
+        }
+
+        public function filterByCategory(string $category): array
+        {
+        return SpecialProductModel::where('category', $category)
+            ->get()
+            ->map(fn($product) => new SpecialProduct(
+                id: $product->id,
+                name: $product->name,
+                price: $product->price,
+                description: $product->description,
+                category: $product->category,
+                image: $product->image,
+                created_at: $product->created_at,
+                updated_at: $product->updated_at
+            ))->toArray();
+        }
+
 }

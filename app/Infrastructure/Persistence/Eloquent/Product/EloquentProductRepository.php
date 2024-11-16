@@ -13,6 +13,7 @@ class EloquentProductRepository implements ProductRepository
         $productModel->id = $product->getId();
         $productModel->name = $product->getName();
         $productModel->price = $product->getPrice();
+        $productModel->description = $product->getDescription();
         $productModel->image = $product->getImage();
         $productModel->created_at = $product->created_at();
         $productModel->updated_at = $product->updated_at();
@@ -25,18 +26,25 @@ class EloquentProductRepository implements ProductRepository
         $productModel->id = $product->getId();
         $productModel->name = $product->getName();
         $productModel->price = $product->getPrice();
+        $productModel->description = $product->getDescription();
         $productModel->image = $product->getImage();
         $productModel->created_at = $product->created_at();
         $productModel->updated_at = $product->updated_at();
         $productModel->save();
     }
+
+    public function delete(string $id): void
+    {
+        SpecialProductModel::where('id', $id)->delete();
+    }
+    
     public function findByID(string $id): ?Product
     {
         $productModel = ProductModel::find($id);
         if (!$productModel) {
             return null;
         }
-        return new Product($productModel->id, $productModel->name, $productModel->price, $productModel->image, $productModel->created_at, $productModel->updated_at);
+        return new Product($productModel->id, $productModel->name, $productModel->price,  $productModel->image , $productModel->description, $productModel->created_at, $productModel->updated_at);
     }
     public function findAll(): array
     {
@@ -45,6 +53,7 @@ class EloquentProductRepository implements ProductRepository
             name: $productModel->name,
             price: $productModel->price,
             image: $productModel->image,
+            description: $productModel->description,
             created_at: $productModel->created_at,
             updated_at: $productModel->updated_at,
         ))->toArray();
@@ -56,7 +65,7 @@ class EloquentProductRepository implements ProductRepository
         if (!$productModel) {
             return null;
         }
-        return new Product($productModel->id, $productModel->product_id, $productModel->name, $productModel->price, $productModel->created_at, $productModel->updated_at);
+        return new Product($productModel->product_id, $productModel->name, $productModel->price,  $productModel->image, $productModel->description, $productModel->created_at, $productModel->updated_at);
     }
 
     public function searchProduct(string $search): array
@@ -75,6 +84,7 @@ class EloquentProductRepository implements ProductRepository
                 $match->name,
                 $match->price,
                 $match->image,
+                $match->description,
                 $match->created_at,
                 $match->updated_at,
             ) : null,
@@ -86,6 +96,7 @@ class EloquentProductRepository implements ProductRepository
                         $product->name,
                         $product->price,
                         $product->image,
+                        $product->description,
                         $product->created_at,
                         $product->updated_at,
                     );

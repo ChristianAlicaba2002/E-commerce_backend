@@ -11,6 +11,7 @@ class Product
         private ?string $name,
         private ?float $price,
         private ?string $image,
+        private ?string $description,
         private ?string $created_at,
         private ?string $updated_at
                                 
@@ -20,6 +21,7 @@ class Product
         $this->name = $name;
         $this->price = $price;
         $this->image = $image;
+        $this->description = $description;
         $this->created_at = $created_at;
         $this->updated_at = $updated_at;
     }
@@ -27,10 +29,11 @@ class Product
     public function toArray()
     {
         return [
-            // 'id' => $this->id,
+            'id' => $this->id,  
             'name' => $this->name,
             'price' => $this->price,
             'image'=> $this->image,
+            'description' => $this->description,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
@@ -51,6 +54,10 @@ class Product
     {
         return $this->image;
     }   
+    public function getDescription()
+    {
+        return $this->description;
+    }
     public function created_at()
     {
         return $this->created_at;
@@ -59,4 +66,44 @@ class Product
     {
         return $this->updated_at;
     }
+ 
+        
+    /** This function is setting the new value of the properties*/
+    public function setName(string $name)
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    public function setPrice(float $price)
+    {
+        $this->price = $price;
+        return $this;
+    }
+
+    public function setImage(string $image)
+    {
+        $this->image = $image;
+        return $this;
+    }
+
+
+    public function setDescription(string $description)
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    public function setCreatedAt(string $created_at)
+    {
+        $this->created_at = $created_at;
+        return $this;
+    }
+
+    public function setUpdatedAt(string $updated_at)
+    {
+        $this->updated_at = $updated_at;
+        return $this;
+    }
+
 }

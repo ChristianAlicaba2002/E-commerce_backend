@@ -80,3 +80,18 @@ document.getElementById('images').onchange = function(evt) {
         document.getElementById('imagessss').src = URL.createObjectURL(file);
     }
 };
+
+
+
+document.getElementById('images').addEventListener('change', function(event) {
+    const image = document.getElementById('imagessss');
+    const file = event.target.files[0];
+    
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            image.src = e.target.result;
+        }
+        reader.readAsDataURL(file);
+    }
+});

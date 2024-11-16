@@ -12,11 +12,14 @@
 </head>
 <style>
     :root {
-        --primary-orange: #ff6b00;
+        --primary-orange:#FFA500;
+        --secondary-orange:  #4f2000;
         --dark-bg: #1a1a1a;
         --darker-bg: #141414;
         --lighter-bg: #2d2d2d;
-    }
+        --lighter-font: #ffffff;
+        --darker-font: rgb(0, 0, 0); 
+    }   
     
     body {
         font-family: 'Poppins', sans-serif;
@@ -57,9 +60,14 @@
         transition: 0.3s;
     }
 
-    .menu-item:hover {
+    .menu-item:nth-child(2){
         background: var(--primary-orange);
-        color: white;
+        color: var(--lighter-font)
+    }
+
+    .menu-item:hover {
+        background: var(--secondary-orange);
+        color: var(--lighter-font);
     }
 
     .menu-item i {
@@ -80,11 +88,14 @@
         padding: 20px;
         margin-bottom: 20px;
         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        transition: transform 0.3s;
+        transition: transform 0.3s ease-in-out;
+        transition: 0.3s ease-in-out;
     }
 
     .dashboard-card:hover {
         transform: translateY(-5px);
+        background-color: var(--primary-orange);
+        color: var(--lighter-font);
     }
 
     .card-icon {
@@ -126,7 +137,7 @@
     }
 
     .btn-orange:hover {
-        background: #ff8533;
+        background: #ffb62f;
         transform: translateY(-2px);
     }
 
@@ -163,21 +174,30 @@
                 <a href="#" class="menu-item">
                     <i class="fas fa-home"></i>Dashboard
                 </a>
+                <a href="{{'/DonMacAllProducts'}}" class="menu-item">
+                    <i class="fa-solid fa-shop"></i>Products
+                </a>
             </div>
         </nav>
 
        
         <div class="main-content">
            
-            <div class="row mb-4">
-                <div class="col-md-3">
+            <div class="row mb-4 ">
+                <div class="col-md-3 ml-[10rem]">
                     <div class="dashboard-card">
                         <div class="card-icon bg-orange">
                             <i class="fas fa-box"></i>
                         </div>
                         <h4>Total Products</h4>
-                        <h2>6</h2>
-                        <p class="text-muted">+12123123213% from last month</p>
+                        @isset($products)
+                            @if($products->isEmpty())
+                                <h2>0</h2>
+                            @else
+                                <h2>{{count($products)}}</h2>
+                            @endif
+                            <p class="">+12% from last month 🛒</p>
+                        @endisset
                     </div>
                 </div>
                 <div class="col-md-3">
@@ -186,39 +206,62 @@
                             <i class="fas fa-peso-sign"></i>
                         </div>
                         <h4>Revenue</h4>
-                        <h2>₱25,000</h2>
-                        <p class="text-muted">Today's earnings wala gyapon</p>
+                        @isset($products)
+                            @if($products->isEmpty())
+                                <h2>0</h2>
+                            @else
+                                @php
+                                    $totalRevenue = 0;
+                                    foreach($products as $product) {
+                                        $totalRevenue += $product->price * 39 * 24;
+                                    }
+                                @endphp
+                                <h2>₱{{ number_format($totalRevenue, 2) }}</h2>
+                            @endif
+                            <p class="medium-font">2-years (39 sales/month) 🛃</p>
+                        @endisset
                     </div>
                 </div>
-                {{-- <div class="col-md-3">
+                <div class="col-md-3">
                     <div class="dashboard-card">
                         <div class="card-icon bg-orange">
-                            <i class="fas fa-shopping-cart"></i>
+                            <i class="fas fa-crown"></i>
                         </div>
-                        <h4>Orders</h4>
-                        <h2>45</h2>
-                        <p class="text-muted">Pending orders</p>
+                        <h4>Best Seller</h4>
+                        @isset($products)
+                            @if($products->isEmpty())
+                                <h2>No Products</h2>
+                            @else
+                                <h3>Caramel Macchiato</h3>
+                            @endif
+                            <p>500+ orders this month 💛</p>
+                        @endisset
                     </div>
-                </div> --}}
+                </div>
                 <div class="col-md-3">
                     <div class="dashboard-card">
                         <div class="card-icon bg-orange">
                             <i class="fas fa-users"></i>
                         </div>
                         <h4>Customers</h4>
-                        <h2>1,250</h2>
-                        <p class="text-muted">Total registered wala gyapon</p>
+                        <h2>+1M</h2>
+                        <p class="">Total registered 🧑🏻‍🦱</p>
                     </div>
                 </div>
             </div>
 
         
             @if(session('success'))
-                <div class="alert custom-alert alert-success alert-dismissible fade show" role="alert">
+                {{-- <div class="alert custom-alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div> --}}
+                <div class="alert alert-success custom-alert alert-dismissible fade show" role="alert">
                     <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
+
 
             @if(session('error'))
                 <div class="alert custom-alert alert-danger alert-dismissible fade show" role="alert">
@@ -250,6 +293,13 @@
                                         placeholder="Enter price" value="{{ old('price') }}">
                                 </div>
                                 @error('price')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Description</label>
+                                <textarea name="description" class="form-control @error('description') is-invalid @enderror" placeholder="Enter description">{{ old('description') }}</textarea>
+                                @error('description')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>

@@ -19,3 +19,4 @@ Route::get('allDonMacProduct', [DonMacController::class, 'getAllDonMacProduct'])
 
 /**This function is for API Special Product */
 Route::get('AllSpecialProduct',[SpecialProductController::class, 'getAllSpecialProduct']);
+

@@ -5,20 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="shortcut icon" href="/storage/logo.png" type="image/x-icon">
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <title>Special Products - Admin Dashboard</title>
 </head>
 <style>
     :root {
-        --primary-orange: #ff6b00;
+        --primary-orange: #FFA500;
+        --secondary-orange:  #4f2000;
         --dark-bg: #1a1a1a;
         --darker-bg: #141414;
         --lighter-bg: #2d2d2d;
+        --lighter-font: #ffffff;
+        --darker-font: #000000;
     }
     
     body {
@@ -58,16 +58,19 @@
         align-items: center;
         transition: 0.3s;
     }
+    .menu-item:nth-child(2){
+        background: var(--primary-orange);
+        color: var(--lighter-font)
+    }
 
     .menu-item:hover {
-        background: var(--primary-orange);
-        color: white;
+        background: var(--secondary-orange);
+        color: var(--lighter-font);
     }
 
     .menu-item i {
         margin-right: 10px;
     }
-
 
     .main-content {
         margin-left: 250px;
@@ -81,11 +84,14 @@
         padding: 20px;
         margin-bottom: 20px;
         box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        transition: transform 0.3s;
+        transition: transform 0.3s ease-in-out;
+        transition: 0.3s ease-in-out;
     }
 
-    .dashboard-card:hover {
+    .dashboard-card:hover  {
         transform: translateY(-5px);
+        background: var(--primary-orange);
+        color: var(--lighter-font)
     }
 
     .card-icon {
@@ -126,7 +132,7 @@
     }
 
     .btn-orange:hover {
-        background: #ff8533;
+        background: #ffb62f;
         transform: translateY(-2px);
     }
 
@@ -159,8 +165,11 @@
                 <a href="{{route('HomePage')}}" class="menu-item">
                     <i class="fa-solid fa-arrow-left"></i>Back to Home
                 </a>
-                <a href="#" class="menu-item">
+                <a href="#" class="menu-item ">
                     <i class="fas fa-home"></i>Dashboard
+                </a>
+                <a href="{{'/AllSpecialProducts'}}" class="menu-item">
+                    <i class="fa-solid fa-shop"></i>Products
                 </a>
             </div>
         </nav>
@@ -169,6 +178,7 @@
         <div class="main-content">
             
             <div class="row mb-4">
+
                 <div class="col-md-3">
                     <div class="dashboard-card">
                         <div class="card-icon bg-orange">
@@ -176,48 +186,84 @@
                         </div>
                         <h4>Total Products</h4>
                         @isset($products)
-                        <h2>{{$products}}</h2>
+                            @if($products->isEmpty())
+                                <h2>0</h2>
+                            @else
+                                <h2>{{count($products)}}</h2>
+                            @endif
                         @endisset
-                            <h2>12</h2>
-                            <p class="text-muted">+124124124124% from last month</p>          
+                            <p class="">+24% from last month 🛒</p>          
                     
                     </div>
                 </div>
+
                 <div class="col-md-3">
                     <div class="dashboard-card">
                         <div class="card-icon bg-orange">
                             <i class="fas fa-peso-sign"></i>
                         </div>
                         <h4>Revenue</h4>
-                        <h2>₱25,000</h2>
-                        <p class="text-muted">Today's earnings Wala gyapon</p>
+                        @isset($products)
+                            @if($products->isEmpty())
+                                <h2>0</h2>
+                            @else
+                               
+                                @php
+                                    $totalRevenue = 0;
+                                    foreach($products as $product) {
+                                        $totalRevenue += $product->price * 24;
+                                    }
+                                @endphp
+                                <h2>₱{{ number_format($totalRevenue, 2) }}</h2>
+                            @endif
+                            <p class="">2-years (24 sales/month) 🛃</p>
+                        @endisset
                     </div>
                 </div>
-                {{-- <div class="col-md-3">
+
+                <div class="col-md-3">
                     <div class="dashboard-card">
                         <div class="card-icon bg-orange">
-                            <i class="fas fa-shopping-cart"></i>
+                            <i class="fas fa-crown"></i>
                         </div>
-                        <h4>Orders</h4>
-                        <h2>45</h2>
-                        <p class="text-muted">Pending orders</p>
+                        <h4>Best Seller</h4>
+                        @isset($products)
+                            @if($products->isEmpty())
+                                <h2>No Products</h2>
+                            @else
+                                <h2>Strawberry Cake</h2>
+                            @endif
+                                <p>500+ orders this month 💛</p>
+                        @endisset
                     </div>
-                </div> --}}
+                </div>
+              
                 <div class="col-md-3">
                     <div class="dashboard-card">
                         <div class="card-icon bg-orange">
                             <i class="fas fa-users"></i>
                         </div>
                         <h4>Customers</h4>
-                        <h2>1,250</h2>
-                        <p class="text-muted">Total registered Wala gyapon</p>
-                    </div>
+                        <h2>+12M</h2>
+                        <p class="">Total registered 🧑🏻‍🦱</p>
+                    </div
                 </div>
             </div>
 
             @if(session('success'))
-                <div class="alert custom-alert alert-success alert-dismissible fade show" role="alert">
+                {{-- <div class="alert custom-alert alert-success alert-dismissible fade show" role="alert">
                     <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div> --}}
+                <div class="alert alert-success custom-alert alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            @if(session('error'))
+                <div class="alert alert-danger custom-alert alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
@@ -248,6 +294,26 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+                            <div class="mb-3">
+                                <label class="form-label">Description</label>
+                                <textarea name="description" class="form-control @error('description') is-invalid @enderror" placeholder="Enter description">{{ old('description') }}</textarea>
+                                @error('description')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+                            <label class="form-label">Category</label>
+                            <select name="category" class="form-control mb-4 @error('category') is-invalid @enderror">
+                                <option value="">Select a category</option>
+                                <option value="Pizza" {{ old('category') == 'Pizza' ? 'selected' : '' }}>Pizza</option>
+                                <option value="Drink" {{ old('category') == 'Drink' ? 'selected' : '' }}>Drinks</option>
+                                <option value="Dessert" {{ old('category') == 'Dessert' ? 'selected' : '' }}>Dessert</option>
+                            </select>
+                            
+                            @error('category')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+
                             <div class="mb-3">
                                 <label class="form-label">Product Image</label>
                                 <input type="file" id="images" class="form-control " name="image">
