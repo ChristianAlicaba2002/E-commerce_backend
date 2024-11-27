@@ -152,9 +152,13 @@
     .alert-success {
         border-left-color: var(--primary-orange);
     }
+
+
 </style>
 
 <body>
+
+
     <div class="wrapper">
      
         <nav class="sidebar">
@@ -162,7 +166,7 @@
                 <h3><i class="fa-brands fa-product-hunt"></i>Special Products</h3>
             </div>
             <div class="sidebar-menu">
-                <a href="{{route('HomePage')}}" class="menu-item">
+                <a href="{{route('LandingPage')}}" class="menu-item">
                     <i class="fa-solid fa-arrow-left"></i>Back to Home
                 </a>
                 <a href="#" class="menu-item ">
@@ -170,6 +174,9 @@
                 </a>
                 <a href="{{'/AllSpecialProducts'}}" class="menu-item">
                     <i class="fa-solid fa-shop"></i>Products
+                </a>
+                <a href="{{'/DeletedSpecialProducts'}}" class="menu-item">
+                    <i class="fa-solid fa-trash"></i>Deleted
                 </a>
             </div>
         </nav>
@@ -192,7 +199,7 @@
                                 <h2>{{count($products)}}</h2>
                             @endif
                         @endisset
-                            <p class="">+24% from last month 🛒</p>          
+                            <p class="">Available Products 🛒</p>          
                     
                     </div>
                 </div>
@@ -216,7 +223,7 @@
                                 @endphp
                                 <h2>₱{{ number_format($totalRevenue, 2) }}</h2>
                             @endif
-                            <p class="">2-years (24 sales/month) 🛃</p>
+                            <p class="">2-years 🛃</p>
                         @endisset
                     </div>
                 </div>
@@ -231,7 +238,7 @@
                             @if($products->isEmpty())
                                 <h2>No Products</h2>
                             @else
-                                <h2>Strawberry Cake</h2>
+                                <h3>Strawberry Cake</h3>
                             @endif
                                 <p>500+ orders this month 💛</p>
                         @endisset
@@ -251,10 +258,6 @@
             </div>
 
             @if(session('success'))
-                {{-- <div class="alert custom-alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div> --}}
                 <div class="alert alert-success custom-alert alert-dismissible fade show" role="alert">
                     <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -268,11 +271,12 @@
                 </div>
             @endif
 
+
+
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <div class="form-container">
                         <h3 class="mb-4"><i class="fas fa-plus-circle me-2"></i>Add New Product</h3>
-
                         <form id="productForm" action="/addspecialproducts" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="mb-3">
@@ -296,28 +300,32 @@
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Description</label>
-                                <textarea name="description" class="form-control @error('description') is-invalid @enderror" placeholder="Enter description">{{ old('description') }}</textarea>
-                                @error('description')
+                                <textarea name="description" class="form-control @error('description') is-invalid @enderror" placeholder="Enter description" value="{{ old('description') }}"></textarea>
+                                @error('description') 
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                           
+
+                            <div class="mb-3">
+                                <label class="form-label">Category</label>
+                                <select name="category" class="form-control mb-4 @error('category') is-invalid @enderror">
+                                    <option value="">Select a category</option>
+                                    <option value="Pizza" {{ old('category') == 'Pizza' ? 'selected' : '' }}>Pizza</option>
+                                    <option value="Drink" {{ old('category') == 'Drink' ? 'selected' : '' }}>Drinks</option>
+                                    <option value="Dessert" {{ old('category') == 'Dessert' ? 'selected' : '' }}>Dessert</option>
+                                    <option value="Combo" {{old('categroy') == 'Combo' ? 'selected' : ''}}>Combo</option>
+                                </select>
+                                @error('category') 
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
-                            <label class="form-label">Category</label>
-                            <select name="category" class="form-control mb-4 @error('category') is-invalid @enderror">
-                                <option value="">Select a category</option>
-                                <option value="Pizza" {{ old('category') == 'Pizza' ? 'selected' : '' }}>Pizza</option>
-                                <option value="Drink" {{ old('category') == 'Drink' ? 'selected' : '' }}>Drinks</option>
-                                <option value="Dessert" {{ old('category') == 'Dessert' ? 'selected' : '' }}>Dessert</option>
-                            </select>
-                            
-                            @error('category')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-
+                          
                             <div class="mb-3">
                                 <label class="form-label">Product Image</label>
-                                <input type="file" id="images" class="form-control " name="image">
-                                @error('image') is-invalid @enderror
+                                <input type="file" id="images" class="form-control @error('image') is-invalid @enderror" 
+                                    name="image">
                                 @error('image')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror

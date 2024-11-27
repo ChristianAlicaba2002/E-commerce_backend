@@ -2,19 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Application\Product\SpecialProducts;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Validator;
-use App\Application\Product\SpecialProducts;
 use Illuminate\Support\Facades\DB;
-use App\Models\SpecialProduct;
-
-use function Laravel\Prompts\error;
+use Illuminate\Support\Facades\Validator;
 
 class SpecialProductController extends Controller
 {
-
     private SpecialProducts $SpecialProducts;
 
     public function __construct(SpecialProducts $SpecialProducts)
@@ -27,24 +23,25 @@ class SpecialProductController extends Controller
      * **/
     public function getAllSpecialProduct()
     {
-        $SpecialProducts = $this->SpecialProducts->findAll();
+        // $SpecialProducts = $this->SpecialProducts->findAll();
 
-        $products = array_map(
-            fn($SpecialProducts) => $SpecialProducts->toArray(),
-            $SpecialProducts
-        );
+        // $products = array_map(
+        //     fn ($SpecialProducts) => $SpecialProducts->toArray(),
+        //     $SpecialProducts
+        // );
+
+        $products = DB::table('special_product')->get();
+
         return response()->json(compact('products'), 200);
     }
-    
+
     /**
      * Add a special product.
      * **/
-
-
     public function addSpecialProducts(Request $request)
     {
         $Incommingcredentials = $request->all();
-    
+
         $validator = Validator::make($Incommingcredentials, [
             'name' => [
                 'required',
@@ -55,30 +52,27 @@ class SpecialProductController extends Controller
                     if ($exists) {
                         $fail('This product name is  already exists.');
                     }
-                }
+                },
             ],
             'price' => 'required|numeric',
             'description' => 'required|string',
-            'category' => 'required|in:Pizza,Drink,Dessert',
+            'category' => 'required|in:Pizza,Drink,Dessert,Combo',
             'image' => 'nullable|image',
         ]);
-    
-       
+
         if ($validator->fails()) {
-            return redirect('/SpecialProductPage')->with('error', 'Error adding product: ' . $validator->errors());
+            return redirect('/SpecialProductPage')->with('error', 'Error adding product: '.$validator->errors());
         }
 
+        $product_id = $this->generateUniqueProductID();
 
-    
-        $id = $this->generateUniqueProductID();
-    
         $data = [];
-    
-        if($request->file(key:'image')){
-            $image = $request->file(key:'image');
+
+        if ($request->file(key: 'image')) {
+            $image = $request->file(key: 'image');
             $destinationPath = 'images';
 
-            $imageName = time() . "." . $image->getClientOriginalExtension();
+            $imageName = time().'.'.$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
             $data['image'] = $imageName;
         } else {
@@ -88,7 +82,7 @@ class SpecialProductController extends Controller
         $price = floatval($request->price);
 
         $this->SpecialProducts->create(
-            $id,
+            $product_id,
             $request->name,
             $price,
             $data['image'],
@@ -97,21 +91,23 @@ class SpecialProductController extends Controller
             Carbon::now()->toDateTimeString(),
             Carbon::now()->toDateTimeString()
         );
+
         return redirect('/SpecialProductPage')->with('success', 'Product Added Successfully');
     }
-    
+
     public function filterByCategory($category)
     {
         try {
             $products = $this->SpecialProducts->filterByCategory($category);
+
             return response()->json([
                 'success' => true,
-                'products' => $products
+                'products' => $products,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to fetch products'
+                'message' => 'Failed to fetch products',
             ], 500);
         }
     }
@@ -123,171 +119,146 @@ class SpecialProductController extends Controller
                 'Pizza' => count($this->SpecialProducts->filterByCategory('Pizza')),
                 'Drinks' => count($this->SpecialProducts->filterByCategory('Drinks')),
                 'Dessert' => count($this->SpecialProducts->filterByCategory('Dessert')),
+                'Combo' => count($this->SpecialProducts->filterByCategory('Combo')),
             ];
 
             return response()->json([
                 'success' => true,
-                'counts' => $counts
+                'counts' => $counts,
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to fetch category counts'
+                'message' => 'Failed to fetch category counts',
             ], 500);
         }
     }
 
-
-
-
-
-
-
-    /**
-     * Generate a uniqueProductId.
-     * **/
+    // Generate a uniqueProductId
     private function generateUniqueProductID(): string
     {
         do {
             $id = $this->generateRandomAlphanumericID(6);
-        } while ($this->SpecialProducts->findByProductID($id) !== null);
-    
+            // Check if the generated ID already exists
+            $exists = $this->SpecialProducts->findByID($id);
+        } while ($exists !== null); // Ensure the ID is unique
+
         return $id;
     }
-    /**
-     * Generate a randomnumericId.
-     * **/
 
+    //  Generate a randomnumericId.
     private function generateRandomAlphanumericID(int $length = 10): string
-        {   
-            $result = substr(bin2hex(random_bytes(ceil($length / 2))), 0, $length);       
-            return $result;
-        }
+    {
+        $result = substr(bin2hex(random_bytes(ceil($length / 2))), 0, $length);
 
-    public function time(){
+        return $result;
+    }
+
+    public function time()
+    {
         return Carbon::now()->toDateTimeString();
     }
 
-    /**
-     * Update a special product.
-     * **/
-    public function updateSpecialProduct(Request $request, $id)
+    public function updateSpecialProduct(Request $request, $product_id)
     {
-        $product = $this->SpecialProducts->findByID($id);
-        
-        if (!$product) {
-            return response()->json(['message' => 'Product not found'], 404);
+        $product = DB::table('special_product')->where('id', $product_id)->first();
+        if (! $product) {
+            return redirect('/AllSpecialProducts')->with('error', 'product not found');
         }
-    
-        try {
-            $request->validate([
-                'name' => 'required|string',
-                'price' => 'required|numeric|min:0',
-                'description' => 'required|string',
-                'image' => 'nullable|image'
-            ]);
-    
-            $product->setName(trim(strip_tags($request->name)));
-            $product->setPrice(number_format((float)$request->price, 2, '.', ''));
-            $product->setDescription(trim(strip_tags($request->description)));
-    
-            if ($request->hasFile('image')) {
-                if ($product->getImage() && $product->getImage() !== 'default.jpg' && 
-                    file_exists(public_path('images/' . $product->getImage()))) {
-                    unlink(public_path('images/' . $product->getImage()));
-                }
-                
-                // Storing new image
-                $image = $request->file('image');
-                $imageName = 'special_product_' . time() . '_' . $id . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('images'), $imageName);
-                $product->setImage($imageName);
-            }
 
-            $product->setCreated_at(now());
-            $product->setUpdated_at(now());
-  
-            $this->SpecialProducts->update($id, $product->getName(), $product->getPrice(), $product->getImage(), $product->getDescription(), $product->getCategory(), $product->getCreated_at(), $product->getUpdated_at());
-            return redirect('/AllSpecialProducts')->with('success', 'Product Updated Successfully');
-    
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json([
-                'message' => 'Validation failed',
-                'errors' => $e->errors()
-            ], 422);
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'An error occurred while updating the product',
-                'error' => $e->getMessage()
-            ], 500);
+        Validator::make($request->all(), [
+            'name' => 'required|string',
+            'price' => 'required|numeric',
+            'description' => 'required|string',
+            'image' => 'required|nullable',
+        ]);
+
+        $data = [];
+
+        if ($request->file(key: 'image')) {
+            $image = $request->file(key: 'image');
+            $destinationPath = 'images';
+
+            $imageName = time().'.'.$image->getClientOriginalExtension();
+            $image->move($destinationPath, $imageName);
+            $data['image'] = $imageName; // Store the image name in the data array
+        } else {
+            $data['image'] = $product->image ?? 'default.jpg';
+            $imageName = $data['image']; // Ensure $imageName is defined
         }
+
+        $price = floatval($request->price);
+
+        $this->SpecialProducts->update(
+            $product->id,
+            $request->name,
+            $price,
+            $imageName,
+            $request->description,
+            $product->category,
+            $product->created_at,
+            Carbon::now()->toDateTimeString() // Changed to toDateTimeString() for consistency
+        );
+
+        return redirect('/AllSpecialProducts')->with('success', 'Product updated successfully');
+
     }
 
-     
-    // public function updateSpecialProduct(Request $request, $id)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'name' => 'string',
-    //         'price' => 'numeric',
-    //         'description' => 'string',
-    //         'image' => 'nullable|image',
-    //     ]);
-    
-    //     if ($validator->fails()) {
-    //         return response()->json([
-    //             'message' => 'Invalid Products.',
-    //             'errors' => $validator->errors()
-    //         ], 422);
-    //     }
-    
-    //     // $product = $this->SpecialProducts->findByProductID($id);
-    //     $product = $this->SpecialProducts->findByID($id);
-
-    //     if (!$product) {
-    //         return response()->json(['message' => 'Product not found'], 404);
-    //     }
-        
-    //     $imageToUpdate = $product->getImage($id);
-
-    //     if ($request->hasFile('image')) {
-    //         $image = $request->file('image');
-    //         $destinationPath = 'images';
-            
-    //         $imageName = 'special_product_' . time() . '_' . $id . '.' . $image->getClientOriginalExtension();
-            
-    //         $image->move($destinationPath, $imageName);
-            
-    //         if ($imageToUpdate && $imageToUpdate !== 'default.jpg') {
-    //             $oldImagePath = public_path($destinationPath . '/' . $imageToUpdate);
-    //             if (file_exists($oldImagePath)) {
-    //                 unlink($oldImagePath);
-    //             }
-    //         }
-            
-    //         $imageToUpdate = $imageName;
-    //     }
-
-    //     $price = floatval($request->price);
-        
-    //     $this->SpecialProducts->update(
-    //         $id,
-    //         $request->name,
-    //         $price,
-    //         $imageToUpdate,
-    //         $request->description,
-    //         Carbon::now()->toDateTimeString(),
-    //         Carbon::now()->toDateTimeString()
-    //     );
-
-
-    //     return redirect('/AllSpecialProducts')->with('success', 'Product Updated Successfully');
-    // }
-    
-
-    public function deleteEachProduct($id)
+    public function deleteEachSpecialProduct($id)
     {
+        $product = DB::table('special_product')->where('id', $id)->first();
+        if (! $product) {
+            return redirect('/AllSpecialProducts')->with('error', 'Product not found');
+        }
+
         DB::table('special_product')->where('id', $id)->delete();
+
+        DB::table('deleted_special')->insert([
+            'product_id' => $product->product_id,
+            'name' => $product->name,
+            'price' => $product->price,
+            'description' => $product->description,
+            'category' => $product->category,
+            'image' => $product->image,
+            'created_at' => $product->created_at,
+            'updated_at' => Carbon::now()->toDateTimeLocalString(), // Ensure only month, day, and year are included // Updated to include only month, day, and year
+        ]);
+
+        // $this->SpecialProducts->restore(
+        //     $product->product_id,
+        //     $product->name,
+        //     $product,
+        //     $product->image,
+        //     $product->description,
+        //     $product->category,
+        //     Carbon::now()->toDateTimeString(),
+        //     Carbon::now()->toDateTimeString()
+        // );
+
         return redirect('/AllSpecialProducts')->with('success', 'Product deleted successfully');
     }
-    
+
+    public function RestoringSpecialProduct($id)
+    {
+        $product = DB::table('deleted_special')->where('id', $id)->first();
+
+        if (! $product) {
+            return redirect('/DeletedSpecialProducts')->with('error', 'Product not found');
+        }
+
+        DB::table('deleted_special')->where('id', $id)->delete();
+
+        DB::table('special_product')->insert([
+            'product_id' => $product->product_id, // Use the correct property
+            'name' => $product->name,
+            'price' => $product->price,
+            'description' => $product->description,
+            'category' => $product->category,
+            'image' => $product->image,
+            'created_at' => $product->created_at,
+            'updated_at' => $product->updated_at,
+        ]);
+
+        return redirect('/DeletedSpecialProducts')->with('success', 'Product restore successfully');
+    }
 }

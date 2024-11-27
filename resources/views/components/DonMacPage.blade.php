@@ -168,7 +168,7 @@
                 <h3><i class="fas fa-coffee me-2"></i>Don Macchiatos</h3>
             </div>
             <div class="sidebar-menu">
-                <a href="{{route('HomePage')}}" class="menu-item">
+                <a href="{{route('LandingPage')}}" class="menu-item">
                     <i class="fa-solid fa-arrow-left"></i>Back to Home
                 </a>
                 <a href="#" class="menu-item">
@@ -176,6 +176,9 @@
                 </a>
                 <a href="{{'/DonMacAllProducts'}}" class="menu-item">
                     <i class="fa-solid fa-shop"></i>Products
+                </a>
+                <a href="{{'/DeletedDonMacProducts'}}" class="menu-item">
+                    <i class="fa-solid fa-trash"></i>Deleted
                 </a>
             </div>
         </nav>
@@ -196,7 +199,7 @@
                             @else
                                 <h2>{{count($products)}}</h2>
                             @endif
-                            <p class="">+12% from last month 🛒</p>
+                            <p class="">Available Products 🛒</p>
                         @endisset
                     </div>
                 </div>
@@ -218,7 +221,7 @@
                                 @endphp
                                 <h2>₱{{ number_format($totalRevenue, 2) }}</h2>
                             @endif
-                            <p class="medium-font">2-years (39 sales/month) 🛃</p>
+                            <p class="medium-font">2-years 🛃</p>
                         @endisset
                     </div>
                 </div>
@@ -232,7 +235,7 @@
                             @if($products->isEmpty())
                                 <h2>No Products</h2>
                             @else
-                                <h3>Caramel Macchiato</h3>
+                                <h2>Dark Forest</h2>
                             @endif
                             <p>500+ orders this month 💛</p>
                         @endisset
@@ -252,10 +255,6 @@
 
         
             @if(session('success'))
-                {{-- <div class="alert custom-alert alert-success alert-dismissible fade show" role="alert">
-                    <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div> --}}
                 <div class="alert alert-success custom-alert alert-dismissible fade show" role="alert">
                     <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>

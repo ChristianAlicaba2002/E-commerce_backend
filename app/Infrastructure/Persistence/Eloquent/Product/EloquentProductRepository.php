@@ -9,8 +9,8 @@ class EloquentProductRepository implements ProductRepository
 {
     public function create(Product $product): void
     {
-        $productModel = ProductModel::find($product->getId()) ?? new ProductModel();
-        $productModel->id = $product->getId();
+        $productModel = ProductModel::find($product->getProduct_id()) ?? new ProductModel();
+        $productModel->product_id = $product->getProduct_id();
         $productModel->name = $product->getName();
         $productModel->price = $product->getPrice();
         $productModel->description = $product->getDescription();
@@ -22,8 +22,8 @@ class EloquentProductRepository implements ProductRepository
     
     public function update(Product $product): void
     {
-        $productModel = ProductModel::find($product->getId()) ?? new ProductModel();
-        $productModel->id = $product->getId();
+        $productModel = ProductModel::find($product->getProduct_id()) ?? new ProductModel();
+        $productModel->id = $product->getProduct_id();
         $productModel->name = $product->getName();
         $productModel->price = $product->getPrice();
         $productModel->description = $product->getDescription();
@@ -35,7 +35,7 @@ class EloquentProductRepository implements ProductRepository
 
     public function delete(string $id): void
     {
-        SpecialProductModel::where('id', $id)->delete();
+        ProductModel::where('id', $id)->delete();
     }
     
     public function findByID(string $id): ?Product
@@ -46,10 +46,11 @@ class EloquentProductRepository implements ProductRepository
         }
         return new Product($productModel->id, $productModel->name, $productModel->price,  $productModel->image , $productModel->description, $productModel->created_at, $productModel->updated_at);
     }
+    
     public function findAll(): array
     {
         return ProductModel::all()->map(fn($productModel) => new Product(
-            id: $productModel->id,
+            product_id: $productModel->product_id,
             name: $productModel->name,
             price: $productModel->price,
             image: $productModel->image,
@@ -79,7 +80,6 @@ class EloquentProductRepository implements ProductRepository
 
         return [
             'match' => $match ? new Product(
-                $match->id,
                 $match->product_id,
                 $match->name,
                 $match->price,
@@ -91,7 +91,6 @@ class EloquentProductRepository implements ProductRepository
             'related' => $related->map(
                 function ($product) {
                     return new Product(
-                        $product->id,
                         $product->product_id,
                         $product->name,
                         $product->price,

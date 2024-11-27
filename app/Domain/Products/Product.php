@@ -6,8 +6,8 @@ class Product
 {
   
 
-    public function __construct(  
-        private ?string $id,
+    public function __construct(
+        private ?string $product_id,
         private ?string $name,
         private ?float $price,
         private ?string $image,
@@ -17,7 +17,7 @@ class Product
                                 
     ){
         
-        $this->id = $id;
+        $this->product_id = $product_id;
         $this->name = $name;
         $this->price = $price;
         $this->image = $image;
@@ -29,7 +29,7 @@ class Product
     public function toArray()
     {
         return [
-            'id' => $this->id,  
+            'id' => $this->product_id,  
             'name' => $this->name,
             'price' => $this->price,
             'image'=> $this->image,
@@ -38,9 +38,9 @@ class Product
             'updated_at' => $this->updated_at,
         ];
     }
-    public function getId()
+    public function getProduct_id()
     {
-        return $this->id;
+        return $this->product_id;
     }
     public function getName()
     {
@@ -69,6 +69,11 @@ class Product
  
         
     /** This function is setting the new value of the properties*/
+    public function setProduct_id(string $product_id)
+    {
+        $this->product_id = $product_id;
+        return $this;
+    }
     public function setName(string $name)
     {
         $this->name = $name;

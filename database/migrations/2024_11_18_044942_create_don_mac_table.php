@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('don_mac', function (Blueprint $table) {
-            $table->id('id');
+            $table->id();
+            $table->string('product_id')->unique();
             $table->string('name')->unique();
             $table->float('price');
             $table->string('image')->nullable();
