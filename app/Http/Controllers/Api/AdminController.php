@@ -111,7 +111,7 @@ class AdminController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return back()->with('error', 'Passwords do not match or are invalid');
+            return back()->with('error', 'Please match your password.');
         }
 
         $user = User::where('branchname', $request->branchname)->first();

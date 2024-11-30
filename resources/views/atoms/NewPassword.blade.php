@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,31 +33,26 @@
             border-color: #ced4da;
             color: #6c757d;
         }
-        
+
         .btn-outline-secondary:hover {
             background-color: #f8f9fa;
             color: #6c757d;
         }
-        
+
         .input-group .btn {
             z-index: 0;
         }
     </style>
 </head>
+
 <body class="min-vh-100 d-flex flex-column">
     <div class="container my-5">
+        <a href="/ForgotpassPage"><i class="fa-solid fa-arrow-left text-black" style="font-size: 1.5rem"></i></a>
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card shadow-sm">
                     <div class="card-body p-4">
                         <h1 class="card-title text-center mb-4">Reset Password</h1>
-                        
-                        @if (session('error'))
-                            <div class="alert alert-danger">
-                                {{ session('error') }}
-                            </div>
-                        @endif
-
                         <form action="/reset-password" method="POST">
                             @csrf
                             <div class="text-center mb-3">
@@ -67,15 +63,22 @@
                                 <label for="">Last Name :</label>
                                 <strong>{{ $lastname }}</strong>
                             </div>
-                            <input type="hidden" name="branchname" value="{{ $branchname }}">   
+
+                            @if (session('error'))
+                                <div class="alert alert-danger">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
+                            <input type="hidden" name="branchname" value="{{ $branchname }}">
                             <input type="hidden" name="firstname" value="{{ $firstname }}">
                             <input type="hidden" name="lastname" value="{{ $lastname }}">
                             <div class="mb-3">
                                 <label for="new_password" class="form-label">New Password</label>
                                 <div class="input-group">
-                                    <input type="password" class="form-control" id="new_password" name="new_password" 
+                                    <input type="password" class="form-control" id="new_password" name="new_password"
                                         placeholder="Enter new password" required>
-                                    <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('new_password', this)">
+                                    <button type="button" class="btn btn-outline-secondary"
+                                        onclick="togglePassword('new_password', this)">
                                         <i class="fas fa-eye-slash"></i>
                                     </button>
                                 </div>
@@ -83,9 +86,10 @@
                             <div class="mb-3">
                                 <label for="confirm_password" class="form-label">Confirm Password</label>
                                 <div class="input-group">
-                                    <input type="password" class="form-control" id="confirm_password" name="confirm_password"
-                                        placeholder="Confirm new password" required>
-                                    <button type="button" class="btn btn-outline-secondary" onclick="togglePassword('confirm_password', this)">
+                                    <input type="password" class="form-control" id="confirm_password"
+                                        name="confirm_password" placeholder="Confirm new password" required>
+                                    <button type="button" class="btn btn-outline-secondary"
+                                        onclick="togglePassword('confirm_password', this)">
                                         <i class="fas fa-eye-slash"></i>
                                     </button>
                                 </div>
@@ -100,20 +104,21 @@
         </div>
     </div>
     <script>
-    function togglePassword(inputId, button) {
-        const input = document.getElementById(inputId);
-        const icon = button.querySelector('i');
-        
-        if (input.type === 'password') {
-            input.type = 'text';
-            icon.classList.remove('fa-eye-slash');
-            icon.classList.add('fa-eye');
-        } else {
-            input.type = 'password';
-            icon.classList.remove('fa-eye');
-            icon.classList.add('fa-eye-slash');
+        function togglePassword(inputId, button) {
+            const input = document.getElementById(inputId);
+            const icon = button.querySelector('i');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            }
         }
-    }
     </script>
 </body>
+
 </html>

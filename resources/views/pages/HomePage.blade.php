@@ -77,8 +77,8 @@
                         </div>
 
                     </div>
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#logoutModal">
-                        Logout
+                    <button type="button" class="btn " data-bs-toggle="modal" data-bs-target="#logoutModal">
+                        <i class="fa-solid fa-right-from-bracket" style="color: #ff0000; font-size: 1.5rem"></i>
                     </button>
 
                 </div>
@@ -108,7 +108,8 @@
 
             <section class="hero-section">
                 <div class="container text-center">
-                    <h1 class="mb-4" data-aos="fade-down">Hello, {{ Auth::user()->firstname }} 🍵</h1>
+                    <h1 class="mb-4" data-aos="fade-down">Hello, {{ Auth::user()->firstname }} <i
+                            class="fa-solid fa-person"></i></h1>
                     <h1 class="display-1 mb-4" data-aos="fade-down">Don Macchiatos</h1>
                     <p class="lead mb-4" data-aos="fade-up" data-aos-delay="200">
                         Crafting Perfect Moments, One Cup at a Time

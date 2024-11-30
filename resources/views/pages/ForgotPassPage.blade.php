@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="shortcut icon" href="/storage/logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Forgot password</title>
     <style>
@@ -32,6 +33,7 @@
 
 <body class="min-vh-100 d-flex flex-column">
     <div class="container my-5">
+        <a href="/"><i class="fa-solid fa-arrow-left text-black" style="font-size: 1.5rem"></i></a>
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card shadow-sm">

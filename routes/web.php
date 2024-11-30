@@ -10,9 +10,6 @@ Route::get('/', function () {
     return view('/pages/LandingPage');
 })->name('LandingPage');
 
-Route::get('/ForgotpassPage', function () {
-    return view('/pages/ForgotPassPage');
-})->name('ForgotpassPage');
 
 Route::get('/DonMacPage', function () {
     $products = DB::table('don_mac')->get();
@@ -61,6 +58,10 @@ Route::get('/DeletedSpecialProducts', function () {
 
     return view('/atoms/DeletedPage/DeletedSpecialProducts', compact('products'));
 })->name('DeletedSpecialProducts');
+
+Route::get('/ForgotpassPage', function () {
+    return view('/pages/ForgotPassPage');
+})->name('ForgotpassPage');
 
 Route::get('/new-password/{branchname}/{firstname}/{lastname}', [AdminController::class, 'showNewPasswordForm'])->name('new.password.form');
 
