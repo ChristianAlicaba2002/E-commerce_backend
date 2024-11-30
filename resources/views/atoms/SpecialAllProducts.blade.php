@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>All Special Products - Admin</title>
 </head>
 <style>
@@ -204,12 +205,12 @@
                                     <td>{{ $product->category }}</td>
                                     <td class="description">{{ $product->description }}</td>
                                     <td>
-                                        <button class="btn btn-orange"
+                                        <button class="btn"
                                             onclick="editProduct({{ $product->id }}, '{{ $product->name }}', '{{ $product->price }}', '{{ addslashes($product->description) }}', '{{ $product->category }}')"
-                                            popovertarget='my-popover'>Edit</button>
+                                            popovertarget='my-popover'><i class="fa-solid fa-pen-to-square" style="color: #2bff00; font-size: 1.3rem;"></i></button>
 
-                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setDeleteProductId({{ $product->id }})">
-                                            Delete
+                                        <button type="button" class="border-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setDeleteProductId({{ $product->id }})">
+                                            <i class="fa-solid fa-trash" style="color: #ff0000; font-size: 1.3rem;"></i>
                                         </button>
                                     </td>
                                 </tr>

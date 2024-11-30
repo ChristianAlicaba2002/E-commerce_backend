@@ -60,7 +60,6 @@
     </head>
 
     <body>
-
         @section('content')
             <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
                 <div class="container">
@@ -76,12 +75,12 @@
                             <a class="nav-link" href="{{ 'DonMacPage' }}">Main Products</a>
                             <a class="nav-link" href="{{ 'SpecialProductPage' }}">Special Products</a>
                         </div>
-                 
+
                     </div>
                     <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#logoutModal">
                         Logout
                     </button>
-                
+
                 </div>
             </nav>
             <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
@@ -96,10 +95,12 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+                            <form id="logout-form" action="{{ route('admin.logout') }}" method="POST"
+                                style="display: none;">
                                 @csrf
                             </form>
-                            <button type="button" class="btn btn-primary" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</button>
+                            <button type="button" class="btn btn-primary"
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</button>
                         </div>
                     </div>
                 </div>
@@ -107,15 +108,15 @@
 
             <section class="hero-section">
                 <div class="container text-center">
-                    <h1 class="mb-4" data-aos="fade-down">Hello, {{ Auth::user()->firstname }}</h1>
+                    <h1 class="mb-4" data-aos="fade-down">Hello, {{ Auth::user()->firstname }} 🍵</h1>
                     <h1 class="display-1 mb-4" data-aos="fade-down">Don Macchiatos</h1>
                     <p class="lead mb-4" data-aos="fade-up" data-aos-delay="200">
                         Crafting Perfect Moments, One Cup at a Time
                     </p>
                 </div>
             </section>
-          
-            
+
+
 
             <section class="about-section">
                 <div class="container">

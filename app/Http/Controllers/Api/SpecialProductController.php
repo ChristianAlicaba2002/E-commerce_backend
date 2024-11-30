@@ -224,17 +224,6 @@ class SpecialProductController extends Controller
             'updated_at' => Carbon::now()->toDateTimeLocalString(), // Ensure only month, day, and year are included // Updated to include only month, day, and year
         ]);
 
-        // $this->SpecialProducts->restore(
-        //     $product->product_id,
-        //     $product->name,
-        //     $product,
-        //     $product->image,
-        //     $product->description,
-        //     $product->category,
-        //     Carbon::now()->toDateTimeString(),
-        //     Carbon::now()->toDateTimeString()
-        // );
-
         return redirect('/AllSpecialProducts')->with('success', 'Product deleted successfully');
     }
 

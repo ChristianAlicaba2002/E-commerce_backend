@@ -210,21 +210,12 @@
                                     <td>₱{{ number_format($product->price, 2) }}</td>
                                     <td class="description">{{ $product->description }}</td>
                                     <td>
-                                        <button class="btn btn-orange"
+                                        <button class="btn"
                                             onclick="editProduct({{ $product->id }}, '{{ $product->name }}', '{{ $product->price }}', '{{ $product->description }}')"
-                                            popovertarget='my-popover'>Edit
-                                        </button>
-                                        {{-- <form
-                                            action="{{ route('deleteEachDonmacchiatosProduct', ['id' => $product->id]) }}"
-                                            method="POST" style="display: inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger"
-                                                onclick="return confirm('Are you sure you want to delete this product?')">Delete</button>
-                                        </form> --}}
+                                            popovertarget='my-popover'><i class="fa-solid fa-pen-to-square" style="color: #2bff00; font-size: 1.3rem;"></i></button>
 
-                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setDeleteProductId({{ $product->id }})">
-                                            Delete
+                                        <button type="button" class="border-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setDeleteProductId({{ $product->id }})">
+                                            <i class="fa-solid fa-trash" style="color: #ff0000; font-size: 1.3rem;"></i>
                                         </button>
                                     </td>
                                 </tr>

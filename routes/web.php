@@ -10,9 +10,9 @@ Route::get('/', function () {
     return view('/pages/LandingPage');
 })->name('LandingPage');
 
-// Route::get('/HomePage', function () {
-//     return view('/pages/HomePage');
-// })->name('HomePage');
+Route::get('/ForgotpassPage', function () {
+    return view('/pages/ForgotPassPage');
+})->name('ForgotpassPage');
 
 Route::get('/DonMacPage', function () {
     $products = DB::table('don_mac')->get();
@@ -83,3 +83,6 @@ Route::delete('/deleteEachDonmacchiatosProduct/{id}', [DonMacController::class, 
 // This funciton is Restoring Data
 Route::post('/restoringSpecialData{id}', [SpecialProductController::class, 'RestoringSpecialProduct']);
 Route::post('/restoringDonmacData{id}', [DonMacController::class, 'restoringDonmacData']);
+
+//This function is for Forgot password
+Route::post('/confirmation', [AdminController::class, 'forgotPassword'])->name('confirmation');

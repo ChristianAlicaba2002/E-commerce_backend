@@ -138,11 +138,11 @@
             @include('pages.HomePage')
             @yield('content')
         </div>
-        @if (session('access'))
+        {{-- @if (session('access'))
             <script>
                 alert("{{ session('access') }}")
             </script>
-        @endif
+        @endif --}}
     @else
         <nav class="navbar navbar-expand-lg fixed-top bg-dark-custom">
             <div class="container">
@@ -161,7 +161,8 @@
                     <div class="fade-in">
                         @if (session('success'))
                             <div class="alert-dark custom-alert alert-dismissible fade show" role="alert">
-                                <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+                                <i class="fas fa-check-circle me-2"></i><label style="color: greenyellow"
+                                    for="">{{ session('success') }}</label>
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"
                                     aria-label="Close"></button>
                             </div>
@@ -169,7 +170,7 @@
 
                         @if (session('error'))
                             <div class="alert-danger custom-alert alert-dismissible fade show " role="alert">
-                                <i class="fas fa-check-circle me-2 "></i>{{ session('error') }}
+                                <label style="color:red">{{ session('error') }}</label>
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"
                                     aria-label="Close"></button>
                             </div>
@@ -177,7 +178,7 @@
 
                         @if (session('revoke'))
                             <div class="alert-danger custom-alert alert-dismissible fade show " role="alert">
-                                <i class="fas fa-check-circle me-2 "></i>{{ session('revoke') }}
+                                <label style="color: red">{{ session('revoke') }}</label>
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"
                                     aria-label="Close"></button>
                             </div>
@@ -188,7 +189,7 @@
                         </h1>
                         <p class="lead mb-5 mx-auto" style="max-width: 800px;">
                             We source only the highest quality tea leaves, fresh milk, and natural ingredients to bring you
-                            a rich, authentic taste with every sip. From classic flavors to creative blends, <span
+                            a rich, authentic taste with every sip. From classic flavors to creative,<br><span
                                 class="text-orange">" DON MACCHIATOS "</span> guarantees a taste that delights.
                         </p>
                         <button popovertarget="AuthForAdmin"
@@ -244,9 +245,9 @@
                 @csrf
                 <div class="mb-3 position-relative">
                     <label for="register-name" class="form-label">
-                        <i class="fas fa-user text-orange me-2"></i>Name
+                        <i class="fas fa-user text-orange me-2"></i>Branch Name
                     </label>
-                    <input type="text" class="form-control form-control-custom" id="login-name" name="firstname"
+                    <input type="text" class="form-control form-control-custom" id="login-name" name="branchname"
                         required>
                 </div>
                 <div class="mb-3 position-relative">
@@ -263,9 +264,15 @@
                     </div>
                 </div>
                 <div class="d-grid">
-                    <button type="submit" class="btn btn-orange">
+                    <button type="submit" class="btn btn-orange ">
                         <i class="fas fa-sign-in-alt me-2"></i>Login
                     </button>
+                </div>
+                <div class="d-grid mt-3" style="display: flex; justify-content: center">
+                    <a class=" cursor-pointer" style="color: orange; text-decoration: none; " href="/ForgotpassPage"
+                        target="_blank">
+                        Forgot password ?
+                    </a>
                 </div>
             </form>
 
@@ -276,9 +283,23 @@
                 @csrf
                 <div class="mb-3 position-relative">
                     <label for="register-name" class="form-label">
-                        <i class="fas fa-user text-orange me-2"></i>Name
+                        <i class="fas fa-user text-orange me-2"></i>Branch Name
+                    </label>
+                    <input type="text" class="form-control form-control-custom" id="register-name" name="branchname"
+                        required>
+                </div>
+                <div class="mb-3 position-relative">
+                    <label for="register-name" class="form-label">
+                        <i class="fas fa-user text-orange me-2"></i>Firstname
                     </label>
                     <input type="text" class="form-control form-control-custom" id="register-name" name="firstname"
+                        required>
+                </div>
+                <div class="mb-3 position-relative">
+                    <label for="register-name" class="form-label">
+                        <i class="fas fa-user text-orange me-2"></i>Lastname
+                    </label>
+                    <input type="text" class="form-control form-control-custom" id="register-name" name="lastname"
                         required>
                 </div>
                 <div class="mb-3 position-relative">
