@@ -94,15 +94,36 @@ class AdminController extends Controller
             return redirect('/ForgotpassPage')->with('error', 'Account not found');
         }
 
-        // Generate a random temporary password
-        $tempPassword = substr(md5(rand()), 0, 8);
+        return redirect()->route('new.password.form', ['branchname' => $user->branchname, 'firstname' => $user->firstname, 'lastname' => $user->lastname]);
+    }
 
-        // Update user's password
-        $user->password = Hash::make($tempPassword);
+    public function showNewPasswordForm($branchname, $firstname, $lastname)
+    {
+        return view('atoms.NewPassword', ['branchname' => $branchname, 'firstname' => $firstname, 'lastname' => $lastname]);
+    }
+
+    public function resetPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'branchname' => 'required|string',
+            'new_password' => 'required|string|min:3',
+            'confirm_password' => 'required|string|same:new_password',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->with('error', 'Passwords do not match or are invalid');
+        }
+
+        $user = User::where('branchname', $request->branchname)->first();
+
+        if (! $user) {
+            return redirect('/')->with('error', 'User not found');
+        }
+
+        $user->password = Hash::make($request->new_password);
         $user->save();
 
-        // In a real application, you would typically send this via email
-        return redirect('/')->with('success', 'Your temporary password is: '.$tempPassword);
+        return redirect('/')->with('success', 'Password has been reset successfully. Please login with your new password.');
     }
 
     public function logout(Request $request)

@@ -12,14 +12,17 @@
         body {
             background: linear-gradient(135deg, #ff8c00 0%, #000000 100%);
         }
+
         .card {
             background-color: rgba(255, 255, 255, 0.9);
             border: none;
         }
+
         .btn-primary {
             background-color: #ff8c00;
             border-color: #ff8c00;
         }
+
         .btn-primary:hover {
             background-color: #ff7600;
             border-color: #ff7600;
@@ -39,14 +42,14 @@
                         </p>
 
                         @if (session('error'))
-                            <script>
-                                alert("{{ session('error') }}")
-                            </script>
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                            </div>
                         @endif
                         @if (session('success'))
-                            <script>
-                                alert("{{ session('success') }}")
-                            </script>
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
                         @endif
 
                         <form action="/confirmation" method="post">
@@ -54,15 +57,18 @@
                             @method('POST')
                             <div class="mb-3">
                                 <label for="branchname" class="form-label">Branch Name</label>
-                                <input type="text" class="form-control" id="branchname" name="branchname" placeholder="Enter branch name" required>
+                                <input type="text" class="form-control" id="branchname" name="branchname"
+                                    placeholder="Enter branch name" required>
                             </div>
                             <div class="mb-3">
                                 <label for="firstname" class="form-label">First Name</label>
-                                <input type="text" class="form-control" id="firstname" name="firstname" placeholder="Enter first name" required>
+                                <input type="text" class="form-control" id="firstname" name="firstname"
+                                    placeholder="Enter first name" required>
                             </div>
                             <div class="mb-3">
                                 <label for="lastname" class="form-label">Last Name</label>
-                                <input type="text" class="form-control" id="lastname" name="lastname" placeholder="Enter last name" required>
+                                <input type="text" class="form-control" id="lastname" name="lastname"
+                                    placeholder="Enter last name" required>
                             </div>
                             <div class="d-grid gap-2">
                                 <button type="submit" class="btn btn-primary">Confirm</button>

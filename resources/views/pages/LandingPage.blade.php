@@ -270,7 +270,7 @@
                 </div>
                 <div class="d-grid mt-3" style="display: flex; justify-content: center">
                     <a class=" cursor-pointer" style="color: orange; text-decoration: none; " href="/ForgotpassPage"
-                        target="_blank">
+                       >
                         Forgot password ?
                     </a>
                 </div>

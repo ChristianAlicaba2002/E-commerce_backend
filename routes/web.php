@@ -62,6 +62,8 @@ Route::get('/DeletedSpecialProducts', function () {
     return view('/atoms/DeletedPage/DeletedSpecialProducts', compact('products'));
 })->name('DeletedSpecialProducts');
 
+Route::get('/new-password/{branchname}/{firstname}/{lastname}', [AdminController::class, 'showNewPasswordForm'])->name('new.password.form');
+
 //This function is Admin Login Route
 // ... existing routes ...
 Route::post('/register', [AdminController::class, 'register'])->name('admin.register');
@@ -86,3 +88,6 @@ Route::post('/restoringDonmacData{id}', [DonMacController::class, 'restoringDonm
 
 //This function is for Forgot password
 Route::post('/confirmation', [AdminController::class, 'forgotPassword'])->name('confirmation');
+
+//This function is for Reset Password
+Route::post('/reset-password', [AdminController::class, 'resetPassword'])->name('reset.password');
