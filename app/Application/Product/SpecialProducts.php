@@ -23,6 +23,7 @@ class SpecialProducts
     {
 
         $price = is_null($price) ? null : (float) $price;
+
         $data = new SpecialProduct($product_id, $name, $price, $image, $description, $category, $created_at, $updated_at);
 
         return $this->SpecialRepository->create($data);

@@ -129,6 +129,22 @@
         .form-label {
             color: white;
         }
+
+        .alert-fade-out {
+            animation: fadeOut 0.5s ease forwards;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
     </style>
 </head>
 
@@ -138,11 +154,6 @@
             @include('pages.HomePage')
             @yield('content')
         </div>
-        {{-- @if (session('access'))
-            <script>
-                alert("{{ session('access') }}")
-            </script>
-        @endif --}}
     @else
         <nav class="navbar navbar-expand-lg fixed-top bg-dark-custom">
             <div class="container">
@@ -269,8 +280,7 @@
                     </button>
                 </div>
                 <div class="d-grid mt-3" style="display: flex; justify-content: center">
-                    <a class=" cursor-pointer" style="color: orange; text-decoration: none; " href="/ForgotpassPage"
-                       >
+                    <a class=" cursor-pointer" style="color: orange; text-decoration: none; " href="/ForgotpassPage">
                         Forgot password ?
                     </a>
                 </div>
@@ -347,21 +357,18 @@
             const input = document.getElementById(inputId);
             if (input.type === 'password') {
                 input.type = 'text';
-                icon.classList.replace('bi-eye-slash', 'bi-eye');
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
             } else {
                 input.type = 'password';
-                icon.classList.replace('bi-eye', 'bi-eye-slash');
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
             }
         }
 
-        // Tab switching functionality
         document.querySelectorAll('.auth-tab').forEach(tab => {
             tab.addEventListener('click', () => {
-                // Update active tab
                 document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
 
-                // Show/hide forms
                 const formToShow = tab.dataset.tab === 'login' ? 'loginForm' : 'registerForm';
                 const formToHide = tab.dataset.tab === 'login' ? 'registerForm' : 'loginForm';
                 document.getElementById(formToShow).style.display = 'block';
@@ -369,7 +376,17 @@
             });
         });
 
-        // Error handling
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert-dismissible');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.classList.add('alert-fade-out');
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 500);
+                }, 3000);
+            });
+        });
     </script>
 
 </body>

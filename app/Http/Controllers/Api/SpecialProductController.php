@@ -23,13 +23,6 @@ class SpecialProductController extends Controller
      * **/
     public function getAllSpecialProduct()
     {
-        // $SpecialProducts = $this->SpecialProducts->findAll();
-
-        // $products = array_map(
-        //     fn ($SpecialProducts) => $SpecialProducts->toArray(),
-        //     $SpecialProducts
-        // );
-
         $products = DB::table('special_product')->get();
 
         return response()->json(compact('products'), 200);
@@ -43,17 +36,7 @@ class SpecialProductController extends Controller
         $Incommingcredentials = $request->all();
 
         $validator = Validator::make($Incommingcredentials, [
-            'name' => [
-                'required',
-                'string',
-                function ($attribute, $value, $fail) {
-                    // Check if product with same name exists
-                    $exists = DB::table('special_product')->where('name', $value)->exists();
-                    if ($exists) {
-                        $fail('This product name is  already exists.');
-                    }
-                },
-            ],
+            'name' => 'required|string',
             'price' => 'required|numeric',
             'description' => 'required|string',
             'category' => 'required|in:Pizza,Drink,Dessert,Combo',
@@ -61,7 +44,11 @@ class SpecialProductController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect('/SpecialProductPage')->with('error', 'Error adding product: '.$validator->errors());
+            return redirect('/SpecialProductPage')->with('error', 'All fields are required');
+        }
+
+        if (DB::table('special_product')->where('name', $request->name)->exists()) {
+            return redirect('/SpecialProductPage')->with('error', 'Product name already exists');
         }
 
         $product_id = $this->generateUniqueProductID();

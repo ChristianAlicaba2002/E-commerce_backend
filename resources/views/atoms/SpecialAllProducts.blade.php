@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+        integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>All Special Products - Admin</title>
 </head>
 <style>
@@ -121,6 +123,36 @@
         width: 35%;
         text-wrap: wrap;
     }
+
+    .alert-fade-out {
+            animation: fadeOut 0.5s ease forwards;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
+
+    nav .btn {
+        border: none;
+        background: none;
+        transition: color 0.3s;
+    }
+
+    nav .btn:hover {
+        color: var(--primary-orange);
+    }
+
+    nav .btn.active {
+        color: var(--primary-orange);
+        font-weight: bold;
+    }
 </style>
 
 <body>
@@ -157,6 +189,18 @@
             <input type="search" name="search" id="search" class="form-control mb-4" onkeyup="searchProduct()"
                 placeholder="Search for a product">
 
+            <nav>
+                <ul class="d-flex justify-content-center gap-4 list-unstyled">
+                    <li><button class="btn" onclick="filterProducts('all', event)">All</button></li>
+                    <li><button class="btn" onclick="filterProducts('Pizza', event)">Pizza</button></li>
+                    <li><button class="btn" onclick="filterProducts('Drink', event)">Drinks</button></li>
+                    <li><button class="btn" onclick="filterProducts('Dessert', event)">Desserts</button></li>
+                    <li><button class="btn" onclick="filterProducts('Combo', event)">Combo</button></li>
+                </ul>
+            </nav>
+
+
+
             @if ($products->isEmpty())
                 <div class="alert alert-warning">No products found in the Database.</div>
             @else
@@ -178,8 +222,8 @@
 
 
                 @isset($products)
-                    <h6>Sort by Price</h6>
-                    <table class="table table-hover" id="productTable">
+                <h6 class="fw-light">Sort by Price</h6>
+                    <table class="table table-hover table-bordered" id="productTable">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -207,9 +251,12 @@
                                     <td>
                                         <button class="btn"
                                             onclick="editProduct({{ $product->id }}, '{{ $product->name }}', '{{ $product->price }}', '{{ addslashes($product->description) }}', '{{ $product->category }}')"
-                                            popovertarget='my-popover'><i class="fa-solid fa-pen-to-square" style="color: #2bff00; font-size: 1.3rem;"></i></button>
+                                            popovertarget='my-popover'><i class="fa-solid fa-pen-to-square"
+                                                style="color: #2bff00; font-size: 1.3rem;"></i></button>
 
-                                        <button type="button" class="border-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setDeleteProductId({{ $product->id }})">
+                                        <button type="button" class="border-0 bg-transparent" data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal"
+                                            onclick="setDeleteProductId({{ $product->id }})">
                                             <i class="fa-solid fa-trash" style="color: #ff0000; font-size: 1.3rem;"></i>
                                         </button>
                                     </td>
@@ -220,29 +267,29 @@
                 </table>
             @endif
         </div>
-                   <!-- Delete Confirmation Modal -->
-                   <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                Are you sure you want to <span style="color: red">delete</span> this product?
-                            </div>
-                            <div class="modal-footer">
-                                <form id="logout-form" action="" method="POST" style="display: inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                </form>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <!-- Delete Confirmation Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to <span style="color: red">delete</span> this product?
+                    </div>
+                    <div class="modal-footer">
+                        <form id="logout-form" action="" method="POST" style="display: inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
 
-                            </div>
-                        </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
         <!-- Popover UpdateForm -->
         <div class="popover-form" id="my-popover" popover>
@@ -273,7 +320,8 @@
                                     <input type="hidden" name="id" id="editProductId">
                                     <div class="mb-3">
                                         <label for="editName" class="form-label">Product Name</label>
-                                        <input type="text" class="form-control" id="editName" name="name" required>
+                                        <input type="text" class="form-control" id="editName" name="name"
+                                            required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="editPrice" class="form-label">Price (₱)</label>
@@ -283,6 +331,7 @@
                                                 required>
                                         </div>
                                     </div>
+                                  
                                     <div class="mb-3">
                                         <label for="editDescription" class="form-label">Description</label>
                                         <textarea class="form-control" id="editDescription" name="description" required></textarea>
@@ -305,9 +354,9 @@
 
                 </div>
 
-            </div>
+        </div>
 
-  
+
 
 
             <script>
@@ -344,19 +393,54 @@
                     }
                 }
 
-                // Function to set the product ID for deletion
                 function setDeleteProductId(productId) {
                     const form = document.getElementById('logout-form');
                     form.action = `{{ url('deleteEachSpecialProduct') }}/${productId}`;
                 }
+
+                document.addEventListener('DOMContentLoaded', function() {
+                const alerts = document.querySelectorAll('.alert-dismissible');
+                alerts.forEach(alert => {
+                    setTimeout(() => {
+                        alert.classList.add('alert-fade-out');
+                        setTimeout(() => {
+                            alert.remove();
+                        }, 500); 
+                    }, 3000); 
+                    });
+                });
+
+                function filterProducts(category, event) {
+                    document.querySelectorAll('nav .btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    event.target.classList.add('active');
+                    
+                    let table = document.getElementById('productTable');
+                    let tr = table.getElementsByTagName('tr');
+
+                    for (let i = 1; i < tr.length; i++) {
+                        let categoryCell = tr[i].getElementsByTagName('td')[4];
+                        if (categoryCell) {
+                            let categoryValue = categoryCell.textContent || categoryCell.innerText;
+                            
+                            if (category === 'all' || categoryValue.trim() === category) {
+                                tr[i].style.display = '';
+                            } else {
+                                tr[i].style.display = 'none';
+                            }
+                        }
+                    }
+                }
+
             </script>
 
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 
-       
+
 
 </body>
 
 </html>
-

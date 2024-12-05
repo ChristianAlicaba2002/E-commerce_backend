@@ -10,7 +10,6 @@ Route::get('/', function () {
     return view('/pages/LandingPage');
 })->name('LandingPage');
 
-
 Route::get('/DonMacPage', function () {
     $products = DB::table('don_mac')->get();
 
@@ -19,8 +18,11 @@ Route::get('/DonMacPage', function () {
 
 Route::get('/SpecialProductPage', function () {
     $products = DB::table('special_product')->get();
+    $bestSeller = DB::table('user_order')->get();
+    $customers = DB::table('user_order')->get();
+    $quantity = DB::table('user_order')->sum('quantity');
 
-    return view('/components/SpecialProductPage', compact('products'));
+    return view('/components/SpecialProductPage', compact('products', 'bestSeller', 'customers', 'quantity'));
 })->name('SpecialProductPage');
 
 Route::get('/DonMacAllProducts', function () {
@@ -34,6 +36,12 @@ Route::get('/AllSpecialProducts', function () {
 
     return view('/atoms/SpecialAllProducts', compact('products'));
 })->name('AllSpecialProducts');
+
+Route::get('/OrdersPage', function () {
+    $orders = DB::table('user_order')->get();
+
+    return view('/components/OrdersPage', compact('orders'));
+})->name('OrdersPage');
 
 Route::get('/updateSpecialProduct/{id}', function () {
     $products = DB::table('special_product')->get();

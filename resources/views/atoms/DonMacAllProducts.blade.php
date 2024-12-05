@@ -117,6 +117,21 @@
         width: 45%;
         text-wrap: wrap;
     }
+
+    .alert-fade-out {
+            animation: fadeOut 0.5s ease forwards;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
 </style>
 
 <body>
@@ -127,7 +142,7 @@
             <h3><i class="fas fa-coffee me-2"></i>Don Macchiatos</h3>
         </div>
         <div class="sidebar-menu">
-            <a href="{{'/'}}" class="menu-item">
+            <a href="{{ '/' }}" class="menu-item">
                 <i class="fa-solid fa-arrow-left"></i>Back to Home
             </a>
             <a href="{{ route('DonMacPage') }}" class="menu-item">
@@ -136,7 +151,7 @@
             <a href="#" class="menu-item">
                 <i class="fa-solid fa-shop"></i>Products
             </a>
-            <a href="{{'/DeletedDonMacProducts'}}" class="menu-item">
+            <a href="{{ '/DeletedDonMacProducts' }}" class="menu-item">
                 <i class="fa-solid fa-trash"></i>Deleted
             </a>
         </div>
@@ -177,17 +192,16 @@
             @if ($products->isEmpty())
                 <div class="alert alert-warning">No products found in the Database.</div>
             @else
+                @if (session('success'))
+                    <div class="alert alert-success custom-alert alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
 
-            @if(session('success'))
-                <div class="alert alert-success custom-alert alert-dismissible fade show" role="alert">
-                <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
-            
                 @isset($products)
                     <h6>Sort by Name</h6>
-                    <table class="table table-hover" id="productTable">
+                    <table class="table table-hover table-bordered" id="productTable">
                         <thead>
                             <tr>
                                 <th>ID</th>
@@ -211,10 +225,13 @@
                                     <td class="description">{{ $product->description }}</td>
                                     <td>
                                         <button class="btn"
-                                            onclick="editProduct({{ $product->id }}, '{{ $product->name }}', '{{ $product->price }}', '{{ $product->description }}')"
-                                            popovertarget='my-popover'><i class="fa-solid fa-pen-to-square" style="color: #2bff00; font-size: 1.3rem;"></i></button>
+                                            onclick="editProduct({{ $product->id }}, '{{ $product->name }}', '{{ $product->price }}', '{{ $product->description }}','{{ $product->image }}')"
+                                            popovertarget='my-popover'><i class="fa-solid fa-pen-to-square"
+                                                style="color: #2bff00; font-size: 1.3rem;"></i></button>
 
-                                        <button type="button" class="border-0 bg-transparent" data-bs-toggle="modal" data-bs-target="#deleteModal" onclick="setDeleteProductId({{ $product->id }})">
+                                        <button type="button" class="border-0 bg-transparent" data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal"
+                                            onclick="setDeleteProductId({{ $product->id }})">
                                             <i class="fa-solid fa-trash" style="color: #ff0000; font-size: 1.3rem;"></i>
                                         </button>
                                     </td>
@@ -226,28 +243,30 @@
             </table>
         </div>
 
-                         <!-- Delete Confirmation Modal -->
-                         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Are you sure you want to <span style="color: red">delete</span> this product?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <form id="logout-form" action="" method="POST" style="display: inline;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger">Delete</button>
-                                        </form>
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+        <!-- Delete Confirmation Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to <span style="color: red">delete</span> this product?
+                    </div>
+                    <div class="modal-footer">
+                        <form id="logout-form" action="" method="POST" style="display: inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
 
         <div class="popover-form" id="my-popover" popover>
             <div class="modal-dialog">
@@ -265,19 +284,20 @@
                                 <div class="alert alert-warning">No products found in the Database.</div>
                             @else
                                 @php
-                                foreach ($products as $product) {
+                                    foreach ($products as $product) {
                                         $id = $product->product_id;
                                     }
                                 @endphp
 
-                                <form action="{{ route('updateDonMacchiatosProduct', ['id' => $id] ) }}" method="POST"
+                                <form action="{{ route('updateDonMacchiatosProduct', ['id' => $id]) }}" method="POST"
                                     id="updateForm" enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
                                     <input type="hidden" name="id" id="editProductId">
                                     <div class="mb-3">
                                         <label for="editName" class="form-label">Product Name</label>
-                                        <input type="text" class="form-control" id="editName" name="name" required>
+                                        <input type="text" class="form-control" id="editName" name="name"
+                                            required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="editPrice" class="form-label">Price (₱)</label>
@@ -287,6 +307,7 @@
                                                 step="0.01" required>
                                         </div>
                                     </div>
+                              
                                     <div class="mb-3">
                                         <label for="editDescription" class="form-label">Description</label>
                                         <textarea class="form-control" id="editDescription" name="description" required></textarea>
@@ -337,8 +358,8 @@
                     }
                 }
 
-                function editProduct(id, name, price, description, image) {
-                    // document.getElementById('updateForm').action = `/updateDonMacchiatosProduct/${id}`;
+                function editProduct(id, name, price,  description, image) {
+                    document.getElementById('updateForm').action = `/updateDonMacchiatosProduct/${id}`;
                     document.getElementById('editProductId').value = id;
                     document.getElementById('editName').value = name;
                     document.getElementById('editPrice').value = price;
@@ -351,12 +372,25 @@
                     const form = document.getElementById('logout-form');
                     form.action = `{{ url('deleteEachDonmacchiatosProduct') }}/${productId}`;
                 }
+
+                document.addEventListener('DOMContentLoaded', function() {
+                const alerts = document.querySelectorAll('.alert-dismissible');
+                alerts.forEach(alert => {
+                    setTimeout(() => {
+                        alert.classList.add('alert-fade-out');
+                        setTimeout(() => {
+                            alert.remove();
+                        }, 500); 
+                    }, 3000); 
+                    });
+                });
+                
             </script>
-            
+
             <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 
-       
+
 </body>
 
 </html>

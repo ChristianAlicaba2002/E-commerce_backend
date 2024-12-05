@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,20 +8,22 @@
     <link rel="shortcut icon" href="/storage/logo.png" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <title>Special Products - Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
 <style>
     :root {
         --primary-orange: #FFA500;
-        --secondary-orange:  #4f2000;
+        --secondary-orange: #4f2000;
         --dark-bg: #1a1a1a;
         --darker-bg: #141414;
         --lighter-bg: #2d2d2d;
         --lighter-font: #ffffff;
         --darker-font: #000000;
     }
-    
+
     body {
         font-family: 'Poppins', sans-serif;
         background-color: #f8f9fa;
@@ -58,7 +61,8 @@
         align-items: center;
         transition: 0.3s;
     }
-    .menu-item:nth-child(2){
+
+    .menu-item:nth-child(2) {
         background: var(--primary-orange);
         color: var(--lighter-font)
     }
@@ -83,12 +87,12 @@
         border-radius: 10px;
         padding: 20px;
         margin-bottom: 20px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         transition: transform 0.3s ease-in-out;
         transition: 0.3s ease-in-out;
     }
 
-    .dashboard-card:hover  {
+    .dashboard-card:hover {
         transform: translateY(-5px);
         background: var(--primary-orange);
         color: var(--lighter-font)
@@ -114,7 +118,7 @@
         background: white;
         padding: 30px;
         border-radius: 15px;
-        box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
     }
 
     .form-control:focus {
@@ -140,7 +144,7 @@
         background: white;
         padding: 20px;
         border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 
 
@@ -153,37 +157,51 @@
         border-left-color: var(--primary-orange);
     }
 
+    .alert-fade-out {
+        animation: fadeOut 0.5s ease forwards;
+    }
 
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        to {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+    }
 </style>
 
 <body>
 
 
     <div class="wrapper">
-     
+
         <nav class="sidebar">
             <div class="sidebar-header">
                 <h3><i class="fa-brands fa-product-hunt"></i>Special Products</h3>
             </div>
             <div class="sidebar-menu">
-                <a href="{{route('LandingPage')}}" class="menu-item">
+                <a href="{{ route('LandingPage') }}" class="menu-item">
                     <i class="fa-solid fa-arrow-left"></i>Back to Home
                 </a>
                 <a href="#" class="menu-item ">
                     <i class="fas fa-home"></i>Dashboard
                 </a>
-                <a href="{{'/AllSpecialProducts'}}" class="menu-item">
+                <a href="{{ '/AllSpecialProducts' }}" class="menu-item">
                     <i class="fa-solid fa-shop"></i>Products
                 </a>
-                <a href="{{'/DeletedSpecialProducts'}}" class="menu-item">
+                <a href="{{ '/DeletedSpecialProducts' }}" class="menu-item">
                     <i class="fa-solid fa-trash"></i>Deleted
                 </a>
             </div>
         </nav>
 
-       
+
         <div class="main-content">
-            
+
             <div class="row mb-4">
 
                 <div class="col-md-3">
@@ -193,14 +211,14 @@
                         </div>
                         <h4>Total Products</h4>
                         @isset($products)
-                            @if($products->isEmpty())
+                            @if ($products->isEmpty())
                                 <h2>0</h2>
                             @else
-                                <h2>{{count($products)}}</h2>
+                                <h2>{{ count($products) }}</h2>
                             @endif
                         @endisset
-                            <p class="">Available Products 🛒</p>          
-                    
+                        <p class="">Available Products 🛒</p>
+
                     </div>
                 </div>
 
@@ -210,20 +228,16 @@
                             <i class="fas fa-peso-sign"></i>
                         </div>
                         <h4>Revenue</h4>
-                        @isset($products)
-                            @if($products->isEmpty())
+                        @isset($quantity)
+                            @if (!$quantity)
                                 <h2>0</h2>
                             @else
-                               
                                 @php
-                                    $totalRevenue = 0;
-                                    foreach($products as $product) {
-                                        $totalRevenue += $product->price * 24;
-                                    }
+                                    $totalRevenue = $quantity * 24;
                                 @endphp
-                                <h2>₱{{ number_format($totalRevenue, 2) }}</h2>
                             @endif
-                            <p class="">2-years 🛃</p>
+                            <h2>₱{{ number_format($totalRevenue, 2) }}</h2>
+                            <p class="">1 year🛃</p>
                         @endisset
                     </div>
                 </div>
@@ -234,116 +248,150 @@
                             <i class="fas fa-crown"></i>
                         </div>
                         <h4>Best Seller</h4>
-                        @isset($products)
-                            @if($products->isEmpty())
-                                <h2>No Products</h2>
-                            @else
-                                <h3>Strawberry Cake</h3>
-                            @endif
-                                <p>500+ orders this month 💛</p>
+                        @isset($bestSeller)
+                            @foreach ($bestSeller as $bs)
+                                @if ($bs->quantity === 0)
+                                    <h5>Don't have best seller yet.</h5>
+                                @else
+                                    @if ($bs->quantity >= 20)
+                                        <h3>{{ $bs->name }}</h3>
+                                    @endif
+                                @endif
+                            @endforeach
+                            <p>{{ $bs->quantity * 360 }}+ orders this month 💛</p>
                         @endisset
                     </div>
                 </div>
-              
+
                 <div class="col-md-3">
                     <div class="dashboard-card">
                         <div class="card-icon bg-orange">
                             <i class="fas fa-users"></i>
                         </div>
                         <h4>Customers</h4>
-                        <h2>+12M</h2>
-                        <p class="">Total registered 🧑🏻‍🦱</p>
-                    </div
+                        @isset($customers)
+                            <h2>+{{ count($customers) }}</h2>
+                            <p class="">Total registered 🧑🏻‍🦱</p>
+                        @endisset
+                    </div>
                 </div>
-            </div>
 
-            @if(session('success'))
-                <div class="alert alert-success custom-alert alert-dismissible fade show" role="alert">
-                    <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
+                @if (session('success'))
+                    <div class="alert alert-success custom-alert alert-dismissible fade show animate__animated animate__fadeIn"
+                        role="alert">
+                        <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
 
-            @if(session('error'))
-                <div class="alert alert-danger custom-alert alert-dismissible fade show" role="alert">
-                    <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
+                @if (session('error'))
+                    <div class="alert alert-danger custom-alert alert-dismissible fade show animate__animated animate__fadeIn"
+                        role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                @endif
 
 
 
-            <div class="row justify-content-center">
-                <div class="col-md-8">
-                    <div class="form-container">
-                        <h3 class="mb-4"><i class="fas fa-plus-circle me-2"></i>Add New Product</h3>
-                        <form id="productForm" action="/addspecialproducts" method="post" enctype="multipart/form-data">
-                            @csrf
-                            <div class="mb-3">
-                                <label class="form-label">Product Name</label>
-                                <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" 
-                                    placeholder="Enter product name" value="{{ old('name') }}">
-                                @error('name')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Price</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">₱</span>
-                                    <input type="number" name="price" class="form-control @error('price') is-invalid @enderror" 
-                                        placeholder="Enter price" value="{{ old('price') }}">
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+                        <div class="form-container">
+                            <h3 class="mb-4"><i class="fas fa-plus-circle me-2"></i>Add New Product</h3>
+                            <form id="productForm" action="/addspecialproducts" method="post"
+                                enctype="multipart/form-data">
+                                @csrf
+                                <div class="mb-3">
+                                    <label class="form-label">Product Name</label>
+                                    <input type="text" name="name"
+                                        class="form-control @error('name') is-invalid @enderror"
+                                        placeholder="Enter product name" value="{{ old('name') }}">
+                                    @error('name')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
-                                @error('price')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">Description</label>
-                                <textarea name="description" class="form-control @error('description') is-invalid @enderror" placeholder="Enter description" value="{{ old('description') }}"></textarea>
-                                @error('description') 
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-                           
-
-                            <div class="mb-3">
-                                <label class="form-label">Category</label>
-                                <select name="category" class="form-control mb-4 @error('category') is-invalid @enderror">
-                                    <option value="">Select a category</option>
-                                    <option value="Pizza" {{ old('category') == 'Pizza' ? 'selected' : '' }}>Pizza</option>
-                                    <option value="Drink" {{ old('category') == 'Drink' ? 'selected' : '' }}>Drinks</option>
-                                    <option value="Dessert" {{ old('category') == 'Dessert' ? 'selected' : '' }}>Dessert</option>
-                                    <option value="Combo" {{old('categroy') == 'Combo' ? 'selected' : ''}}>Combo</option>
-                                </select>
-                                @error('category') 
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                            </div>
-
-                          
-                            <div class="mb-3">
-                                <label class="form-label">Product Image</label>
-                                <input type="file" id="images" class="form-control @error('image') is-invalid @enderror" 
-                                    name="image">
-                                @error('image')
-                                    <div class="invalid-feedback">{{ $message }}</div>
-                                @enderror
-                                <div class="mt-3">
-                                    <img id="imagessss" class="img-preview img-fluid rounded" style="max-height: 200px;" src="" alt="">
+                                <div class="mb-3">
+                                    <label class="form-label">Price</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">₱</span>
+                                        <input type="number" name="price"
+                                            class="form-control @error('price') is-invalid @enderror"
+                                            placeholder="Enter price" value="{{ old('price') }}">
+                                    </div>
+                                    @error('price')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
-                            </div>
-                            <div class="text-end">
-                                <button type="submit" class="btn btn-orange">
-                                    <i class="fas fa-plus me-2"></i>Add Product
-                                </button>
-                            </div>
-                        </form>
+
+
+
+                                <div class="mb-3">
+                                    <label class="form-label">Description</label>
+                                    <textarea name="description" class="form-control @error('description') is-invalid @enderror"
+                                        placeholder="Enter description" value="{{ old('description') }}"></textarea>
+                                    @error('description')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+
+                                <div class="mb-3">
+                                    <label class="form-label">Category</label>
+                                    <select name="category"
+                                        class="form-control mb-4 @error('category') is-invalid @enderror">
+                                        <option value="">Select a category</option>
+                                        <option value="Pizza" {{ old('category') == 'Pizza' ? 'selected' : '' }}>
+                                            Pizza</option>
+                                        <option value="Drink" {{ old('category') == 'Drink' ? 'selected' : '' }}>
+                                            Drinks</option>
+                                        <option value="Dessert" {{ old('category') == 'Dessert' ? 'selected' : '' }}>
+                                            Dessert</option>
+                                        <option value="Combo" {{ old('categroy') == 'Combo' ? 'selected' : '' }}>
+                                            Combo</option>
+                                    </select>
+                                    @error('category')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+
+                                <div class="mb-3">
+                                    <label class="form-label">Product Image</label>
+                                    <input type="file" id="images"
+                                        class="form-control @error('image') is-invalid @enderror" name="image">
+                                    @error('image')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                    <div class="mt-3">
+                                        <img id="imagessss" class="img-preview img-fluid rounded"
+                                            style="max-height: 200px;" src="" alt="">
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <button type="submit" class="btn btn-orange">
+                                        <i class="fas fa-plus me-2"></i>Add Product
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <script src="{{asset('homepage.js')}}"></script>
+        <script src="{{ asset('homepage.js') }}"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const alerts = document.querySelectorAll('.alert-dismissible');
+                alerts.forEach(alert => {
+                    setTimeout(() => {
+                        alert.classList.add('alert-fade-out');
+                        setTimeout(() => {
+                            alert.remove();
+                        }, 500);
+                    }, 3000);
+                });
+            });
+        </script>
 </body>
+
 </html>

@@ -26,9 +26,13 @@ class AdminController extends Controller
             'branchname' => 'required|string',
             'firstname' => 'required|string',
             'lastname' => 'required|string',
-            'password' => 'required|string|min:3',
+            'password' => 'required|string|min:5|max:15',
             'confirm_password' => 'required|string|same:password',
         ]);
+
+        if (Str()->length($request->password) < 5) {
+            return back()->with('error', 'The password must be at least 5 characters long.');
+        }
 
         if ($validator->fails()) {
             return response()->json([
@@ -60,7 +64,7 @@ class AdminController extends Controller
 
         $credentials = $request->validate([
             'branchname' => ['required', 'string'],
-            'password' => ['required'],
+            'password' => ['required', 'min:5', 'max:15'],
         ]);
 
         if (Auth::attempt($credentials)) {
@@ -82,7 +86,7 @@ class AdminController extends Controller
         ]);
 
         if ($incomingDetails->fails()) {
-            return redirect('/ForgotpassPage')->with('error', 'Please fill in all required fields');
+            return redirect('/ForgotpassPage')->with('error', 'All fields are required');
         }
 
         $user = User::where('branchname', $request->branchname)
@@ -106,9 +110,13 @@ class AdminController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'branchname' => 'required|string',
-            'new_password' => 'required|string|min:3',
+            'new_password' => 'required|string|min:5|max:15',
             'confirm_password' => 'required|string|same:new_password',
         ]);
+
+        if (Str()->length($request->new_password) < 5) {
+            return back()->with('error', 'The password must be at least 5 characters long.');
+        }
 
         if ($validator->fails()) {
             return back()->with('error', 'Please match your password.');
@@ -123,7 +131,7 @@ class AdminController extends Controller
         $user->password = Hash::make($request->new_password);
         $user->save();
 
-        return redirect('/')->with('success', 'Password has been reset successfully. Please login with your new password.');
+        return redirect('/')->with('success', 'Please login with your new password.');
     }
 
     public function logout(Request $request)

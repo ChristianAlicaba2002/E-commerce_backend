@@ -77,43 +77,4 @@ class SpecialProduct
     {
         return $this->updated_at;
     }
-
-    //Setters
-    // public function setProduct_id(string $product_id)
-    // {
-    //     $this->product_id = $product_id;
-    //     return $this;
-    // }
-
-    // public function setName(string $name)
-    // {
-    //     $this->name = $name;
-    //     return $this;
-    // }
-    // public function setPrice(float $price)
-    // {
-    //     $this->price = $price;
-    //     return $this;
-    // }
-    // public function setDescription(string $description)
-    // {
-    //     $this->description = $description;
-    //     return $this;
-    // }
-    // public function setImage(string $image)
-    // {
-    //     $this->image = $image;
-    //     return $this;
-    // }
-    // public function setCreated_at(string $created_at)
-    // {
-    //     $this->created_at = $created_at;
-    //     return $this;
-    // }
-    // public function setUpdated_at(string $updated_at)
-    // {
-    //     $this->updated_at = $updated_at;
-    //     return $this;
-    // }
-
 }

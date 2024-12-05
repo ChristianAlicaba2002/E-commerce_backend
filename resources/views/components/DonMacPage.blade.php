@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,19 +9,20 @@
     <title>Don Macchiatos - Admin Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 </head>
 <style>
     :root {
-        --primary-orange:#FFA500;
-        --secondary-orange:  #4f2000;
+        --primary-orange: #FFA500;
+        --secondary-orange: #4f2000;
         --dark-bg: #1a1a1a;
         --darker-bg: #141414;
         --lighter-bg: #2d2d2d;
         --lighter-font: #ffffff;
-        --darker-font: rgb(0, 0, 0); 
-    }   
-    
+        --darker-font: rgb(0, 0, 0);
+    }
+
     body {
         font-family: 'Poppins', sans-serif;
         background-color: #f8f9fa;
@@ -60,7 +62,7 @@
         transition: 0.3s;
     }
 
-    .menu-item:nth-child(2){
+    .menu-item:nth-child(2) {
         background: var(--primary-orange);
         color: var(--lighter-font)
     }
@@ -87,7 +89,7 @@
         border-radius: 10px;
         padding: 20px;
         margin-bottom: 20px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         transition: transform 0.3s ease-in-out;
         transition: 0.3s ease-in-out;
     }
@@ -119,7 +121,7 @@
         background: white;
         padding: 30px;
         border-radius: 15px;
-        box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
     }
 
     .form-control:focus {
@@ -146,7 +148,7 @@
         background: white;
         padding: 20px;
         border-radius: 10px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
 
 
@@ -158,34 +160,48 @@
     .alert-success {
         border-left-color: var(--primary-orange);
     }
+    .alert-fade-out {
+            animation: fadeOut 0.5s ease forwards;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
 </style>
 
 <body>
     <div class="wrapper">
-       
+
         <nav class="sidebar">
             <div class="sidebar-header">
                 <h3><i class="fas fa-coffee me-2"></i>Don Macchiatos</h3>
             </div>
             <div class="sidebar-menu">
-                <a href="{{route('LandingPage')}}" class="menu-item">
+                <a href="{{ route('LandingPage') }}" class="menu-item">
                     <i class="fa-solid fa-arrow-left"></i>Back to Home
                 </a>
                 <a href="#" class="menu-item">
                     <i class="fas fa-home"></i>Dashboard
                 </a>
-                <a href="{{'/DonMacAllProducts'}}" class="menu-item">
+                <a href="{{ '/DonMacAllProducts' }}" class="menu-item">
                     <i class="fa-solid fa-shop"></i>Products
                 </a>
-                <a href="{{'/DeletedDonMacProducts'}}" class="menu-item">
+                <a href="{{ '/DeletedDonMacProducts' }}" class="menu-item">
                     <i class="fa-solid fa-trash"></i>Deleted
                 </a>
             </div>
         </nav>
 
-       
+
         <div class="main-content">
-           
+
             <div class="row mb-4 ">
                 <div class="col-md-3 ml-[10rem]">
                     <div class="dashboard-card">
@@ -194,10 +210,10 @@
                         </div>
                         <h4>Total Products</h4>
                         @isset($products)
-                            @if($products->isEmpty())
+                            @if ($products->isEmpty())
                                 <h2>0</h2>
                             @else
-                                <h2>{{count($products)}}</h2>
+                                <h2>{{ count($products) }}</h2>
                             @endif
                             <p class="">Available Products 🛒</p>
                         @endisset
@@ -210,12 +226,12 @@
                         </div>
                         <h4>Revenue</h4>
                         @isset($products)
-                            @if($products->isEmpty())
+                            @if ($products->isEmpty())
                                 <h2>0</h2>
                             @else
                                 @php
                                     $totalRevenue = 0;
-                                    foreach($products as $product) {
+                                    foreach ($products as $product) {
                                         $totalRevenue += $product->price * 39 * 24;
                                     }
                                 @endphp
@@ -232,7 +248,7 @@
                         </div>
                         <h4>Best Seller</h4>
                         @isset($products)
-                            @if($products->isEmpty())
+                            @if ($products->isEmpty())
                                 <h2>No Products</h2>
                             @else
                                 <h2>Dark Forest</h2>
@@ -253,8 +269,8 @@
                 </div>
             </div>
 
-        
-            @if(session('success'))
+
+            @if (session('success'))
                 <div class="alert alert-success custom-alert alert-dismissible fade show" role="alert">
                     <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -262,14 +278,14 @@
             @endif
 
 
-            @if(session('error'))
+            @if (session('error'))
                 <div class="alert custom-alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
 
-        
+
             <div class="row justify-content-center">
                 <div class="col-md-8">
                     <div class="form-container">
@@ -278,7 +294,8 @@
                             @csrf
                             <div class="mb-3">
                                 <label class="form-label">Product Name</label>
-                                <input type="text" name="name" class="form-control @error('name') is-invalid @enderror" 
+                                <input type="text" name="name" maxlength="50"
+                                    class="form-control @error('name') is-invalid @enderror"
                                     placeholder="Enter product name" value="{{ old('name') }}">
                                 @error('name')
                                     <div class="invalid-feedback">{{ $message }}</div>
@@ -288,29 +305,34 @@
                                 <label class="form-label">Price</label>
                                 <div class="input-group">
                                     <span class="input-group-text">₱</span>
-                                    <input type="number" name="price" class="form-control @error('price') is-invalid @enderror" 
+                                    <input type="number" name="price" maxlength="5000"
+                                        class="form-control @error('price') is-invalid @enderror"
                                         placeholder="Enter price" value="{{ old('price') }}">
                                 </div>
                                 @error('price')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+
+                
                             <div class="mb-3">
                                 <label class="form-label">Description</label>
-                                <textarea name="description" class="form-control @error('description') is-invalid @enderror" placeholder="Enter description">{{ old('description') }}</textarea>
+                                <textarea name="description" class="form-control @error('description') is-invalid @enderror"
+                                    placeholder="Enter description">{{ old('description') }}</textarea>
                                 @error('description')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Product Image</label>
-                                <input type="file" id="images" class="form-control @error('image') is-invalid @enderror" 
-                                    name="image">
+                                <input type="file" id="images"
+                                    class="form-control @error('image') is-invalid @enderror" name="image">
                                 @error('image')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                                 <div class="mt-3">
-                                    <img id="imagessss" class="img-preview img-fluid rounded" style="max-height: 200px;" src="" alt="">
+                                    <img id="imagessss" class="img-preview img-fluid rounded"
+                                        style="max-height: 200px;" src="" alt="">
                                 </div>
                             </div>
                             <div class="text-end">
@@ -324,6 +346,9 @@
             </div>
         </div>
     </div>
-    <script src="{{asset('homepage.js')}}"></script>
+    <script src="{{ asset('homepage.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 </body>
+
 </html>

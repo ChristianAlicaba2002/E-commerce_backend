@@ -38,24 +38,19 @@ class DonMacController extends Controller
         $Incommingcredentials = $request->all();
 
         $validator = Validator::make($Incommingcredentials, [
-            'name' => [
-                'required',
-                'string',
-                function ($attribute, $value, $fail) {
-                    // Check if product with same name exists
-                    $exists = DB::table('don_mac')->where('name', $value)->exists();
-                    if ($exists) {
-                        $fail('This product name is  already exists.');
-                    }
-                },
-            ],
+            'name' => 'required|string',
             'price' => 'required|numeric',
             'description' => 'nullable|string',
             'image' => 'nullable|image',
         ]);
 
+
         if ($validator->fails()) {
-            return redirect('/DonMacPage')->with('error', 'Error adding product: '.$validator->errors());
+            return redirect('/DonMacPage')->with('error', 'All fields are required');
+        }
+
+        if(DB::table('don_mac')->where('name' , $request->name)->exists()){
+            return redirect('/DonMacPage')->with('error','Product name already exists');
         }
 
         $product_id = $this->generateUniqueProductID();
@@ -143,6 +138,7 @@ class DonMacController extends Controller
         }
 
         $price = floatval($request->price);
+        $stock = floatval($request->stock);
 
         $this->registerProducts->update(
             $product->id,
@@ -173,7 +169,7 @@ class DonMacController extends Controller
             'description' => $product->description,
             'image' => $product->image,
             'created_at' => $product->created_at,
-            'updated_at' => $product->updated_at,
+            'updated_at' => Carbon::now()->toDateTimeLocalString(),
         ]);
 
         return redirect('/DonMacAllProducts')->with('success', 'Product deleted successfully');
@@ -196,7 +192,7 @@ class DonMacController extends Controller
             'description' => $products->description,
             'image' => $products->image,
             'created_at' => $products->created_at,
-            'updated_at' => $products->updated_at,
+            'updated_at' => Carbon::now()->toDateTimeLocalString(),
         ]);
 
         return redirect('/DeletedDonMacProducts')->with('success', 'Product restore successfully');

@@ -86,6 +86,20 @@
         border-radius: 10px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
+
+    .alert-fade-out {
+            animation: fadeOut 0.5s ease forwards;
+        }
+    @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
 </style>
 
 <body>
@@ -136,6 +150,7 @@
                                 <th scope="col">Image</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Price</th>
+                                <th scope="col">Stock</th>
                                 <th scope="col">Category</th>
                                 <th scope="col">Description</th>
                                 <th scope="col">Deleted At</th>
@@ -152,6 +167,7 @@
                                     </td>
                                     <td>{{ $product->name }}</td>
                                     <td>{{ $product->price }}</td>
+                                    <td>{{ $product->stock }}</td>
                                     <td>{{ $product->category }}</td>
                                     <td>{{ $product->description }}</td>
                                     <td>{{ $product->updated_at }}</td>
@@ -203,6 +219,17 @@
                 tr[i].style.display = found ? '' : 'none';
             }
         }
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert-dismissible');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.classList.add('alert-fade-out');
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 500); 
+                }, 3000); 
+            });
+        });
     </script>
 </body>
 

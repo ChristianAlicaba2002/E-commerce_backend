@@ -74,6 +74,7 @@
                         <div class="navbar-nav ms-auto">
                             <a class="nav-link" href="{{ 'DonMacPage' }}">Main Products</a>
                             <a class="nav-link" href="{{ 'SpecialProductPage' }}">Special Products</a>
+                            <a class="nav-link" href="{{ 'OrdersPage' }}">Orders</a>
                         </div>
 
                     </div>

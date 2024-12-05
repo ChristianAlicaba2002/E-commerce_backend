@@ -2,14 +2,14 @@
 
 namespace App\Infrastructure\Persistence\Eloquent\Product;
 
-use App\Domain\Products\ProductRepository;
 use App\Domain\Products\Product;
+use App\Domain\Products\ProductRepository;
 
 class EloquentProductRepository implements ProductRepository
 {
     public function create(Product $product): void
     {
-        $productModel = ProductModel::find($product->getProduct_id()) ?? new ProductModel();
+        $productModel = ProductModel::find($product->getProduct_id()) ?? new ProductModel;
         $productModel->product_id = $product->getProduct_id();
         $productModel->name = $product->getName();
         $productModel->price = $product->getPrice();
@@ -19,10 +19,10 @@ class EloquentProductRepository implements ProductRepository
         $productModel->updated_at = $product->updated_at();
         $productModel->save();
     }
-    
+
     public function update(Product $product): void
     {
-        $productModel = ProductModel::find($product->getProduct_id()) ?? new ProductModel();
+        $productModel = ProductModel::find($product->getProduct_id()) ?? new ProductModel;
         $productModel->id = $product->getProduct_id();
         $productModel->name = $product->getName();
         $productModel->price = $product->getPrice();
@@ -37,19 +37,27 @@ class EloquentProductRepository implements ProductRepository
     {
         ProductModel::where('id', $id)->delete();
     }
-    
+
     public function findByID(string $id): ?Product
     {
         $productModel = ProductModel::find($id);
-        if (!$productModel) {
+        if (! $productModel) {
             return null;
         }
-        return new Product($productModel->id, $productModel->name, $productModel->price,  $productModel->image , $productModel->description, $productModel->created_at, $productModel->updated_at);
+
+        return new Product(
+            $productModel->id,
+            $productModel->name,
+            $productModel->price,
+            $productModel->image,
+            $productModel->description,
+            $productModel->created_at,
+            $productModel->updated_at);
     }
-    
+
     public function findAll(): array
     {
-        return ProductModel::all()->map(fn($productModel) => new Product(
+        return ProductModel::all()->map(fn ($productModel) => new Product(
             product_id: $productModel->product_id,
             name: $productModel->name,
             price: $productModel->price,
@@ -63,10 +71,18 @@ class EloquentProductRepository implements ProductRepository
     public function findByProductID(string $id): ?Product
     {
         $productModel = ProductModel::where('id', $id)->first();
-        if (!$productModel) {
+        if (! $productModel) {
             return null;
         }
-        return new Product($productModel->product_id, $productModel->name, $productModel->price,  $productModel->image, $productModel->description, $productModel->created_at, $productModel->updated_at);
+
+        return new Product(
+            $productModel->product_id,
+            $productModel->name,
+            $productModel->price,
+            $productModel->image,
+            $productModel->description,
+            $productModel->created_at,
+            $productModel->updated_at);
     }
 
     public function searchProduct(string $search): array
@@ -100,7 +116,7 @@ class EloquentProductRepository implements ProductRepository
                         $product->updated_at,
                     );
                 }
-            )->toArray()
+            )->toArray(),
         ];
     }
 }
