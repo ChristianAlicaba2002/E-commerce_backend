@@ -33,7 +33,7 @@
 
         .table {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 0.90rem;
+            font-size: 0.85rem;
         }
 
         .table thead {
@@ -52,25 +52,37 @@
             </div>
         </div>
 
+        <div class="row mb-3">
+            <div class="col-md-6 mx-auto">
+                <div class="input-group">
+                    <input type="text" id="searchInput" class="form-control" placeholder="Search orders...">
+                    <button class="btn btn-warning" type="button">
+                        <i class="fa-solid fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <div class="table-responsive">
-            <table class="table table-hover text-center table-striped border">
+            <table class="table  text-center table-striped border">
                 <thead class="bg-orange text-white">
                     <tr>
                         <th scope="col">ID</th>
-                        <th scope="col">Product ID</th>
-                        <th scope="col">Product Name</th>
-                        <th scope="col">Payment Method</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Payment</th>
                         <th scope="col">Quantity</th>
                         <th scope="col">Full Name</th>
                         <th scope="col">Address</th>
                         <th scope="col">Phone Number</th>
                         <th scope="col">Message</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Tracking Number</th>
                     </tr>
                 </thead>
                 <tbody>
+
                     @foreach ($orders as $order)
                         <tr class="align-middle">
-                            <td>{{ $order->id }}</td>
                             <td>{{ $order->product_id }}</td>
                             <td>{{ $order->name }}</td>
                             <td>{{ $order->payment }}</td>
@@ -79,15 +91,33 @@
                             <td>{{ $order->address }}</td>
                             <td>{{ $order->phoneNumber }}</td>
                             <td>{{ $order->message }}</td>
+                            <td>{{ $order->status }}</td>
+                            <td>{{ $order->tracking_number }}</td>
                         </tr>
                     @endforeach
+
+
                 </tbody>
+
             </table>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    
+    <!-- Add this search functionality -->
+    <script>
+        document.getElementById('searchInput').addEventListener('keyup', function() {
+            let searchText = this.value.toLowerCase();
+            let tableRows = document.querySelectorAll('tbody tr');
+            
+            tableRows.forEach(row => {
+                let text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchText) ? '' : 'none';
+            });
+        });
+    </script>
 </body>
 
 </html>

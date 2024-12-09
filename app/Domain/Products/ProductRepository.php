@@ -16,5 +16,5 @@ interface ProductRepository
 
     public function findAll(): array;
 
-    public function searchProduct(string $search): array;
+    // public function searchProduct(string $search): array;
 }

@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('quantity');
             $table->string('payment');
             $table->integer('total_price');
+            $table->string('status');
+            $table->string('tracking_number');
             $table->rememberToken();
             $table->timestamps();
         });

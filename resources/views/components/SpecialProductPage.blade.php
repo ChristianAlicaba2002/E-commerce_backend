@@ -229,13 +229,12 @@
                         </div>
                         <h4>Revenue</h4>
                         @isset($quantity)
-                            @if (!$quantity)
-                                <h2>0</h2>
-                            @else
-                                @php
+                            @php
+                                $totalRevenue = 0;
+                                if (!empty($quantity)) {
                                     $totalRevenue = $quantity * 24;
-                                @endphp
-                            @endif
+                                }
+                            @endphp
                             <h2>₱{{ number_format($totalRevenue, 2) }}</h2>
                             <p class="">1 year🛃</p>
                         @endisset
@@ -251,14 +250,15 @@
                         @isset($bestSeller)
                             @foreach ($bestSeller as $bs)
                                 @if ($bs->quantity === 0)
-                                    <h5>Don't have best seller yet.</h5>
-                                @else
-                                    @if ($bs->quantity >= 20)
-                                        <h3>{{ $bs->name }}</h3>
-                                    @endif
+                                    <h5>No best seller yet</h5>
+                                @elseif ($bs->quantity >= 20)
+                                    <h3>{{ $bs->name }}</h3>
+                                    <p>{{ $bs->quantity }}+ orders this month 💛</p>
                                 @endif
                             @endforeach
-                            <p>{{ $bs->quantity * 360 }}+ orders this month 💛</p>
+                            @if (count($bestSeller) === 0)
+                                <h5>No products available</h5>
+                            @endif
                         @endisset
                     </div>
                 </div>
@@ -316,7 +316,8 @@
                                         <span class="input-group-text">₱</span>
                                         <input type="number" name="price"
                                             class="form-control @error('price') is-invalid @enderror"
-                                            placeholder="Enter price" value="{{ old('price') }}">
+                                            placeholder="Enter price" value="{{ old('price') }}"
+                                            max="99999" oninput="if(this.value.length > 5) this.value=this.value.slice(0,5)">
                                     </div>
                                     @error('price')
                                         <div class="invalid-feedback">{{ $message }}</div>

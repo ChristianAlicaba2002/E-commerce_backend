@@ -18,7 +18,7 @@ interface SpecialRepository
 
     public function findByProductID(string $product_id): ?SpecialProduct;
 
-    public function searchProduct(string $search): array;
+    // public function searchProduct(string $search): array;
 
     public function filterByCategory(string $category): array;
 }

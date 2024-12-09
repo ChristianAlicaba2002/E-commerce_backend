@@ -241,7 +241,6 @@
         </main>
 
 
-        {{-- authentication --}}
         <div id="AuthForAdmin" popover class="auth-popover">
             <h1 class="text-center text-white font-serif">Admin</h1>
             <div class="nav nav-tabs mb-4 justify-content-center border-0" role="tablist">
@@ -251,7 +250,6 @@
 
 
 
-            {{-- LoginForm --}}
             <form id="loginForm" action="{{ route('admin.login') }}" method="POST">
                 @csrf
                 <div class="mb-3 position-relative">

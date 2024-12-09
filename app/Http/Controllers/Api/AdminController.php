@@ -35,10 +35,8 @@ class AdminController extends Controller
         }
 
         if ($validator->fails()) {
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors(),
-            ], 422);
+            return back()->with('error', 'Please match your');
+
         }
         if (DB::table('users')->where('branchname', $request->branchname)->exists()) {
             return redirect('/')->with('error', 'The Branch name is already exist , please make a new one.');
@@ -61,10 +59,9 @@ class AdminController extends Controller
 
     public function login(Request $request): RedirectResponse
     {
-
         $credentials = $request->validate([
             'branchname' => ['required', 'string'],
-            'password' => ['required', 'min:5', 'max:15'],
+            'password' => ['required', 'string', 'min:5', 'max:15'],
         ]);
 
         if (Auth::attempt($credentials)) {
@@ -74,7 +71,6 @@ class AdminController extends Controller
         } else {
             return redirect('/')->with('revoke', 'Username or Password is incorrect');
         }
-
     }
 
     public function forgotPassword(Request $request)

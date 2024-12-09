@@ -125,19 +125,20 @@
     }
 
     .alert-fade-out {
-            animation: fadeOut 0.5s ease forwards;
+        animation: fadeOut 0.5s ease forwards;
+    }
+
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        @keyframes fadeOut {
-            from {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            to {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
+        to {
+            opacity: 0;
+            transform: translateY(-20px);
         }
+    }
 
     nav .btn {
         border: none;
@@ -181,7 +182,7 @@
 
     <div class="main-content">
         <div class="table-container">
-            <h2 class="mb-4">Special Products List</h2>
+            <h2 class="mb-4">Special Product List</h2>
             @isset($products)
                 <h6>Total Products: {{ count($products) }}</h6>
             @endisset
@@ -222,7 +223,7 @@
 
 
                 @isset($products)
-                <h6 class="fw-light">Sort by Price</h6>
+                    <h6 class="fw-light">Sort by Price</h6>
                     <table class="table table-hover table-bordered" id="productTable">
                         <thead>
                             <tr>
@@ -273,7 +274,8 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
                         Are you sure you want to <span style="color: red">delete</span> this product?
@@ -331,7 +333,7 @@
                                                 required>
                                         </div>
                                     </div>
-                                  
+
                                     <div class="mb-3">
                                         <label for="editDescription" class="form-label">Description</label>
                                         <textarea class="form-control" id="editDescription" name="description" required></textarea>
@@ -354,7 +356,7 @@
 
                 </div>
 
-        </div>
+            </div>
 
 
 
@@ -399,14 +401,14 @@
                 }
 
                 document.addEventListener('DOMContentLoaded', function() {
-                const alerts = document.querySelectorAll('.alert-dismissible');
-                alerts.forEach(alert => {
-                    setTimeout(() => {
-                        alert.classList.add('alert-fade-out');
+                    const alerts = document.querySelectorAll('.alert-dismissible');
+                    alerts.forEach(alert => {
                         setTimeout(() => {
-                            alert.remove();
-                        }, 500); 
-                    }, 3000); 
+                            alert.classList.add('alert-fade-out');
+                            setTimeout(() => {
+                                alert.remove();
+                            }, 500);
+                        }, 3000);
                     });
                 });
 
@@ -414,9 +416,9 @@
                     document.querySelectorAll('nav .btn').forEach(btn => {
                         btn.classList.remove('active');
                     });
-                    
+
                     event.target.classList.add('active');
-                    
+
                     let table = document.getElementById('productTable');
                     let tr = table.getElementsByTagName('tr');
 
@@ -424,7 +426,7 @@
                         let categoryCell = tr[i].getElementsByTagName('td')[4];
                         if (categoryCell) {
                             let categoryValue = categoryCell.textContent || categoryCell.innerText;
-                            
+
                             if (category === 'all' || categoryValue.trim() === category) {
                                 tr[i].style.display = '';
                             } else {
@@ -433,7 +435,6 @@
                         }
                     }
                 }
-
             </script>
 
             <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>

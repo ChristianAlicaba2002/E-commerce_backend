@@ -157,7 +157,7 @@ class SpecialProductController extends Controller
             'name' => 'required|string',
             'price' => 'required|numeric',
             'description' => 'required|string',
-            'image' => 'required|nullable',
+            'image' => 'nullable|image',
         ]);
 
         $data = [];

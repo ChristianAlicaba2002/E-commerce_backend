@@ -42,15 +42,15 @@ class DonMacController extends Controller
             'price' => 'required|numeric',
             'description' => 'nullable|string',
             'image' => 'nullable|image',
-        ]);
 
+        ]);
 
         if ($validator->fails()) {
             return redirect('/DonMacPage')->with('error', 'All fields are required');
         }
 
-        if(DB::table('don_mac')->where('name' , $request->name)->exists()){
-            return redirect('/DonMacPage')->with('error','Product name already exists');
+        if (DB::table('don_mac')->where('name', $request->name)->exists()) {
+            return redirect('/DonMacPage')->with('error', 'Product name already exists');
         }
 
         $product_id = $this->generateUniqueProductID();
@@ -84,9 +84,7 @@ class DonMacController extends Controller
 
     }
 
-    /**
-     * Generate a uniqueProductId.
-     * **/
+    // Generate a uniqueProductId
     private function generateUniqueProductID(): string
     {
         do {
@@ -96,9 +94,7 @@ class DonMacController extends Controller
         return $id;
     }
 
-    /**
-     * Generate a randomnumericId.
-     * **/
+    //  Generate a randomnumericId.
     private function generateRandomAlphanumericID(int $length = 10): string
     {
         $result = substr(bin2hex(random_bytes(ceil($length / 2))), 0, $length);
@@ -106,9 +102,7 @@ class DonMacController extends Controller
         return $result;
     }
 
-    /**
-     * Update the special product.
-     * **/
+    //Update the special product.
     public function updateDonMacchiatosProduct(Request $request, $product_id)
     {
         $product = DB::table('don_mac')->where('id', $product_id)->first();
@@ -120,7 +114,8 @@ class DonMacController extends Controller
             'name' => 'required|string',
             'price' => 'required|numeric',
             'description' => 'required|string',
-            'image' => 'required|nullable',
+            'image' => 'nullable|image',
+
         ]);
 
         $data = [];
@@ -131,10 +126,10 @@ class DonMacController extends Controller
 
             $imageName = time().'.'.$image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
-            $data['image'] = $imageName; // Store the image name in the data array
+            $data['image'] = $imageName;
         } else {
             $data['image'] = $product->image ?? 'default.jpg';
-            $imageName = $data['image']; // Ensure $imageName is defined
+            $imageName = $data['image'];
         }
 
         $price = floatval($request->price);
@@ -147,7 +142,7 @@ class DonMacController extends Controller
             $request->description,
             $imageName,
             $product->created_at,
-            Carbon::now()->toDateTimeString() // Changed to toDateTimeString() for consistency
+            Carbon::now()->toDateTimeString()
         );
 
         return redirect('/DonMacAllProducts')->with('success', 'Product updated successfully');

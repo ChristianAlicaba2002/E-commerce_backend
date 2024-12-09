@@ -11,11 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_api', function (Blueprint $table) {
+        Schema::create('user_register', function (Blueprint $table) {
             $table->id();
-            $table->string('username');
+            $table->string('firstName');
+            $table->string('lastName');
+            $table->string('birthMonth');
+            $table->string('birthDay');
+            $table->string('birthYear');
+            $table->string('gender');
             $table->string('email');
             $table->string('password');
+            $table->rememberToken();
+            $table->string('image');
             $table->timestamps();
         });
     }
@@ -25,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_api');
+        Schema::dropIfExists('user_register');
     }
 };
