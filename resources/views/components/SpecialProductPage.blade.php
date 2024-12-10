@@ -316,8 +316,8 @@
                                         <span class="input-group-text">₱</span>
                                         <input type="number" name="price"
                                             class="form-control @error('price') is-invalid @enderror"
-                                            placeholder="Enter price" value="{{ old('price') }}"
-                                            max="99999" oninput="if(this.value.length > 5) this.value=this.value.slice(0,5)">
+                                            placeholder="Enter price" value="{{ old('price') }}" max="99999"
+                                            oninput="if(this.value.length > 5) this.value=this.value.slice(0,5)">
                                     </div>
                                     @error('price')
                                         <div class="invalid-feedback">{{ $message }}</div>

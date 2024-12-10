@@ -41,7 +41,7 @@ class AdminController extends Controller
         if (DB::table('users')->where('branchname', $request->branchname)->exists()) {
             return redirect('/')->with('error', 'The Branch name is already exist , please make a new one.');
         }
-
+    
         $user = User::create([
             'branchname' => $request->branchname,
             'firstname' => $request->firstname,

@@ -22,7 +22,7 @@ class RegisteredUserApiController extends Controller
 
     public function apiRegister(Request $request)
     {
-        $createUser = Validator::make($request->all(), [
+         Validator::make($request->all(), [
             'firstName' => 'required',
             'lastName' => 'required',
             'birthMonth' => 'required',
@@ -42,7 +42,7 @@ class RegisteredUserApiController extends Controller
             $data['image'] = $imageName;
         }
 
-        $createUser = UserRegisterModel::create([
+        $user = UserRegisterModel::create([
             'firstName' => $request->firstName,
             'lastName' => $request->lastName,
             'birthMonth' => $request->birthMonth,
@@ -54,7 +54,8 @@ class RegisteredUserApiController extends Controller
             'image' => $data['image'],
         ]);
 
-        return response()->json(compact('createUser'), 201);
+
+        return response()->json(compact('user'), 201);
     }
 
     public function apiLogin(Request $request)

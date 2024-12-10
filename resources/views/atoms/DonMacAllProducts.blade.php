@@ -119,19 +119,20 @@
     }
 
     .alert-fade-out {
-            animation: fadeOut 0.5s ease forwards;
+        animation: fadeOut 0.5s ease forwards;
+    }
+
+    @keyframes fadeOut {
+        from {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        @keyframes fadeOut {
-            from {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            to {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
+        to {
+            opacity: 0;
+            transform: translateY(-20px);
         }
+    }
 </style>
 
 <body>
@@ -304,10 +305,12 @@
                                         <div class="input-group">
                                             <span class="input-group-text">₱</span>
                                             <input type="number" class="form-control" id="editPrice" name="price"
-                                                step="0.01" required>
+                                                step="0.01" max="99999"
+                                                oninput="if(this.value.length > 5) this.value=this.value.slice(0,5)"
+                                                required>
                                         </div>
                                     </div>
-                              
+
                                     <div class="mb-3">
                                         <label for="editDescription" class="form-label">Description</label>
                                         <textarea class="form-control" id="editDescription" name="description" required></textarea>
@@ -358,7 +361,7 @@
                     }
                 }
 
-                function editProduct(id, name, price,  description, image) {
+                function editProduct(id, name, price, description, image) {
                     document.getElementById('updateForm').action = `/updateDonMacchiatosProduct/${id}`;
                     document.getElementById('editProductId').value = id;
                     document.getElementById('editName').value = name;
@@ -374,17 +377,16 @@
                 }
 
                 document.addEventListener('DOMContentLoaded', function() {
-                const alerts = document.querySelectorAll('.alert-dismissible');
-                alerts.forEach(alert => {
-                    setTimeout(() => {
-                        alert.classList.add('alert-fade-out');
+                    const alerts = document.querySelectorAll('.alert-dismissible');
+                    alerts.forEach(alert => {
                         setTimeout(() => {
-                            alert.remove();
-                        }, 500); 
-                    }, 3000); 
+                            alert.classList.add('alert-fade-out');
+                            setTimeout(() => {
+                                alert.remove();
+                            }, 500);
+                        }, 3000);
                     });
                 });
-                
             </script>
 
             <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>

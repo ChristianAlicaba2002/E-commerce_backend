@@ -330,6 +330,8 @@
                                         <div class="input-group">
                                             <span class="input-group-text">₱</span>
                                             <input type="number" class="form-control" id="editPrice" name="price"
+                                                max="99999"
+                                                oninput="if(this.value.length > 5) this.value=this.value.slice(0,5)"
                                                 required>
                                         </div>
                                     </div>

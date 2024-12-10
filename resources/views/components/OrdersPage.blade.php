@@ -64,7 +64,7 @@
         </div>
 
         <div class="table-responsive">
-            <table class="table  text-center table-striped border">
+            <table class="table  text-center table-bordered border">
                 <thead class="bg-orange text-white">
                     <tr>
                         <th scope="col">ID</th>
@@ -76,7 +76,7 @@
                         <th scope="col">Phone Number</th>
                         <th scope="col">Message</th>
                         <th scope="col">Status</th>
-                        <th scope="col">Tracking Number</th>
+                        <th scope="col">Time</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -92,7 +92,7 @@
                             <td>{{ $order->phoneNumber }}</td>
                             <td>{{ $order->message }}</td>
                             <td>{{ $order->status }}</td>
-                            <td>{{ $order->tracking_number }}</td>
+                            <td>{{ $order->updated_at }}</td>
                         </tr>
                     @endforeach
 
@@ -105,13 +105,13 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-    
+
     <!-- Add this search functionality -->
     <script>
         document.getElementById('searchInput').addEventListener('keyup', function() {
             let searchText = this.value.toLowerCase();
             let tableRows = document.querySelectorAll('tbody tr');
-            
+
             tableRows.forEach(row => {
                 let text = row.textContent.toLowerCase();
                 row.style.display = text.includes(searchText) ? '' : 'none';
