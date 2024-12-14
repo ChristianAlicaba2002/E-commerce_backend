@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\DonMacController;
 use App\Http\Controllers\Api\RegisteredUserApiController;
 use App\Http\Controllers\Api\SpecialProductController;
 use App\Http\Controllers\Api\UserOrderController;
+use App\Http\Controllers\Api\UserOrderDonmacController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,8 +29,10 @@ Route::post('Register', [RegisteredUserApiController::class, 'apiRegister'])->na
 Route::post('Login', [RegisteredUserApiController::class, 'apiLogin'])->name('api.login');
 
 /**This function is for API User */
-Route::get('ApiUser', [RegisteredUserApiController::class, 'displayUser']);
+Route::get('ApiAllUserRegister', [RegisteredUserApiController::class, 'displayUser']);
 
+
+//Special Products
 // User Order API
 Route::post('userOrder', [UserOrderController::class, 'store'])->name('api.user-order.store');
 
@@ -39,3 +42,21 @@ Route::get('AllUserOrderApi', [UserOrderController::class, 'GetUserOrderApi']);
 
 // Update Order Status API
 Route::post('/updateOrderStatus', [UserOrderController::class, 'updateStatus']);
+
+
+
+// // Don Macchiatos
+// // User Order API
+// Route::post('donMacOrder', [UserOrderDonmacController::class, 'store'])->name('api.user-order.store');
+
+// Route::get('donMacTrackingNumber', [UserOrderDonmacController::class, 'GetUserOrder']);
+
+// Route::get('DonMacAllUserOrderApi', [UserOrderDonmacController::class, 'GetUserOrderApi']);
+
+// // Update Order Status API
+// Route::post('/updateOrderStatus', [UserOrderDonmacController::class, 'updateStatus']);
+
+
+
+
+

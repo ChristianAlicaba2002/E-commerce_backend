@@ -44,7 +44,7 @@
 
 <body>
     <div class="container mt-5 shadow-lg p-3 mb-5 bg-body rounded">
-        <a href="{{ '/' }}" class="btn btn-warning mb-3"><i class="fa-solid fa-arrow-left"></i></a>
+        <a href="{{ '/LoginPage' }}" class="btn btn-warning mb-3"><i class="fa-solid fa-arrow-left"></i></a>
         <div class="row mb-4">
             <div class="col text-center">
                 <h1 class="display-4 text-orange">Orders Management</h1>

@@ -6,7 +6,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <link rel="shortcut icon" href="/storage/logo.png" type="image/x-icon">
-        <title>Don Macchiatos-Admin Dashboard</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
         <style>
@@ -61,9 +60,10 @@
 
     <body>
         @section('content')
+        
             <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
                 <div class="container">
-                    <a class="navbar-brand" href="{{ '/' }}">
+                    <a class="navbar-brand" href="{{ '/LoginPage' }}">
                         <img class="logo rounded-circle" src="/storage/logo.png" alt="Don Macchiatos Logo" height="40">
                     </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -72,8 +72,8 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <div class="navbar-nav ms-auto">
-                            <a class="nav-link" href="{{ 'DonMacPage' }}">Main Products</a>
-                            <a class="nav-link" href="{{ 'SpecialProductPage' }}">Special Products</a>
+                            {{-- <a class="nav-link" href="{{ 'DonMacPage' }}">Main Products</a> --}}
+                            <a class="nav-link" href="{{ 'SpecialProductPage' }}">Dashboard</a>
                             <a class="nav-link" href="{{ 'OrdersPage' }}">Orders</a>
                         </div>
 

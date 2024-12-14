@@ -61,7 +61,7 @@
         transition: 0.3s;
     }
 
-    .menu-item:nth-child(4) {
+    .menu-item:nth-child(5) {
         background: var(--primary-orange);
     }
 
@@ -88,45 +88,92 @@
     }
 
     .alert-fade-out {
-            animation: fadeOut 0.5s ease forwards;
-        }
+        animation: fadeOut 0.5s ease forwards;
+    }
+
     @keyframes fadeOut {
-            from {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            to {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
+        from {
+            opacity: 1;
+            transform: translateY(0);
         }
+
+        to {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+    }
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        z-index: 1000; 
+        background-color: var(--primary-orange);
+    }
+
+    .dropdown:hover .dropdown-menu {
+        display: block; 
+    }
+    .dropdown-menu li {
+        padding: 5px 10px;
+        color: var(--lighter-font);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        transition: 0.3s;
+    }
+    .dropdown-item:hover {
+        background-color: rgba(255, 255, 255, 0.386);
+    }
+
 </style>
 
 <body>
 
     <nav class="sidebar">
         <div class="sidebar-header">
-            <h3><i class="fas fa-coffee me-2"></i>Don Macchiatos</h3>
+            <h3><i class="fas fa-coffee me-2"></i>Deleted Items</h3>
         </div>
         <div class="sidebar-menu">
-            <a href="{{ '/' }}" class="menu-item">
+            <a href="{{ '/LoginPage' }}" class="menu-item">
                 <i class="fa-solid fa-arrow-left"></i>Back to Home
             </a>
-            <a href="{{ route('DonMacPage') }}" class="menu-item">
-                <i class="fas fa-home"></i>Dashboard
-            </a>
-            <a href="{{ '/DonMacAllProducts' }}" class="menu-item">
-                <i class="fa-solid fa-shop"></i>Products
-            </a>
-            <a href="{{ '/DeletedDonMacProducts' }}" class="menu-item">
-                <i class="fa-solid fa-trash"></i>Deleted
-            </a>
+            <div class="dropdown">
+                <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-solid fa-shop"></i>Add Products
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="deletedDropdown">
+                    <li><a class="dropdown-item" href="{{ '/DonMacPage' }}">Don Macchiatos</a></li>
+                    <li><a class="dropdown-item" href="{{ '/SpecialProductPage' }}">Special Products</a></li>
+                </ul>
+            </div>
+
+    
+            <div class="dropdown">
+                <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-solid fa-shop"></i>Products
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="deletedDropdown">
+                    <li><a class="dropdown-item" href="{{ '/DonMacAllProducts' }}">Don Macchiatos</a></li>
+                    <li><a class="dropdown-item" href="{{ '/AllSpecialProducts' }}">Special Products</a></li>
+                </ul>
+            </div>
+
+
+            <div class="dropdown">
+                <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-solid fa-trash"></i>Deleted Items
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="deletedDropdown">
+                    <li><a class="dropdown-item" href="{{ '/DeletedDonMacProducts' }}"> Don Macchiatos</a></li>
+                    <li><a class="dropdown-item" href="{{ '/DeletedSpecialProducts' }}"> Special Products</a></li>
+                </ul>
+            </div>
         </div>
     </nav>
 
     <div class="main-content">
         <div class="table-container">
-            <h2 class="">Deleted Items</h2>
+            <h2 class="">Deleted Don Mac Items</h2>
             @isset($products)
                 <h6>Total Products: {{ count($products) }}</h6>
             @endisset
@@ -150,7 +197,6 @@
                                 <th scope="col">Image</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Price</th>
-                                <th scope="col">Stock</th>
                                 <th scope="col">Description</th>
                                 <th scope="col">Deleted At</th>
                                 <th scope="col">Actions</th>
@@ -166,7 +212,6 @@
                                     </td>
                                     <td>{{ $product->name }}</td>
                                     <td>{{ $product->price }}</td>
-                                    <td>{{ $product->stock }}</td>
                                     <td>{{ $product->description }}</td>
                                     <td>{{ $product->updated_at }}</td>
                                     <td>
@@ -226,8 +271,8 @@
                     alert.classList.add('alert-fade-out');
                     setTimeout(() => {
                         alert.remove();
-                    }, 500); 
-                }, 3000); 
+                    }, 500);
+                }, 3000);
             });
         });
     </script>

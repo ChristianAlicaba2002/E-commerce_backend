@@ -6,7 +6,7 @@ document
     .querySelector('input[type="file"]')
     .addEventListener("change", function () {
         if (this.files && this.files[0]) {
-            var img = document.querySelector("img");
+            let img = document.querySelector("img");
 
             img.onload = () => {
                 URL.revokeObjectURL(img.src);
@@ -34,6 +34,10 @@ document
         const name = document.querySelector('input[name="name"]');
         const price = document.querySelector('input[name="price"]');
         const image = document.querySelector('input[name="image"]');
+        const description = document.querySelector(
+            'textarea[name="description"]'
+        );
+        const category = document.querySelector('select[name="category"]');
 
         const inputs = [name, price, image];
         inputs.forEach((input) => {
@@ -60,6 +64,16 @@ document
 
         if (!image.files || !image.files[0]) {
             showError(image, "Please select an image");
+            isValid = false;
+        }
+
+        if (!description.value.trim()) {
+            showError(description, "Description is required");
+            isValid = false;
+        }
+
+        if (!category.value.trim()) {
+            showError(category, "Category is required");
             isValid = false;
         }
 

@@ -172,6 +172,29 @@
             transform: translateY(-20px);
         }
     }
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        z-index: 1000; 
+        background-color: var(--primary-orange);
+    }
+
+    .dropdown:hover .dropdown-menu {
+        display: block; 
+    }
+    .dropdown-menu li {
+        padding: 5px 10px;
+        color: var(--lighter-font);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        transition: 0.3s;
+    }
+    .dropdown-item:hover {
+        background-color: rgba(255, 255, 255, 0.386);
+    }
+
 </style>
 
 <body>
@@ -184,18 +207,41 @@
                 <h3><i class="fa-brands fa-product-hunt"></i>Special Products</h3>
             </div>
             <div class="sidebar-menu">
-                <a href="{{ route('LandingPage') }}" class="menu-item">
+                <a href="{{ route('LoginPage') }}" class="menu-item">
                     <i class="fa-solid fa-arrow-left"></i>Back to Home
                 </a>
-                <a href="#" class="menu-item ">
-                    <i class="fas fa-home"></i>Dashboard
-                </a>
-                <a href="{{ '/AllSpecialProducts' }}" class="menu-item">
-                    <i class="fa-solid fa-shop"></i>Products
-                </a>
-                <a href="{{ '/DeletedSpecialProducts' }}" class="menu-item">
-                    <i class="fa-solid fa-trash"></i>Deleted
-                </a>
+
+                <div class="dropdown">
+                    <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-shop"></i>Add Products
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="deletedDropdown">
+                        <li><a class="dropdown-item" href="{{ '/DonMacPage' }}">Don Macchiatos</a></li>
+                        <li><a class="dropdown-item" href="{{ '/SpecialProductPage' }}">Special Products</a></li>
+                    </ul>
+                </div>
+               
+
+                <div class="dropdown">
+                    <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-shop"></i>Products
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="deletedDropdown">
+                        <li><a class="dropdown-item" href="{{ '/DonMacAllProducts' }}">Don Macchiatos</a></li>
+                        <li><a class="dropdown-item" href="{{ '/AllSpecialProducts' }}">Special Products</a></li>
+                    </ul>
+                </div>
+
+
+                <div class="dropdown">
+                    <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-trash"></i>Deleted Items
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="deletedDropdown">
+                        <li><a class="dropdown-item" href="{{ '/DeletedDonMacProducts' }}">Don Macchiatos</a></li>
+                        <li><a class="dropdown-item" href="{{ '/DeletedSpecialProducts' }}">Special Products</a></li>
+                    </ul>
+                </div>
             </div>
         </nav>
 
@@ -339,7 +385,7 @@
                                 <div class="mb-3">
                                     <label class="form-label">Category</label>
                                     <select name="category"
-                                        class="form-control mb-4 @error('category') is-invalid @enderror">
+                                        class="form-control mb-1 @error('category') is-invalid @enderror">
                                         <option value="">Select a category</option>
                                         <option value="Pizza" {{ old('category') == 'Pizza' ? 'selected' : '' }}>
                                             Pizza</option>

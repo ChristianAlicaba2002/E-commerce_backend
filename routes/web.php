@@ -10,10 +10,23 @@ Route::get('/', function () {
     return view('/pages/LandingPage');
 })->name('LandingPage');
 
-Route::get('/DonMacPage', function () {
-    $products = DB::table('don_mac')->get();
+Route::get('/LoginPage', function () {
+    return view('AuthPage.LoginPage');
+})->name('LoginPage');
 
-    return view('/components/DonMacPage', compact('products'));
+Route::get('/RegisterPage', function () {
+    return view('AuthPage.RegisterPage');
+})->name('RegisterPage');
+
+Route::get('/DonMacPage', function () {
+    // $products = DB::table('don_mac')->get();
+
+    $products = DB::table('special_product')->get();
+    $bestSeller = DB::table('user_order')->get();
+    $customers = DB::table('user_order')->get();
+    $quantity = DB::table('user_order')->sum('quantity');
+
+    return view('/components/DonMacPage', compact('products', 'bestSeller', 'customers', 'quantity'));
 })->name('DonMacPage');
 
 Route::get('/SpecialProductPage', function () {

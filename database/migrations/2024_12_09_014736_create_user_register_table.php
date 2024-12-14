@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('birthDay');
             $table->string('birthYear');
             $table->string('gender');
-            $table->string('email');
+            $table->string('email')->unique();
             $table->string('password');
             $table->rememberToken();
             $table->string('image');

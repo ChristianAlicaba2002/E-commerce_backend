@@ -31,17 +31,17 @@ class AdminController extends Controller
         ]);
 
         if (Str()->length($request->password) < 5) {
-            return back()->with('error', 'The password must be at least 5 characters long.');
+            return redirect('/RegisterPage')->with('error', 'The password must be at least 5 characters long.');
         }
 
         if ($validator->fails()) {
-            return back()->with('error', 'Please match your');
+            return redirect('/RegisterPage')->with('error', 'Please match your password and confirm password');
 
         }
         if (DB::table('users')->where('branchname', $request->branchname)->exists()) {
-            return redirect('/')->with('error', 'The Branch name is already exist , please make a new one.');
+            return redirect('/RegisterPage')->with('error', 'The Branch name is already exist , please make a new one.');
         }
-    
+
         $user = User::create([
             'branchname' => $request->branchname,
             'firstname' => $request->firstname,
@@ -50,11 +50,9 @@ class AdminController extends Controller
             'role' => 'admin',
         ]);
 
-        // auth::login($user);
-
         $token = $user->createToken('admin_user')->plainTextToken;
 
-        return redirect('/')->with('success', 'Registered successfully!');
+        return redirect('/LoginPage')->with('success', 'Registered successfully!');
     }
 
     public function login(Request $request): RedirectResponse
@@ -67,9 +65,9 @@ class AdminController extends Controller
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect('/')->with('access', 'Login Successfully');
+            return redirect('/LoginPage')->with('access', 'Login Successfully');
         } else {
-            return redirect('/')->with('revoke', 'Username or Password is incorrect');
+            return redirect('/LoginPage')->with('revoke', 'Username or Password is incorrect');
         }
     }
 
@@ -121,13 +119,13 @@ class AdminController extends Controller
         $user = User::where('branchname', $request->branchname)->first();
 
         if (! $user) {
-            return redirect('/')->with('error', 'User not found');
+            return redirect('/ForgotpassPage')->with('error', 'User not found');
         }
 
         $user->password = Hash::make($request->new_password);
         $user->save();
 
-        return redirect('/')->with('success', 'Please login with your new password.');
+        return redirect('/LoginPage')->with('success', 'Please login with your new password.');
     }
 
     public function logout(Request $request)

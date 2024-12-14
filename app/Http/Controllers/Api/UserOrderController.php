@@ -75,8 +75,8 @@ class UserOrderController extends Controller
 
     public function GetUserOrderApi()
     {
-        $orders = DB::table('user_order')->get();
+        $allOrders = DB::table('user_order')->get();
 
-        return response()->json(compact('orders'));
+        return response()->json(compact('allOrders'));
     }
 }

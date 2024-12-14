@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Infrastructure\Persistence\Eloquent\User\UserRegisterModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -15,21 +14,21 @@ class RegisteredUserApiController extends Controller
     //
     public function displayUser()
     {
-        $user = UserRegisterModel::all();
+        $UserRegistered = UserRegisterModel::all();
 
-        return response()->json(compact('user'), 201);
+        return response()->json(compact('UserRegistered'), 201);
     }
 
     public function apiRegister(Request $request)
     {
-         Validator::make($request->all(), [
+        Validator::make($request->all(), [
             'firstName' => 'required',
             'lastName' => 'required',
             'birthMonth' => 'required',
             'birthDay' => 'required',
             'birthYear' => 'required',
             'gender' => 'required',
-            'email' => 'required',
+            'email' => 'required|email|unique:user_register,email',
             'password' => 'required',
             'image' => 'required',
         ]);
@@ -42,7 +41,7 @@ class RegisteredUserApiController extends Controller
             $data['image'] = $imageName;
         }
 
-        $user = UserRegisterModel::create([
+            $user = UserRegisterModel::create([
             'firstName' => $request->firstName,
             'lastName' => $request->lastName,
             'birthMonth' => $request->birthMonth,
@@ -51,35 +50,50 @@ class RegisteredUserApiController extends Controller
             'gender' => $request->gender,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'image' => $data['image'],
+            'image' => $data['image']
         ]);
 
+        return response()->json([
+            'status' => 'success',
+            'register' => $user,
+            'message' => 'register successfully',
+        ],200);
 
-        return response()->json(compact('user'), 201);
+        return response()->json([
+            'status' => 'error',
+            'register' => $user,
+            'message' => 'Error Registration',
+        ], 400);
     }
 
     public function apiLogin(Request $request)
     {
-        $credentials = $request->all();
-
-        $loginUser = $request->validate($credentials, [
+        $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required',
         ]);
 
-        if ($request->fails()) {
-            return response()->json($request->errors(), 400);
+        if ($validator->fails()) {
+            return response()->json('Login Unssucessful');
         }
 
-        $user = DB::table('user_register')
-            ->where('email', $request->email)
-            ->where('password', Hash::make($request->password))
-            ->first();
+        $credentials = $request->only('email', 'password');
 
-        if (Auth::attempt($loginUser)) {
+        if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
+
+            $user = Auth::user();
+
+            return response()->json([
+                'status' => 'success',
+                'user' => $user,
+                'message' => 'Login successful',
+            ], 200);
         }
 
-        return response()->json(compact('user'), 201);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid credentials',
+            ], 401);
     }
 }

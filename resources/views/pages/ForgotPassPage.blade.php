@@ -33,7 +33,7 @@
 
 <body class="min-vh-100 d-flex flex-column">
     <div class="container my-5">
-        <a href="/"><i class="fa-solid fa-arrow-left text-black" style="font-size: 1.5rem"></i></a>
+        <a href="/LoginPage"><i class="fa-solid fa-arrow-left text-black" style="font-size: 1.5rem"></i></a>
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card shadow-sm">
