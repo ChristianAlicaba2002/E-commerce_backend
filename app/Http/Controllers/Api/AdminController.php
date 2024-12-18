@@ -30,16 +30,25 @@ class AdminController extends Controller
             'confirm_password' => 'required|string|same:password',
         ]);
 
+        if ($request->password !== $request->confirm_password) {
+            return back()->with('error', 'Please match your password ');
+
+        }
+
+        if (!preg_match('/[A-Z]/', $request->password)) {
+            return back()->with('error', 'The password must contain at least one Uppercase letter.');
+        }
+
+        if (!preg_match('/[0-9]/', $request->password)) {
+            return back()->with('error', 'The password must contain at least one Number.');
+        }
+
         if (Str()->length($request->password) < 5) {
-            return redirect('/RegisterPage')->with('error', 'The password must be at least 5 characters long.');
+            return back()->with('error', 'The password must be at least 5 Characters long.');
         }
 
-        if ($validator->fails()) {
-            return redirect('/RegisterPage')->with('error', 'Please match your password and confirm password');
-
-        }
         if (DB::table('users')->where('branchname', $request->branchname)->exists()) {
-            return redirect('/RegisterPage')->with('error', 'The Branch name is already exist , please make a new one.');
+            return back()->with('error', 'The Branch name is already exist , please make a new one.');
         }
 
         $user = User::create([
@@ -55,19 +64,21 @@ class AdminController extends Controller
         return redirect('/LoginPage')->with('success', 'Registered successfully!');
     }
 
+
     public function login(Request $request): RedirectResponse
     {
         $credentials = $request->validate([
-            'branchname' => ['required', 'string'],
+            'firstname' => ['required', 'string'],
             'password' => ['required', 'string', 'min:5', 'max:15'],
         ]);
+
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
 
-            return redirect('/LoginPage')->with('access', 'Login Successfully');
+            return redirect('/LoginPage')->with('access', 'Welcome Back ' . $request->firstname);
         } else {
-            return redirect('/LoginPage')->with('revoke', 'Username or Password is incorrect');
+            return redirect('/LoginPage')->with('revoke', 'Account Admin not found');
         }
     }
 

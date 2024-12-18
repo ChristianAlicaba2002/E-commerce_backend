@@ -54,6 +54,42 @@
                 max-width: 100%;
                 height: auto;
             }
+
+            @media (max-width: 768px) {
+                .hero-section {
+                    height: 80vh;
+                    padding: 2rem 1rem;
+                    text-align: center;
+                }
+
+                .nav-link {
+                    font-size: 1rem;
+                    margin: 0.5rem 0;
+                }
+
+                .about-section {
+                    padding: 2rem 1rem;
+                }
+
+                .coffee-card {
+                    margin-bottom: 1rem;
+                    width: 100%;
+                }
+
+                .coffee-card img {
+                    width: 100%;
+                    height: auto;
+                }
+            }
+
+            @media (max-width: 576px) {
+                .hero-section h1 {
+                    font-size: 1.5rem;
+                }
+
+                .hero-section p {
+                    font-size: 1rem;
+                }
             }
         </style>
     </head>
@@ -62,7 +98,7 @@
         @section('content')
         
             <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-                <div class="container">
+                <div class="container-fluid">
                     <a class="navbar-brand" href="{{ '/LoginPage' }}">
                         <img class="logo rounded-circle" src="/storage/logo.png" alt="Don Macchiatos Logo" height="40">
                     </a>
@@ -72,14 +108,13 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <div class="navbar-nav ms-auto">
-                            {{-- <a class="nav-link" href="{{ 'DonMacPage' }}">Main Products</a> --}}
                             <a class="nav-link" href="{{ 'SpecialProductPage' }}">Dashboard</a>
                             <a class="nav-link" href="{{ 'OrdersPage' }}">Orders</a>
                         </div>
 
                     </div>
                     <button type="button" class="btn " data-bs-toggle="modal" data-bs-target="#logoutModal">
-                        <i class="fa-solid fa-right-from-bracket" style="color: #ff0000; font-size: 1.5rem"></i>
+                        <i class="fa-solid fa-right-from-bracket" style="color: #ff0000; font-size: 1.5rem; margin-right: 10px; margin-top: 5px"></i>
                     </button>
 
                 </div>
@@ -101,7 +136,8 @@
                                 @csrf
                             </form>
                             <button type="button" class="btn btn-primary"
-                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</button>
+                                onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -109,7 +145,7 @@
 
             <section class="hero-section">
                 <div class="container text-center">
-                    <h1 class="mb-4" data-aos="fade-down">Hello, {{ Auth::user()->firstname }} <i
+                    <h1 class="mb-4" data-aos="fade-down">Hello, {{ Auth::user()->branchname }} <i
                             class="fa-solid fa-person"></i></h1>
                     <h1 class="display-1 mb-4" data-aos="fade-down">Don Macchiatos</h1>
                     <p class="lead mb-4" data-aos="fade-up" data-aos-delay="200">

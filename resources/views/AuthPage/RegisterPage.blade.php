@@ -191,7 +191,7 @@
                                 <p>
                                     Already have an account?
                                     <a href="{{ route('LoginPage') }}"
-                                        class="text-warning text-decoration-none hover:text-decoration-underline">
+                                        class="text-primary  text-decoration-none">
                                         Sign in
                                     </a>
                                 </p>

@@ -115,14 +115,14 @@
                             <form id="loginForm" action="{{ route('admin.login') }}" method="POST">
                                 @csrf
                                 <div class="mb-3">
-                                    <label for="branchname" class="form-label text-black">Branch Name</label>
+                                    <label for="firstname" class="form-label text-black">First Name</label>
                                     <div class="input-group">
                                         <span class="input-group-text bg-warning text-white">
                                             <i class="fas fa-user"></i>
                                         </span>
-                                        <input type="text" class="form-control @error('branchname') is-invalid @enderror"
-                                            id="branchname" name="branchname" required placeholder="Enter branch name">
-                                        @error('branchname')
+                                        <input type="text" class="form-control @error('firstname') is-invalid @enderror"
+                                            id="firstname" name="firstname" required placeholder="First Name">
+                                        @error('firstname')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
                                             </div>
@@ -137,7 +137,7 @@
                                             <i class="fas fa-lock"></i>
                                         </span>
                                         <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                            id="password" name="password" required placeholder="Enter password">
+                                            id="password" name="password" required placeholder="Password">
                                         <button class="btn btn-outline-warning" type="button" onclick="togglePassword()">
                                             <i class="fas fa-eye-slash" id="passwordToggle"></i>
                                         </button>
@@ -152,7 +152,7 @@
                                     <p>
                                         Don't have an account?
                                         <a href="{{ route('RegisterPage') }}"
-                                            class="text-primary decoration-transparent hover:underline">
+                                            class="text-primary text-decoration-none">
                                             Sign up
                                         </a>
                                     </p>

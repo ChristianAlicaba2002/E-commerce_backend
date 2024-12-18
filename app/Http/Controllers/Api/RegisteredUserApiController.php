@@ -8,31 +8,43 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
+
 
 class RegisteredUserApiController extends Controller
 {
     //
     public function displayUser()
     {
-        $UserRegistered = UserRegisterModel::all();
+        $UserRegistered = DB::table('user_register')->get();
 
         return response()->json(compact('UserRegistered'), 201);
     }
 
     public function apiRegister(Request $request)
     {
-        Validator::make($request->all(), [
-            'firstName' => 'required',
-            'lastName' => 'required',
-            'birthMonth' => 'required',
-            'birthDay' => 'required',
-            'birthYear' => 'required',
-            'gender' => 'required',
-            'email' => 'required|email|unique:user_register,email',
-            'password' => 'required',
-            'image' => 'required',
+        $validator = Validator::make($request->all(), [
+            'firstName' => 'required|string',
+            'lastName' => 'required|string',
+            'birthMonth' => 'required|string',
+            'birthDay' => 'required|numeric',
+            'birthYear' => 'required|numeric',
+            'gender' => 'required|string',
+            'email' => 'required|email|unique,user_register,email',
+            'password' => 'required|string|min:6',
+            'image' => 'nullable|image',
         ]);
 
+        
+
+
+        // if($validator->fails()){
+        //     return response()->json([
+        //         'status' => false,
+        //         'message' => 'Email is already exist'
+        //     ]);
+        // }
+        
         $data = [];
         if ($request->hasFile('image')) {
             $image = $request->file('image');
@@ -41,7 +53,7 @@ class RegisteredUserApiController extends Controller
             $data['image'] = $imageName;
         }
 
-            $user = UserRegisterModel::create([
+        $user = UserRegisterModel::create([
             'firstName' => $request->firstName,
             'lastName' => $request->lastName,
             'birthMonth' => $request->birthMonth,
@@ -54,16 +66,10 @@ class RegisteredUserApiController extends Controller
         ]);
 
         return response()->json([
-            'status' => 'success',
-            'register' => $user,
-            'message' => 'register successfully',
+            'status' => true,
+            'message' => 'Registration successful, you can now login',
+            'token' => $user->createToken('auth_token')->plainTextToken,
         ],200);
-
-        return response()->json([
-            'status' => 'error',
-            'register' => $user,
-            'message' => 'Error Registration',
-        ], 400);
     }
 
     public function apiLogin(Request $request)
@@ -74,26 +80,35 @@ class RegisteredUserApiController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json('Login Unssucessful');
+            return response()->json([
+                'status' => false,
+                'message' => 'Validation failed',
+                'errors' => $validator->errors()
+            ], 401);
         }
 
-        $credentials = $request->only('email', 'password');
-
-        if (Auth::attempt($credentials)) {
-            $request->session()->regenerate();
-
-            $user = Auth::user();
-
+        if(!Auth::attempt($request->only(['email', 'password']))){
             return response()->json([
-                'status' => 'success',
+                'status' => false,
+                'message' => 'Email or Password is incorrect',
+            ], 422);
+        }
+
+        $user = DB::table('user_register')
+        ->where('email' , $request->email)
+        ->where('password',$request->password)->first();
+
+        if(Auth::attempt($request->only(['email', 'password']))){
+            return response()->json([
+                'status' => true,
                 'user' => $user,
-                'message' => 'Login successful',
+                'message' => 'Login successful' . $user->email,
+                'token' => $user->createToken('auth_token')->plainTextToken,
             ], 200);
         }
 
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Invalid credentials',
-            ], 401);
+       
     }
+
+        
 }

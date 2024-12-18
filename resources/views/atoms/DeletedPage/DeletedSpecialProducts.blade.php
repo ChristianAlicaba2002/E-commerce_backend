@@ -104,6 +104,7 @@
     }
 
     .dropdown-menu {
+        margin-left: 5px;
         display: none;
         position: absolute;
         z-index: 1000; 

@@ -174,15 +174,17 @@
     }
 
     .dropdown-menu {
+        margin-left: 5px;
         display: none;
         position: absolute;
-        z-index: 1000; 
+        z-index: 1000;
         background-color: var(--primary-orange);
     }
 
     .dropdown:hover .dropdown-menu {
-        display: block; 
+        display: block;
     }
+
     .dropdown-menu li {
         padding: 5px 10px;
         color: var(--lighter-font);
@@ -191,10 +193,10 @@
         align-items: center;
         transition: 0.3s;
     }
+
     .dropdown-item:hover {
         background-color: rgba(255, 255, 255, 0.386);
     }
-
 </style>
 
 <body>
@@ -212,7 +214,8 @@
                 </a>
 
                 <div class="dropdown">
-                    <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fa-solid fa-shop"></i>Add Products
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="deletedDropdown">
@@ -220,10 +223,11 @@
                         <li><a class="dropdown-item" href="{{ '/SpecialProductPage' }}">Special Products</a></li>
                     </ul>
                 </div>
-               
+
 
                 <div class="dropdown">
-                    <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fa-solid fa-shop"></i>Products
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="deletedDropdown">
@@ -234,7 +238,8 @@
 
 
                 <div class="dropdown">
-                    <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fa-solid fa-trash"></i>Deleted Items
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="deletedDropdown">
@@ -317,7 +322,7 @@
                         <h4>Customers</h4>
                         @isset($customers)
                             <h2>+{{ count($customers) }}</h2>
-                            <p class="">Total registered 🧑🏻‍🦱</p>
+                            <p class="">Total Customers 🧑🏻‍🦱</p>
                         @endisset
                     </div>
                 </div>
@@ -362,7 +367,8 @@
                                         <span class="input-group-text">₱</span>
                                         <input type="number" name="price"
                                             class="form-control @error('price') is-invalid @enderror"
-                                            placeholder="Enter price" value="{{ old('price') }}" max="99999"
+                                            placeholder="Enter price" value="{{ old('price') }}" min="1"
+                                            max="99999"
                                             oninput="if(this.value.length > 5) this.value=this.value.slice(0,5)">
                                     </div>
                                     @error('price')

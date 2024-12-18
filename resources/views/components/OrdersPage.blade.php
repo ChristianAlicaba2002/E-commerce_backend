@@ -64,7 +64,7 @@
         </div>
 
         <div class="table-responsive">
-            <table class="table  text-center table-bordered border">
+            <table class="table table-striped table-hover text-center table-bordered border">
                 <thead class="bg-orange text-white">
                     <tr>
                         <th scope="col">ID</th>
