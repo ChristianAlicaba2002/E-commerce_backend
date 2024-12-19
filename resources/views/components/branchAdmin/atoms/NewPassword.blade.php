@@ -42,6 +42,22 @@
         .input-group .btn {
             z-index: 0;
         }
+
+        .alert-fade-out {
+            animation: fadeOut 0.5s ease forwards;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            to {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
     </style>
 </head>
 
@@ -64,11 +80,24 @@
                                 <strong>{{ $lastname }}</strong>
                             </div>
 
+                            {{-- @if (session('success'))
+                                <div class="alert alert-success custom-alert alert-dismissible fade show animate__animated animate__fadeIn"
+                                    role="alert">
+                                    <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                            @endif --}}
+
                             @if (session('error'))
-                                <div class="alert alert-danger">
-                                    {{ session('error') }}
+                                <div class="alert alert-danger custom-alert alert-dismissible fade show animate__animated animate__fadeIn"
+                                    role="alert">
+                                    <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
                                 </div>
                             @endif
+
                             <input type="hidden" name="branchname" value="{{ $branchname }}">
                             <input type="hidden" name="firstname" value="{{ $firstname }}">
                             <input type="hidden" name="lastname" value="{{ $lastname }}">
@@ -118,6 +147,18 @@
                 icon.classList.add('fa-eye-slash');
             }
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert-dismissible');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.classList.add('alert-fade-out');
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 500);
+                }, 3000);
+            });
+        });
     </script>
 </body>
 

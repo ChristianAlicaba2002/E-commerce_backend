@@ -3,20 +3,25 @@
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\DonMacController;
 use App\Http\Controllers\Api\SpecialProductController;
+use App\Http\Controllers\SuperAdmin\SuperAdminController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('/pages/LandingPage');
-})->name('LandingPage');
+    return view('components/superAdmin/AdminAuth/LoginSuperAdmin');
+})->name('LoginSuperAdmin');
 
-Route::get('/LoginPage', function () {
-    return view('AuthPage.LoginPage');
-})->name('LoginPage');
+Route::get('/Dashboard', function () {
+    return view('components/superAdmin/pages/dashboard');
+})->name('LoginSuperAdmin');
 
-Route::get('/RegisterPage', function () {
-    return view('AuthPage.RegisterPage');
-})->name('RegisterPage');
+Route::get('/BranchAdminLoginPage', function () {
+    return view('components/branchAdmin/AuthPage/LoginPage');
+})->name('BranchAdminLoginPage');
+
+Route::get('/BranchAdminRegisterPage', function () {
+    return view('components/branchAdmin/AuthPage/RegisterPage');
+})->name('BranchAdminRegisterPage');
 
 Route::get('/DonMacPage', function () {
     // $products = DB::table('don_mac')->get();
@@ -26,7 +31,7 @@ Route::get('/DonMacPage', function () {
     $customers = DB::table('user_order')->get();
     $quantity = DB::table('user_order')->sum('quantity');
 
-    return view('/components/DonMacPage', compact('products', 'bestSeller', 'customers', 'quantity'));
+    return view('components/branchAdmin/DonMacPage', compact('products', 'bestSeller', 'customers', 'quantity'));
 })->name('DonMacPage');
 
 Route::get('/SpecialProductPage', function () {
@@ -35,53 +40,53 @@ Route::get('/SpecialProductPage', function () {
     $customers = DB::table('user_order')->get();
     $quantity = DB::table('user_order')->sum('quantity');
 
-    return view('/components/SpecialProductPage', compact('products', 'bestSeller', 'customers', 'quantity'));
+    return view('components/branchAdmin/SpecialProductPage', compact('products', 'bestSeller', 'customers', 'quantity'));
 })->name('SpecialProductPage');
 
 Route::get('/DonMacAllProducts', function () {
     $products = DB::table('don_mac')->get();
 
-    return view('/atoms/DonMacAllProducts', compact('products'));
+    return view('components/branchAdmin/DonMacAllProducts', compact('products'));
 })->name('DonMacAllProducts');
 
 Route::get('/AllSpecialProducts', function () {
     $products = DB::table('special_product')->get();
 
-    return view('/atoms/SpecialAllProducts', compact('products'));
+    return view('components/branchAdmin/SpecialAllProducts', compact('products'));
 })->name('AllSpecialProducts');
 
 Route::get('/OrdersPage', function () {
     $orders = DB::table('user_order')->get();
 
-    return view('/components/OrdersPage', compact('orders'));
+    return view('components/branchAdmin/OrdersPage', compact('orders'));
 })->name('OrdersPage');
 
 Route::get('/updateSpecialProduct/{id}', function () {
     $products = DB::table('special_product')->get();
 
-    return view('/atoms/SpecialAllProducts', compact('products'));
+    return view('components/branchAdmin/SpecialAllProducts', compact('products'));
 })->name('updateSpecialProduct');
 
 Route::get('/updateDonMacProduct/{id}', function ($id) {
     $product = DB::table('don_mac')->get();
 
-    return view('/atoms/DonMacAllProducts', compact('product'));
+    return view('components/branchAdmin/DonMacAllProducts', compact('product'));
 })->name('updateDonMacProduct');
 
 Route::get('/DeletedDonMacProducts', function () {
     $products = DB::table('deleted_donmac')->get();
 
-    return view('/atoms/DeletedPage/DeletedDonMacProducts', compact('products'));
+    return view('components/branchAdmin/DeletedPage/DeletedDonMacProducts', compact('products'));
 })->name('DeletedDonMacProducts');
 
 Route::get('/DeletedSpecialProducts', function () {
     $products = DB::table('deleted_special')->get();
 
-    return view('/atoms/DeletedPage/DeletedSpecialProducts', compact('products'));
+    return view('components/branchAdmin/DeletedPage/DeletedSpecialProducts', compact('products'));
 })->name('DeletedSpecialProducts');
 
 Route::get('/ForgotpassPage', function () {
-    return view('/pages/ForgotPassPage');
+    return view('components/branchAdmin/AuthPage/ForgotPassPage');
 })->name('ForgotpassPage');
 
 Route::get('/new-password/{branchname}/{firstname}/{lastname}', [AdminController::class, 'showNewPasswordForm'])->name('new.password.form');
@@ -91,6 +96,20 @@ Route::get('/new-password/{branchname}/{firstname}/{lastname}', [AdminController
 Route::post('/register', [AdminController::class, 'register'])->name('admin.register');
 Route::post('/admin/login', [AdminController::class, 'login'])->name('admin.login');
 Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.logout');
+
+//This function for SuperAdmin
+Route::post('/superadmin/AdminAuth/login', [SuperAdminController::class, 'loginSuperAdmin'])->name('superadmin.login');
+Route::post('/superadmin/logout', [SuperAdminController::class , 'logoutSuperAdmin'])->name('SuperAdmin.logout');
+
+
+
+
+
+
+
+
+
+
 
 // This function is storing Data
 Route::post('/addDonMacProducts', [DonMacController::class, 'addDonMacProducts']);

@@ -35,16 +35,7 @@ class RegisteredUserApiController extends Controller
             'image' => 'nullable|image',
         ]);
 
-        
-
-
-        // if($validator->fails()){
-        //     return response()->json([
-        //         'status' => false,
-        //         'message' => 'Email is already exist'
-        //     ]);
-        // }
-        
+    
         $data = [];
         if ($request->hasFile('image')) {
             $image = $request->file('image');

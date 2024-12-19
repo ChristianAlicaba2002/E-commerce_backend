@@ -4,13 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="/storage/logo.png" type="image/x-icon">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="/storage/logo.png" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
-    <title>All Don Macchiatos Products - Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
+        integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>All Special Products - Admin</title>
 </head>
 <style>
     :root {
@@ -26,6 +29,11 @@
     body {
         font-family: 'Poppins', sans-serif;
         background-color: #f8f9fa;
+    }
+
+    .wrapper {
+        display: flex;
+        min-height: 100vh;
     }
 
     .sidebar {
@@ -56,20 +64,18 @@
         transition: 0.3s;
     }
 
-    .menu-item:nth-child(3) {
+    .menu-item:nth-child(4) {
         background: var(--primary-orange);
-        color: var(--lighter-font)
     }
 
     .menu-item:hover {
         background: var(--secondary-orange);
-        color: var(--ligther-font);
+        color: var(--lighter-font);
     }
 
     .menu-item i {
         margin-right: 10px;
     }
-
 
     .main-content {
         margin-left: 250px;
@@ -87,7 +93,7 @@
     }
 
     .btn-orange:hover {
-        background: var(--secondary-orange);
+        background: #ff8533;
         color: var(--lighter-font)
     }
 
@@ -96,6 +102,12 @@
         padding: 20px;
         border-radius: 10px;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .popover-form {
+        padding: 0.90rem 3rem;
+        box-shadow: 1px 1px 20px var(--dark-bg);
+        border-radius: 2rem;
     }
 
     .custom-alert {
@@ -107,14 +119,8 @@
         border-left-color: var(--primary-orange);
     }
 
-    .popover-form {
-        border-radius: 2rem;
-        padding: 0.90rem 3rem;
-        box-shadow: 1px 1px 20px var(--dark-bg);
-    }
-
     .description {
-        width: 45%;
+        width: 35%;
         text-wrap: wrap;
     }
 
@@ -134,17 +140,33 @@
         }
     }
 
+    nav .btn {
+        border: none;
+        background: none;
+        transition: color 0.3s;
+    }
+
+    nav .btn:hover {
+        color: var(--primary-orange);
+    }
+
+    nav .btn.active {
+        color: var(--primary-orange);
+        font-weight: bold;
+    }
+
     .dropdown-menu {
-        margin-left: 5px;
+        margin: 2% 0 0 6%;
         display: none;
         position: absolute;
-        z-index: 1000; 
+        z-index: 1000;
         background-color: var(--primary-orange);
     }
 
     .dropdown:hover .dropdown-menu {
-        display: block; 
+        display: block;
     }
+
     .dropdown-menu li {
         padding: 5px 10px;
         color: var(--lighter-font);
@@ -153,25 +175,25 @@
         align-items: center;
         transition: 0.3s;
     }
+
     .dropdown-item:hover {
         background-color: rgba(255, 255, 255, 0.386);
     }
-
 </style>
 
 <body>
 
-
     <nav class="sidebar">
         <div class="sidebar-header">
-            <h3><i class="fas fa-coffee me-2"></i>Don Macchiatos</h3>
+            <h3><i class="fa-brands fa-product-hunt"></i>Special Products</h3>
         </div>
         <div class="sidebar-menu">
             <a href="{{ '/LoginPage' }}" class="menu-item">
                 <i class="fa-solid fa-arrow-left"></i>Back to Home
             </a>
             <div class="dropdown">
-                <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fa-solid fa-shop"></i>Add Products
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="deletedDropdown">
@@ -182,18 +204,22 @@
 
 
             <div class="dropdown">
-                <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fa-solid fa-shop"></i>Products
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="deletedDropdown">
-                    <li><a class="dropdown-item" href="{{ '#' }}">Don Macchiatos</a></li>
-                    <li><a class="dropdown-item" href="{{ '/AllSpecialProducts' }}">Special Products</a></li>
+                    <li><a class="dropdown-item" href="{{ '/DonMacAllProducts' }}">Don Macchiatos</a></li>
+                    <li><a class="dropdown-item" href="{{ '#' }}">Special Products</a></li>
                 </ul>
             </div>
 
 
+
+
             <div class="dropdown">
-                <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fa-solid fa-trash"></i>Deleted Items
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="deletedDropdown">
@@ -204,37 +230,31 @@
         </div>
     </nav>
 
-    @error('record')
-        <div class="alert alert-danger custom-alert alert-dismissible fade show" role="alert">
-            <i class="fas fa-exclamation-circle me-2"></i>{{ $message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @enderror
-
-    @error('success')
-        <div class="alert alert-success custom-alert alert-dismissible fade show" role="alert">
-            <i class="fas fa-check-circle me-2"></i>{{ $message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @enderror
 
 
-    @error('error')
-        <div class="alert alert-danger custom-alert alert-dismissible fade show" role="alert">
-            <i class="fas fa-exclamation-circle me-2"></i>{{ $message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @enderror
+
 
     <div class="main-content">
         <div class="table-container">
-            <h2 class="mb-4">Don Macchiatos List</h2>
+            <h2 class="mb-4">Special Product List</h2>
             @isset($products)
                 <h6>Total Products: {{ count($products) }}</h6>
             @endisset
 
             <input type="search" name="search" id="search" class="form-control mb-4" onkeyup="searchProduct()"
                 placeholder="Search for a product">
+
+            <nav>
+                <ul class="d-flex justify-content-center gap-4 list-unstyled">
+                    <li><button class="btn" onclick="filterProducts('all', event)">All</button></li>
+                    <li><button class="btn" onclick="filterProducts('Pizza', event)">Pizza</button></li>
+                    <li><button class="btn" onclick="filterProducts('Drink', event)">Drinks</button></li>
+                    <li><button class="btn" onclick="filterProducts('Dessert', event)">Desserts</button></li>
+                    <li><button class="btn" onclick="filterProducts('Combo', event)">Combo</button></li>
+                </ul>
+            </nav>
+
+
 
             @if ($products->isEmpty())
                 <div class="alert alert-warning">No products found in the Database.</div>
@@ -246,8 +266,19 @@
                     </div>
                 @endif
 
+                @if (session('error'))
+                    <div class="alert alert-danger custom-alert alert-dismissible fade show" role="alert">
+                        <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                            aria-label="Close"></button>
+                    </div>
+                @endif
+
+
+
+
                 @isset($products)
-                    <h6>Sort by Name</h6>
+                    <h6 class="fw-light">Sort by Price</h6>
                     <table class="table table-hover table-bordered" id="productTable">
                         <thead>
                             <tr>
@@ -255,12 +286,14 @@
                                 <th>Image</th>
                                 <th>Name</th>
                                 <th>Price</th>
+                                <th>Category</th>
                                 <th>Description</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($products->sortBy('name') as $product)
+
+                            @foreach ($products->sortBy('price') as $product)
                                 <tr>
                                     <td>{{ $product->product_id }}</td>
                                     <td>
@@ -269,10 +302,11 @@
                                     </td>
                                     <td>{{ $product->name }}</td>
                                     <td>₱{{ number_format($product->price, 2) }}</td>
+                                    <td>{{ $product->category }}</td>
                                     <td class="description">{{ $product->description }}</td>
                                     <td>
                                         <button class="btn"
-                                            onclick="editProduct({{ $product->id }}, '{{ $product->name }}', '{{ $product->price }}', '{{ $product->description }}','{{ $product->image }}')"
+                                            onclick="editProduct({{ $product->id }}, '{{ $product->name }}', '{{ $product->price }}', '{{ addslashes($product->description) }}', '{{ $product->category }}')"
                                             popovertarget='my-popover'><i class="fa-solid fa-pen-to-square"
                                                 style="color: #2bff00; font-size: 1.3rem;"></i></button>
 
@@ -286,12 +320,12 @@
                             @endforeach
                         @endisset
                     </tbody>
+                </table>
             @endif
-            </table>
         </div>
-
         <!-- Delete Confirmation Modal -->
-        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -309,19 +343,20 @@
                             <button type="submit" class="btn btn-danger">Delete</button>
                         </form>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+
                     </div>
                 </div>
             </div>
         </div>
 
-
-
+        <!-- Popover UpdateForm -->
         <div class="popover-form" id="my-popover" popover>
             <div class="modal-dialog">
 
                 <div class="modal-content">
 
                     <div class="modal-header">
+
                         <h5 class="modal-title fw-bold">Update Product</h5>
                         <button type="button" class="btn-close" popovertarget="my-popover"></button>
                     </div>
@@ -336,8 +371,7 @@
                                         $id = $product->product_id;
                                     }
                                 @endphp
-
-                                <form action="{{ route('updateDonMacchiatosProduct', ['id' => $id]) }}" method="POST"
+                                <form action="{{ route('updateSpecialProduct', ['id' => $id]) }}" method="POST"
                                     id="updateForm" enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
@@ -352,7 +386,7 @@
                                         <div class="input-group">
                                             <span class="input-group-text">₱</span>
                                             <input type="number" class="form-control" id="editPrice" name="price"
-                                                step="0.01" max="99999"
+                                                max="99999"
                                                 oninput="if(this.value.length > 5) this.value=this.value.slice(0,5)"
                                                 required>
                                         </div>
@@ -382,7 +416,18 @@
 
             </div>
 
+
+
+
             <script>
+                function editProduct(id, name, price, description) {
+                    document.getElementById('updateForm').action = `/updateSpecialProduct/${id}`;
+                    document.getElementById('editProductId').value = id;
+                    document.getElementById('editName').value = name;
+                    document.getElementById('editPrice').value = price;
+                    document.getElementById('editDescription').value = description;
+                }
+
                 function searchProduct() {
                     let input = document.getElementById('search');
                     let filter = input.value.toLowerCase();
@@ -408,19 +453,9 @@
                     }
                 }
 
-                function editProduct(id, name, price, description, image) {
-                    document.getElementById('updateForm').action = `/updateDonMacchiatosProduct/${id}`;
-                    document.getElementById('editProductId').value = id;
-                    document.getElementById('editName').value = name;
-                    document.getElementById('editPrice').value = price;
-                    document.getElementById('editDescription').value = description;
-                    document.getElementById('editImage').value = image;
-
-                }
-
                 function setDeleteProductId(productId) {
                     const form = document.getElementById('logout-form');
-                    form.action = `{{ url('deleteEachDonmacchiatosProduct') }}/${productId}`;
+                    form.action = `{{ url('deleteEachSpecialProduct') }}/${productId}`;
                 }
 
                 document.addEventListener('DOMContentLoaded', function() {
@@ -434,10 +469,35 @@
                         }, 3000);
                     });
                 });
+
+                function filterProducts(category, event) {
+                    document.querySelectorAll('nav .btn').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+
+                    event.target.classList.add('active');
+
+                    let table = document.getElementById('productTable');
+                    let tr = table.getElementsByTagName('tr');
+
+                    for (let i = 1; i < tr.length; i++) {
+                        let categoryCell = tr[i].getElementsByTagName('td')[4];
+                        if (categoryCell) {
+                            let categoryValue = categoryCell.textContent || categoryCell.innerText;
+
+                            if (category === 'all' || categoryValue.trim() === category) {
+                                tr[i].style.display = '';
+                            } else {
+                                tr[i].style.display = 'none';
+                            }
+                        }
+                    }
+                }
             </script>
 
             <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
 
 
 </body>

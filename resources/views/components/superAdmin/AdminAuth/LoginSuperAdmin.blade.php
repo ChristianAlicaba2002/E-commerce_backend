@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Super Admin </title>
     <link rel="shortcut icon" href="/storage/logo.png" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -58,11 +58,11 @@
 <body>
     @auth
         <div>
-            @include('pages.HomePage')
-            @yield('content')
+            @include('components.superAdmin.pages.dashboard')
+            @yield('dashboard')
             @if (session('access'))
                 <script>
-                    alert('{{ session('access') }}')
+                    alert("{{ session('access') }}")
                 </script>
             @endif
 
@@ -108,21 +108,22 @@
                 <div class="col-12 col-md-6 col-lg-4">
                     <div class="card login-card bg-white border-warning">
                         <div class="card-body p-4">
-                            <h2 class="text-center text-black mb-4">Welcome Back</h2>
+                            <h2 class="text-center text-black mb-2">ADMIN</h2>
+                            <p class="text-center">Don Macchiatos</p>
 
 
 
-                            <form id="loginForm" action="{{ route('admin.login') }}" method="POST">
+                            <form id="loginForm" action="{{ route('superadmin.login') }}" method="POST">
                                 @csrf
                                 <div class="mb-3">
-                                    <label for="firstname" class="form-label text-black">First Name</label>
+                                    <label for="admin" class="form-label text-black">Admin</label>
                                     <div class="input-group">
                                         <span class="input-group-text bg-warning text-white">
                                             <i class="fas fa-user"></i>
                                         </span>
-                                        <input type="text" class="form-control @error('firstname') is-invalid @enderror"
-                                            id="firstname" name="firstname" required placeholder="First Name">
-                                        @error('firstname')
+                                        <input type="text" class="form-control @error('admin') is-invalid @enderror"
+                                            id="admin" name="admin" required placeholder="Admin">
+                                        @error('admin')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
                                             </div>
@@ -148,26 +149,17 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="d-grid gap-2 mt-3">
-                                    <p>
-                                        Don't have an account?
-                                        <a href="{{ route('RegisterPage') }}"
-                                            class="text-primary text-decoration-none">
-                                            Sign up
-                                        </a>
-                                    </p>
-                                </div>
                                 <div class="d-grid gap-2 mb-3">
                                     <button type="submit" class="btn btn-warning">
                                         <i class="fas fa-sign-in-alt me-2 text-black"></i>Login
                                     </button>
                                 </div>
 
-                                <div class="mb-3 text-center">
+                                <!-- <div class="mb-3 text-center">
                                     <a href="/ForgotpassPage" class="text-danger text-decoration-none">
                                         Forgot password?
                                     </a>
-                                </div>
+                                </div> -->
 
 
 

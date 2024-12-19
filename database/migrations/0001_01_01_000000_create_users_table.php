@@ -16,8 +16,10 @@ return new class extends Migration
             $table->string('branchname')->unique();
             $table->string('firstname');
             $table->string('lastname');
+            $table->string('address');
+            $table->string('phone_number');
+            $table->string('email')->unique();
             $table->string('password');
-            $table->string('role');
             $table->rememberToken();
             $table->timestamps();
         });

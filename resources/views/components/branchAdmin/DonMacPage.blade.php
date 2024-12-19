@@ -4,14 +4,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="shortcut icon" href="/storage/logo.png" type="image/x-icon">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Don Macchiatos - Admin Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
-    <title>Special Products - Admin Dashboard</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
 </head>
 <style>
     :root {
@@ -21,7 +20,7 @@
         --darker-bg: #141414;
         --lighter-bg: #2d2d2d;
         --lighter-font: #ffffff;
-        --darker-font: #000000;
+        --darker-font: rgb(0, 0, 0);
     }
 
     body {
@@ -33,6 +32,7 @@
         display: flex;
         min-height: 100vh;
     }
+
 
     .sidebar {
         width: 250px;
@@ -76,11 +76,13 @@
         margin-right: 10px;
     }
 
+
     .main-content {
         margin-left: 250px;
         width: calc(100% - 250px);
         padding: 20px;
     }
+
 
     .dashboard-card {
         background: white;
@@ -94,8 +96,8 @@
 
     .dashboard-card:hover {
         transform: translateY(-5px);
-        background: var(--primary-orange);
-        color: var(--lighter-font)
+        background-color: var(--primary-orange);
+        color: var(--lighter-font);
     }
 
     .card-icon {
@@ -113,6 +115,7 @@
         background: var(--primary-orange);
         color: white;
     }
+
 
     .form-container {
         background: white;
@@ -139,6 +142,7 @@
         background: #ffb62f;
         transform: translateY(-2px);
     }
+
 
     .table-container {
         background: white;
@@ -174,7 +178,7 @@
     }
 
     .dropdown-menu {
-        margin-left: 5px;
+        margin: 2% 0 0 6%;
         display: none;
         position: absolute;
         z-index: 1000;
@@ -200,19 +204,16 @@
 </style>
 
 <body>
-
-
     <div class="wrapper">
 
         <nav class="sidebar">
             <div class="sidebar-header">
-                <h3><i class="fa-brands fa-product-hunt"></i>Special Products</h3>
+                <h3><i class="fas fa-coffee me-2"></i>Don Macchiatos</h3>
             </div>
             <div class="sidebar-menu">
                 <a href="{{ route('LoginPage') }}" class="menu-item">
                     <i class="fa-solid fa-arrow-left"></i>Back to Home
                 </a>
-
                 <div class="dropdown">
                     <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
@@ -247,13 +248,14 @@
                         <li><a class="dropdown-item" href="{{ '/DeletedSpecialProducts' }}">Special Products</a></li>
                     </ul>
                 </div>
+
             </div>
         </nav>
 
 
         <div class="main-content">
 
-            <div class="row mb-4">
+            <div class="row mb-4 ">
 
                 <div class="col-md-3">
                     <div class="dashboard-card">
@@ -326,125 +328,210 @@
                         @endisset
                     </div>
                 </div>
-
-                @if (session('success'))
-                    <div class="alert alert-success custom-alert alert-dismissible fade show animate__animated animate__fadeIn"
-                        role="alert">
-                        <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
-
-                @if (session('error'))
-                    <div class="alert alert-danger custom-alert alert-dismissible fade show animate__animated animate__fadeIn"
-                        role="alert">
-                        <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                @endif
+            </div>
 
 
+            @if (session('success'))
+                <div class="alert alert-success custom-alert alert-dismissible fade show" role="alert">
+                    <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
 
-                <div class="row justify-content-center">
-                    <div class="col-md-8">
-                        <div class="form-container">
-                            <h3 class="mb-4"><i class="fas fa-plus-circle me-2"></i>Add New Product</h3>
-                            <form id="productForm" action="/addspecialproducts" method="post"
-                                enctype="multipart/form-data">
-                                @csrf
-                                <div class="mb-3">
-                                    <label class="form-label">Product Name</label>
-                                    <input type="text" name="name"
-                                        class="form-control @error('name') is-invalid @enderror"
-                                        placeholder="Enter product name" value="{{ old('name') }}">
-                                    @error('name')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+
+            @if (session('error'))
+                <div class="alert custom-alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="form-container">
+                        <h3 class="mb-4"><i class="fas fa-plus-circle me-2"></i>Add New Product</h3>
+                        <form id="productForm" action="/addDonMacProducts" method="post"
+                            enctype="multipart/form-data">
+                            @csrf
+                            <div class="mb-3">
+                                <label class="form-label">Product Name</label>
+                                <input type="text" name="name" maxlength="50"
+                                    class="form-control @error('name') is-invalid @enderror"
+                                    placeholder="Enter product name" value="{{ old('name') }}">
+                                @error('name')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Price</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">₱</span>
+                                    <input type="number" name="price"
+                                        class="form-control @error('price') is-invalid @enderror"
+                                        placeholder="Enter price" value="{{ old('price') }}"min="1" max="99999"
+                                        oninput="if(this.value.length > 5) this.value=this.value.slice(0,5)">
                                 </div>
-                                <div class="mb-3">
-                                    <label class="form-label">Price</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text">₱</span>
-                                        <input type="number" name="price"
-                                            class="form-control @error('price') is-invalid @enderror"
-                                            placeholder="Enter price" value="{{ old('price') }}" min="1"
-                                            max="99999"
-                                            oninput="if(this.value.length > 5) this.value=this.value.slice(0,5)">
-                                    </div>
-                                    @error('price')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
+                                @error('price')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label class="form-label">Description</label>
+                                <textarea name="description" class="form-control @error('description') is-invalid @enderror"
+                                    placeholder="Enter description">{{ old('description') }}</textarea>
+                                @error('description')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Product Image</label>
+                                <input type="file" id="images"
+                                    class="form-control @error('image') is-invalid @enderror" name="image">
+                                @error('image')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                                <div class="mt-3">
+                                    <img id="imagessss" class="img-preview img-fluid rounded"
+                                        style="max-height: 200px;" src="" alt="">
                                 </div>
-
-
-
-                                <div class="mb-3">
-                                    <label class="form-label">Description</label>
-                                    <textarea name="description" class="form-control @error('description') is-invalid @enderror"
-                                        placeholder="Enter description" value="{{ old('description') }}"></textarea>
-                                    @error('description')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-
-                                <div class="mb-3">
-                                    <label class="form-label">Category</label>
-                                    <select name="category"
-                                        class="form-control mb-1 @error('category') is-invalid @enderror">
-                                        <option value="">Select a category</option>
-                                        <option value="Pizza" {{ old('category') == 'Pizza' ? 'selected' : '' }}>
-                                            Pizza</option>
-                                        <option value="Drink" {{ old('category') == 'Drink' ? 'selected' : '' }}>
-                                            Drinks</option>
-                                        <option value="Dessert" {{ old('category') == 'Dessert' ? 'selected' : '' }}>
-                                            Dessert</option>
-                                        <option value="Combo" {{ old('categroy') == 'Combo' ? 'selected' : '' }}>
-                                            Combo</option>
-                                    </select>
-                                    @error('category')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                </div>
-
-
-                                <div class="mb-3">
-                                    <label class="form-label">Product Image</label>
-                                    <input type="file" id="images"
-                                        class="form-control @error('image') is-invalid @enderror" name="image">
-                                    @error('image')
-                                        <div class="invalid-feedback">{{ $message }}</div>
-                                    @enderror
-                                    <div class="mt-3">
-                                        <img id="imagessss" class="img-preview img-fluid rounded"
-                                            style="max-height: 200px;" src="" alt="">
-                                    </div>
-                                </div>
-                                <div class="text-end">
-                                    <button type="submit" class="btn btn-orange">
-                                        <i class="fas fa-plus me-2"></i>Add Product
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
+                            </div>
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-orange">
+                                    <i class="fas fa-plus me-2"></i>Add Product
+                                </button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
-        <script src="{{ asset('homepage.js') }}"></script>
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const alerts = document.querySelectorAll('.alert-dismissible');
-                alerts.forEach(alert => {
-                    setTimeout(() => {
-                        alert.classList.add('alert-fade-out');
-                        setTimeout(() => {
-                            alert.remove();
-                        }, 500);
-                    }, 3000);
-                });
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        const imagessss = document.getElementById("imagessss");
+        const message = document.getElementById("message");
+
+        let nameofFile = "";
+        document
+            .querySelector('input[type="file"]')
+            .addEventListener("change", function() {
+                if (this.files && this.files[0]) {
+                    let img = document.querySelector("img");
+
+                    img.onload = () => {
+                        URL.revokeObjectURL(img.src);
+                    };
+                    img.src = URL.createObjectURL(this.files[0]);
+                    console.log(this.files[0]);
+                    imagessss.style.display = "inline-block";
+                    subimage.style.display = "none";
+                    imagelabel.textContent = this.files[0].name;
+                }
+
+                const getfilename = (event) => {
+                    const files = event.target.files;
+                    const fileName = files[0].name;
+                    nameofFile = fileName;
+                    console.log("file name: ", getfilename);
+                };
             });
-        </script>
+
+        document
+            .getElementById("productForm")
+            .addEventListener("submit", function(event) {
+                event.preventDefault();
+
+                const name = document.querySelector('input[name="name"]');
+                const price = document.querySelector('input[name="price"]');
+                const image = document.querySelector('input[name="image"]');
+                const description = document.querySelector(
+                    'textarea[name="description"]'
+                );
+
+                const inputs = [name, price, image];
+                inputs.forEach((input) => {
+                    input.classList.remove("is-invalid");
+                    const feedback = input.nextElementSibling;
+                    if (feedback && feedback.classList.contains("invalid-feedback")) {
+                        feedback.remove();
+                    }
+                });
+                let isValid = true;
+
+                if (!name.value.trim()) {
+                    showError(name, "Product name is required");
+                    isValid = false;
+                }
+
+                if (!price.value.trim()) {
+                    showError(price, "Price is required");
+                    isValid = false;
+                } else if (price.value <= 0) {
+                    showError(price, "Price must be greater than 0");
+                    isValid = false;
+                }
+
+                if (!image.files || !image.files[0]) {
+                    showError(image, "Please select an image");
+                    isValid = false;
+                }
+
+                if (!description.value.trim()) {
+                    showError(description, "Description is required");
+                    isValid = false;
+                }
+
+
+                if (isValid) {
+                    this.submit();
+                }
+            });
+
+        function showError(input, message) {
+            input.classList.add("is-invalid");
+            const errorDiv = document.createElement("div");
+            errorDiv.className = "invalid-feedback";
+            errorDiv.textContent = message;
+            input.parentNode.insertBefore(errorDiv, input.nextSibling);
+        }
+
+        document.getElementById("images").onchange = function(evt) {
+            const [file] = this.files;
+            if (file) {
+                document.getElementById("imagessss").src = URL.createObjectURL(file);
+            }
+        };
+
+        document.getElementById("images").addEventListener("change", function(event) {
+            const image = document.getElementById("imagessss");
+            const file = event.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    image.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const alerts = document.querySelectorAll(".alert-dismissible");
+            alerts.forEach((alert) => {
+                setTimeout(() => {
+                    alert.classList.add("alert-fade-out");
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 500);
+                }, 3000);
+            });
+        });
+    </script>
 </body>
 
 </html>

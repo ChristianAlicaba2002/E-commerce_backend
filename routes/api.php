@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\DonMacController;
 use App\Http\Controllers\Api\RegisteredUserApiController;
 use App\Http\Controllers\Api\SpecialProductController;
 use App\Http\Controllers\Api\UserOrderController;
+use App\Http\Controllers\SuperAdmin\SuperAdminController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -45,3 +46,9 @@ Route::post('/updateOrderStatus', [UserOrderController::class, 'updateStatus']);
 
 // // Update Order Status API
 // Route::post('/updateOrderStatus', [UserOrderDonmacController::class, 'updateStatus']);
+
+
+
+
+Route::post('/auth/Branch' , [SuperAdminController::class , 'AddBranch']);
+
