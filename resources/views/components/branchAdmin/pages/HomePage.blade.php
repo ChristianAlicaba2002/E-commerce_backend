@@ -99,7 +99,7 @@
         
             <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
                 <div class="container-fluid">
-                    <a class="navbar-brand" href="{{ '/LoginPage' }}">
+                    <a class="navbar-brand" href="{{ '/' }}">
                         <img class="logo rounded-circle" src="/storage/logo.png" alt="Don Macchiatos Logo" height="40">
                     </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
@@ -108,7 +108,7 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <div class="navbar-nav ms-auto">
-                            <a class="nav-link" href="{{ 'SpecialProductPage' }}">Dashboard</a>
+                            <a class="nav-link" href="{{ 'DonMacAllProducts' }}">Dashboard</a>
                             <a class="nav-link" href="{{ 'OrdersPage' }}">Orders</a>
                         </div>
 
@@ -145,8 +145,7 @@
 
             <section class="hero-section">
                 <div class="container text-center">
-                    <h1 class="mb-4" data-aos="fade-down">Hello, {{ Auth::user()->branchname }} <i
-                            class="fa-solid fa-person"></i></h1>
+                <h1 class="mb-4" data-aos="fade-down">{{ Auth::guard('branches')->user()->branch_name }} <i class="fa-solid fa-house"></i></h1>
                     <h1 class="display-1 mb-4" data-aos="fade-down">Don Macchiatos</h1>
                     <p class="lead mb-4" data-aos="fade-up" data-aos-delay="200">
                         Crafting Perfect Moments, One Cup at a Time

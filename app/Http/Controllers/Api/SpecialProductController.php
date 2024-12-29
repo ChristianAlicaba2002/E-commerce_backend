@@ -41,14 +41,16 @@ class SpecialProductController extends Controller
             'description' => 'required|string',
             'category' => 'required|in:Pizza,Drink,Dessert,Combo',
             'image' => 'nullable|image',
+            'branch_id' => 'required|string',
+            'branch_name' => 'required|string',
         ]);
 
         if ($validator->fails()) {
-            return redirect('/SpecialProductPage')->with('error', 'All fields are required');
+            return redirect('/AllSpecialProducts')->with('error', 'All fields are required');
         }
 
         if (DB::table('special_product')->where('name', $request->name)->exists()) {
-            return redirect('/SpecialProductPage')->with('error', 'Product name already exists');
+            return redirect('/AllSpecialProducts')->with('error', 'Product name already exists');
         }
 
         $product_id = $this->generateUniqueProductID();
@@ -75,11 +77,13 @@ class SpecialProductController extends Controller
             $data['image'],
             $request->description,
             $request->category,
+            $request->branch_id,
+            $request->branch_name,
             Carbon::now()->toDateTimeString(),
             Carbon::now()->toDateTimeString()
         );
 
-        return redirect('/SpecialProductPage')->with('success', 'Product Added Successfully');
+        return redirect('/AllSpecialProducts')->with('success', 'Product Added Successfully');
     }
 
     public function filterByCategory($category)
@@ -158,6 +162,8 @@ class SpecialProductController extends Controller
             'price' => 'required|numeric',
             'description' => 'required|string',
             'image' => 'nullable|image',
+            'branch_id' => 'required|string',
+            'branch_name' => 'required|string',
         ]);
 
         $data = [];
@@ -182,6 +188,8 @@ class SpecialProductController extends Controller
             $price,
             $imageName,
             $request->description,
+            $request->branch_id,
+            $request->branch_name,
             $product->category,
             $product->created_at,
             Carbon::now()->toDateTimeString() // Changed to toDateTimeString() for consistency
@@ -207,6 +215,8 @@ class SpecialProductController extends Controller
             'description' => $product->description,
             'category' => $product->category,
             'image' => $product->image,
+            'branch_id' => $product->branch_id,
+            'branch_name' => $product->branch_name,
             'created_at' => $product->created_at,
             'updated_at' => Carbon::now()->toDateTimeLocalString(), // Ensure only month, day, and year are included // Updated to include only month, day, and year
         ]);
@@ -231,6 +241,8 @@ class SpecialProductController extends Controller
             'description' => $product->description,
             'category' => $product->category,
             'image' => $product->image,
+            'branch_id' => $product->branch_id,
+            'branch_name' => $product->branch_name,
             'created_at' => $product->created_at,
             'updated_at' => $product->updated_at,
         ]);

@@ -17,11 +17,11 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
+    protected $table = 'branches';
 
-    protected $table = 'super_admin';
     protected $fillable = [
-        'admin',
-        'password'
+        'branch_name',
+        'password',
     ];
 
     /**

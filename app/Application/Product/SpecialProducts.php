@@ -19,17 +19,27 @@ class SpecialProducts
         return $this->SpecialRepository->findAll();
     }
 
-    public function create(string $product_id, string $name, $price, string $image, string $description, string $category, string $created_at, string $updated_at)
+    public function create(string $product_id, string $name, $price, string $image, string $description, string $category, string $branch_id, string $branch_name, string $created_at, string $updated_at)
     {
 
         $price = is_null($price) ? null : (float) $price;
 
-        $data = new SpecialProduct($product_id, $name, $price, $image, $description, $category, $created_at, $updated_at);
+        $data = new SpecialProduct(
+            $product_id,
+            $name,
+            $price,
+            $image,
+            $description,
+            $category,
+            $branch_id,
+            $branch_name,
+            $created_at,
+            $updated_at);
 
         return $this->SpecialRepository->create($data);
     }
 
-    public function update(string $product_id, string $name, $price, ?string $image, string $description, string $category, string $created_at, string $updated_at)
+    public function update(string $product_id, string $name, $price, ?string $image, string $description, string $category, string $branch_id, string $branch_name, string $created_at, string $updated_at)
     {
         $price = is_null($price) ? null : (float) $price;
         $newdata = new SpecialProduct(
@@ -39,6 +49,8 @@ class SpecialProducts
             $image,
             $description,
             $category,
+            $branch_id,
+            $branch_name,
             $created_at,
             $updated_at
         );

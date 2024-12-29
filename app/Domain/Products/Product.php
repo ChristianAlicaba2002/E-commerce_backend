@@ -10,6 +10,8 @@ class Product
         private ?float $price,
         private ?string $image,
         private ?string $description,
+        private ?string $branch_id,
+        private ?string $branch_name,
         private ?string $created_at,
         private ?string $updated_at
 
@@ -20,6 +22,8 @@ class Product
         $this->price = $price;
         $this->image = $image;
         $this->description = $description;
+        $this->branch_id = $branch_id;
+        $this->branch_name = $branch_name;
         $this->created_at = $created_at;
         $this->updated_at = $updated_at;
     }
@@ -32,6 +36,8 @@ class Product
             'price' => $this->price,
             'image' => $this->image,
             'description' => $this->description,
+            'branch_id' => $this->branch_id,
+            'branch_name' => $this->branch_name,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
@@ -62,12 +68,22 @@ class Product
         return $this->description;
     }
 
-    public function created_at()
+    public function getBranch_id()
+    {
+        return $this->branch_id;
+    }
+
+    public function getBranch_name()
+    {
+        return $this->branch_name;
+    }
+
+    public function getCreatedAt()
     {
         return $this->created_at;
     }
 
-    public function updated_at()
+    public function getUpdatedAt()
     {
         return $this->updated_at;
     }

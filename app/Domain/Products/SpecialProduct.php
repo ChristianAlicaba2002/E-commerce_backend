@@ -11,6 +11,8 @@ class SpecialProduct
         private ?string $image,
         private ?string $description,
         private ?string $category,
+        private ?string $branch_id,
+        private ?string $branch_name,
         private ?string $created_at,
         private ?string $updated_at,
     ) {
@@ -20,6 +22,8 @@ class SpecialProduct
         $this->image = $image;
         $this->description = $description;
         $this->category = $category;
+        $this->branch_id = $branch_id;
+        $this->branch_name = $branch_name;
         $this->created_at = $created_at;
         $this->updated_at = $updated_at;
     }
@@ -33,6 +37,8 @@ class SpecialProduct
             'image' => $this->image,
             'description' => $this->description,
             'category' => $this->category,
+            'branch_name' => $this->branch_name,
+            'branch_id' => $this->branch_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
@@ -66,6 +72,16 @@ class SpecialProduct
     public function getCategory()
     {
         return $this->category;
+    }
+
+    public function getBranch_name()
+    {
+        return $this->branch_name;
+    }
+
+    public function getBranch_id()
+    {
+        return $this->branch_id;
     }
 
     public function getCreated_at()

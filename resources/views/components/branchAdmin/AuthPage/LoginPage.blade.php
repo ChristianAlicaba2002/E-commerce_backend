@@ -56,9 +56,9 @@
 </head>
 
 <body>
-    @auth
+    @auth('branches')
         <div>
-            @include('pages.HomePage')
+            @include('components.branchAdmin.pages.HomePage')
             @yield('content')
             @if (session('access'))
                 <script>
@@ -68,7 +68,7 @@
 
         </div>
     @else
-        <div class="containerBackgound">
+        <div class="containerBackgound container-fluid">
 
             <div class="row justify-content-center align-items-center h-100 w-100">
                 <div class='position-absolute top-0 end-0'>
@@ -116,24 +116,27 @@
                             <form id="loginForm" action="{{ route('admin.login') }}" method="POST">
                                 @csrf
                                 <div class="mb-3">
-                                    <label for="branchname" class="form-label text-black">Branch</label>
+                                    <label for="branch_name" class="form-label text-black">Branch</label>
                                     <div class="input-group">
                                         <span class="input-group-text bg-warning text-white">
                                             <i class="fas fa-user"></i>
                                         </span>
-                                        <Select name="branchname"
-                                            class="form-control @error('branchname') is-invalid @enderror" id="branchname"
-                                            required>
-                                            <option value="Compostela Cebu">Compostela Cebu</option>
-                                            <option value="Liloan Cebu">Liloan Cebu</option>
-                                            <option value="Consolacion Cebu">Consolacion Cebu</option>
-                                            <option value="Mandaue City">Mandaue Cebu City</option>
-                                            <option value="Lapu-Lapu City">Lapu-Lapu City</option>
-                                            <option value="Banilad City">Banilad City</option>
-                                            <option value="Talisay City">Talisay City</option>
-                                            <option value="Cebu City">Cebu City</option>
-                                        </Select>
-                                        @error('branchname')
+                                        <input type="text" 
+                                            name="branch_name"
+                                            id="branch_name"
+                                            class="form-control @error('branch_name') is-invalid @enderror"
+                                            placeholder="Search your branch"
+                                            required 
+                                            list="branchList">
+                                        <datalist id="branchList">
+                                            @foreach ($branches as $branch)
+                                                @if($branch->branch_name == null)
+                                                    <option value="">No branches available</option>
+                                                @endif
+                                                <option value="{{ $branch->branch_name }}">
+                                            @endforeach
+                                        </datalist>
+                                        @error('branch_name')
                                             <div class="invalid-feedback">
                                                 {{ $message }}
                                             </div>
@@ -159,30 +162,26 @@
                                         @enderror
                                     </div>
                                 </div>
-                                {{-- <div class="d-grid gap-2 mt-3">
-                                    <p>
-                                        Don't have an account?
-                                        <a href="{{ route('RegisterPage') }}" class="text-primary text-decoration-none">
-                                            Sign up
-                                        </a>
-                                    </p>
-                                </div> --}}
-                                <div class="d-grid gap-2 mb-3">
-                                    <button type="submit" class="btn btn-warning">
-                                        <i class="fas fa-sign-in-alt me-2 text-black"></i>Login
-                                    </button>
-                                </div>
 
                                 <div class="mb-3 text-center">
                                     <a href="/ForgotpassPage" class="text-danger text-decoration-none">
                                         Forgot password?
                                     </a>
                                 </div>
+                             
+                                <div class="d-grid gap-2 mb-3">
+                                    <button type="submit" class="btn btn-warning">
+                                        <i class="fas fa-sign-in-alt me-2 text-black"></i>Login
+                                    </button>
+                                </div>
 
+                              
 
-
-
-
+                                <div class="mb-3 text-center">
+                                    <a href="/LoginSuperAdmin" class="text-warning text-decoration-none">
+                                        <i class="fas fa-user-shield me-1"></i>Go to Super Admin
+                                    </a>
+                                </div>
 
                             </form>
                         </div>

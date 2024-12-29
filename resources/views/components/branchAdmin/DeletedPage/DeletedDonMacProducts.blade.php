@@ -104,7 +104,7 @@
     }
 
     .dropdown-menu {
-        margin: 2% 0 0 6%;
+        margin: 1.5% 0 0 0;
         display: none;
         position: absolute;
         z-index: 1000;
@@ -136,21 +136,10 @@
             <h3><i class="fas fa-coffee me-2"></i>Deleted Items</h3>
         </div>
         <div class="sidebar-menu">
-            <a href="{{ '/LoginPage' }}" class="menu-item">
+            <a href="{{ '/' }}" class="menu-item">
                 <i class="fa-solid fa-arrow-left"></i>Back to Home
             </a>
-            <div class="dropdown">
-                <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fa-solid fa-shop"></i>Add Products
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="deletedDropdown">
-                    <li><a class="dropdown-item" href="{{ '/DonMacPage' }}">Don Macchiatos</a></li>
-                    <li><a class="dropdown-item" href="{{ '/SpecialProductPage' }}">Special Products</a></li>
-                </ul>
-            </div>
-
-
+    
             <div class="dropdown">
                 <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button"
                     data-bs-toggle="dropdown" aria-expanded="false">
@@ -172,6 +161,13 @@
                     <li><a class="dropdown-item" href="{{ '/DeletedDonMacProducts' }}"> Don Macchiatos</a></li>
                     <li><a class="dropdown-item" href="{{ '/DeletedSpecialProducts' }}"> Special Products</a></li>
                 </ul>
+            </div>
+
+            <div style="position: absolute; bottom: 20px; width: 100%; text-align: center; color: white; padding: 15px; background-color: var(--darker-bg);">
+                <i class="fas fa-store me-2"></i>
+                <a class="text-white" href="{{ '/DisplayBranchDashboard' . Auth::guard('branches')->user()->branch_id }}">
+                    <strong>{{ Auth::guard('branches')->user()->branch_name }}</strong>
+                </a>
             </div>
         </div>
     </nav>

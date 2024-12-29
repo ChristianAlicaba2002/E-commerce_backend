@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->string('category')->nullable();
             $table->string('image')->nullable();
+            $table->string('branch_id')->constrained();
+            $table->string('branch_name')->constrained();
             $table->timestamps();
         });
     }

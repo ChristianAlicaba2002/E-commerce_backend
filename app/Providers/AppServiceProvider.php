@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use App\Domain\Products\ProductRepository;
 use App\Domain\Products\SpecialRepository;
 use App\Infrastructure\Persistence\Eloquent\Product\EloquentProductRepository;
 use App\Infrastructure\Persistence\Eloquent\Product\EloquentSpecialProductRepository;
+use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -17,6 +17,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(ProductRepository::class, EloquentProductRepository::class);
         $this->app->bind(SpecialRepository::class, EloquentSpecialProductRepository::class);
+        $this->app->bind(\App\Domain\Branches\BranchRepository::class, \App\Infrastructure\Persistence\Eloquent\Admin\EloquentBranchRepository::class);
     }
 
     /**

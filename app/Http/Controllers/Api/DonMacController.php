@@ -6,6 +6,7 @@ use App\Application\Product\RegisterProducts;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -46,11 +47,11 @@ class DonMacController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect('/DonMacPage')->with('error', 'All fields are required');
+            return redirect('/DonMacAllProducts')->with('error', 'All fields are required');
         }
 
-        if (DB::table('don_mac')->where('name', $request->name)->exists()) {
-            return redirect('/DonMacPage')->with('error', 'Product name already exists');
+        if (DB::table('don_mac')->where('name', $request->name)->where('branch_id', Auth::guard('branches')->user()->branch_id)->exists()) {
+            return redirect('/DonMacAllProducts')->with('error', 'Product name already exists');
         }
 
         $product_id = $this->generateUniqueProductID();
@@ -75,12 +76,14 @@ class DonMacController extends Controller
             $price,
             $data['image'],
             $request->description,
+            $request->branch_id,
+            $request->branch_name,
             Carbon::now()->toDateTimeString(),
             Carbon::now()->toDateTimeString()
         );
 
         // return response()->json(['data' => $Incommingcredentials], 200);
-        return redirect('/DonMacPage')->with('success', 'Product added successfully');
+        return redirect('/DonMacAllProducts')->with('success', 'Product added successfully');
 
     }
 
@@ -115,6 +118,8 @@ class DonMacController extends Controller
             'price' => 'required|numeric',
             'description' => 'required|string',
             'image' => 'nullable|image',
+            'branch_id' => 'required|string',
+            'branch_name' => 'required|string',
 
         ]);
 
@@ -141,6 +146,8 @@ class DonMacController extends Controller
             $price,
             $request->description,
             $imageName,
+            $request->branch_id,
+            $request->branch_name,
             $product->created_at,
             Carbon::now()->toDateTimeString()
         );
@@ -163,6 +170,8 @@ class DonMacController extends Controller
             'price' => $product->price,
             'description' => $product->description,
             'image' => $product->image,
+            'branch_id' => $product->branch_id,
+            'branch_name' => $product->branch_name,
             'created_at' => $product->created_at,
             'updated_at' => Carbon::now()->toDateTimeLocalString(),
         ]);
@@ -186,6 +195,8 @@ class DonMacController extends Controller
             'price' => $products->price,
             'description' => $products->description,
             'image' => $products->image,
+            'branch_id' => $products->branch_id,
+            'branch_name' => $products->branch_name,
             'created_at' => $products->created_at,
             'updated_at' => Carbon::now()->toDateTimeLocalString(),
         ]);

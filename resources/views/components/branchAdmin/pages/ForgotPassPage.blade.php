@@ -49,7 +49,7 @@
 
 <body class="min-vh-100 d-flex flex-column">
     <div class="container my-5">
-        <a href="/LoginPage"><i class="fa-solid fa-arrow-left text-black" style="font-size: 1.5rem"></i></a>
+        <a href="/"><i class="fa-solid fa-arrow-left text-black" style="font-size: 1.5rem"></i></a>
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card shadow-sm">
@@ -94,20 +94,31 @@
                         <form action="/confirmation" method="post">
                             @csrf
                             @method('POST')
-                            <div class="mb-3">
-                                <label for="branchname" class="form-label">Branch Name</label>
-                                <input type="text" class="form-control" id="branchname" name="branchname"
+                            <!-- <div class="mb-3">
+                                <label for="branch_name" class="form-label">Branch Name</label>
+                                <input type="text" class="form-control" id="branch_name" name="branch_name"
                                     placeholder="Enter branch name" required>
-                            </div>
+                            </div> -->
                             <div class="mb-3">
-                                <label for="firstname" class="form-label">First Name</label>
-                                <input type="text" class="form-control" id="firstname" name="firstname"
+                                <label for="first_name" class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="first_name" name="first_name"
                                     placeholder="Enter first name" required>
                             </div>
                             <div class="mb-3">
-                                <label for="lastname" class="form-label">Last Name</label>
-                                <input type="text" class="form-control" id="lastname" name="lastname"
+                                <label for="last_name" class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="last_name" name="last_name"
                                     placeholder="Enter last name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="address" class="form-label">Address</label>
+                                <input type="text" class="form-control" id="address" name="address"
+                                    placeholder="Enter address" required>
+                            </div>
+        
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email"
+                                    placeholder="Enter email" required>
                             </div>
                             <div class="d-grid gap-2">
                                 <button type="submit" class="btn btn-primary">Confirm</button>

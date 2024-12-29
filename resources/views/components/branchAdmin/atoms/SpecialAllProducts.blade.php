@@ -156,7 +156,7 @@
     }
 
     .dropdown-menu {
-        margin: 2% 0 0 6%;
+        margin: 1.5% 0 0 0;
         display: none;
         position: absolute;
         z-index: 1000;
@@ -179,6 +179,30 @@
     .dropdown-item:hover {
         background-color: rgba(255, 255, 255, 0.386);
     }
+
+    .card {
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .card-body {
+        padding: 1.25rem;
+    }
+
+    .card-title {
+        color: #666;
+        margin-bottom: 0.5rem;
+    }
+
+    .card-text {
+        color: var(--primary-orange);
+        margin-bottom: 0;
+    }
 </style>
 
 <body>
@@ -188,14 +212,10 @@
             <h3><i class="fa-brands fa-product-hunt"></i>Special Products</h3>
         </div>
         <div class="sidebar-menu">
-            <a href="{{ '/LoginPage' }}" class="menu-item">
+            <a href="{{ '/' }}" class="menu-item">
                 <i class="fa-solid fa-arrow-left"></i>Back to Home
             </a>
             <div class="dropdown">
-                <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fa-solid fa-shop"></i>Add Products
-                </a>
                 <ul class="dropdown-menu" aria-labelledby="deletedDropdown">
                     <li><a class="dropdown-item" href="{{ '/DonMacPage' }}">Don Macchiatos</a></li>
                     <li><a class="dropdown-item" href="{{ '/SpecialProductPage' }}">Special Products</a></li>
@@ -227,16 +247,59 @@
                     <li><a class="dropdown-item" href="{{ '/DeletedSpecialProducts' }}"> Special Products</a></li>
                 </ul>
             </div>
+
+            <div style="position: absolute; bottom: 20px; width: 100%; text-align: center; color: white; padding: 15px; background-color: var(--darker-bg);">
+                <i class="fas fa-store me-2"></i>
+                <a class=" text-white" href="{{ '/DisplayBranchDashboard' . Auth::guard('branches')->user()->branch_id }}">
+                    <strong>{{ Auth::guard('branches')->user()->branch_name }}</strong>
+                </a>
+            </div>
         </div>
     </nav>
 
-
-
-
-
     <div class="main-content">
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">All Products</h6>
+                        <p class="card-text h4">{{ count($products) }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Revenue</h6>
+                        <p class="card-text h4">₱0.00</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Best Seller</h6>
+                        <p class="card-text h4">-</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title">Customers</h6>
+                        <p class="card-text h4">0</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="table-container">
-            <h2 class="mb-4">Special Product List</h2>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Special Products List</h2>
+                <button class="btn btn-orange" data-bs-toggle="modal" data-bs-target="#add-product-modal">
+                    <i class="fas fa-plus me-2"></i>Add Product
+                </button>
+            </div>
             @isset($products)
                 <h6>Total Products: {{ count($products) }}</h6>
             @endisset
@@ -244,20 +307,24 @@
             <input type="search" name="search" id="search" class="form-control mb-4" onkeyup="searchProduct()"
                 placeholder="Search for a product">
 
+            @if($products->isEmpty())
+                <!-- <div class="alert alert-warning">Don't have any products</div> -->
+            @else
+            
             <nav>
                 <ul class="d-flex justify-content-center gap-4 list-unstyled">
                     <li><button class="btn" onclick="filterProducts('all', event)">All</button></li>
                     <li><button class="btn" onclick="filterProducts('Pizza', event)">Pizza</button></li>
                     <li><button class="btn" onclick="filterProducts('Drink', event)">Drinks</button></li>
                     <li><button class="btn" onclick="filterProducts('Dessert', event)">Desserts</button></li>
-                    <li><button class="btn" onclick="filterProducts('Combo', event)">Combo</button></li>
-                </ul>
-            </nav>
-
+                        <li><button class="btn" onclick="filterProducts('Combo', event)">Combo</button></li>
+                    </ul>
+                </nav>
+            @endif
 
 
             @if ($products->isEmpty())
-                <div class="alert alert-warning">No products found in the Database.</div>
+                <div class="alert alert-warning">Don't have any products</div>
             @else
                 @if (session('success'))
                     <div class="alert alert-success custom-alert alert-dismissible fade show" role="alert">
@@ -322,8 +389,102 @@
                     </tbody>
                 </table>
             @endif
+
+            <div class="modal fade" id="add-product-modal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title fw-bold" id="addProductModalLabel">Add New Product</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body p-4">
+                                    <form id="productForm" action="/addspecialproducts" method="post" enctype="multipart/form-data">
+                                        @csrf
+                                        <input type="hidden" name="branch_id" value="{{ Auth::guard('branches')->user()->branch_id }}">
+                                        <input type="hidden" name="branch_name" value="{{ Auth::guard('branches')->user()->branch_name }}">
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label">Product Name</label>
+                                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
+                                                placeholder="Enter product name" value="{{ old('name') }}">
+                                            @error('name')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Price</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text">₱</span>
+                                                <input type="number" name="price"
+                                                    class="form-control @error('price') is-invalid @enderror"
+                                                    placeholder="Enter price" value="{{ old('price') }}" min="1"
+                                                    max="99999"
+                                                    oninput="if(this.value.length > 5) this.value=this.value.slice(0,5)">
+                                            </div>
+                                            @error('price')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Description</label>
+                                            <textarea name="description" class="form-control @error('description') is-invalid @enderror"
+                                                placeholder="Enter description" value="{{ old('description') }}"></textarea>
+                                            @error('description')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Category</label>
+                                            <select name="category"
+                                                class="form-control mb-1 @error('category') is-invalid @enderror">
+                                                <option value="">Select a category</option>
+                                                <option value="Pizza" {{ old('category') == 'Pizza' ? 'selected' : '' }}>
+                                                    Pizza</option>
+                                                <option value="Drink" {{ old('category') == 'Drink' ? 'selected' : '' }}>
+                                                    Drinks</option>
+                                                <option value="Dessert" {{ old('category') == 'Dessert' ? 'selected' : '' }}>
+                                                    Dessert</option>
+                                                <option value="Combo" {{ old('category') == 'Combo' ? 'selected' : '' }}>
+                                                    Combo</option>
+                                            </select>
+                                            @error('category')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+
+
+                                        <div class="mb-3">
+                                            <label class="form-label">Product Image</label>
+                                            <input type="file" id="images"
+                                                class="form-control @error('image') is-invalid @enderror" name="image">
+                                            @error('image')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                            <div class="mt-3">
+                                                <img id="imagessss" class="img-preview img-fluid rounded"
+                                                    style="max-height: 100px;" src="" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="d-flex justify-content-end gap-2 mt-4">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                            <button type="submit" class="btn btn-orange">
+                                                <i class="fas fa-plus me-2"></i>Add Product
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
         </div>
-        <!-- Delete Confirmation Modal -->
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
             aria-hidden="true">
             <div class="modal-dialog">
@@ -349,7 +510,6 @@
             </div>
         </div>
 
-        <!-- Popover UpdateForm -->
         <div class="popover-form" id="my-popover" popover>
             <div class="modal-dialog">
 
@@ -411,58 +571,132 @@
                         @endisset
                     </div>
 
-
                 </div>
-
             </div>
+        </div>
+    </div>
 
 
+    <script>
 
 
-            <script>
-                function editProduct(id, name, price, description) {
-                    document.getElementById('updateForm').action = `/updateSpecialProduct/${id}`;
-                    document.getElementById('editProductId').value = id;
-                    document.getElementById('editName').value = name;
-                    document.getElementById('editPrice').value = price;
-                    document.getElementById('editDescription').value = description;
-                }
+                const imagessss = document.getElementById("imagessss");
+                const message = document.getElementById("message");
 
-                function searchProduct() {
-                    let input = document.getElementById('search');
-                    let filter = input.value.toLowerCase();
-                    let table = document.getElementById('productTable');
-                    let tr = table.getElementsByTagName('tr');
+                let nameofFile = "";
+                document
+                    .querySelector('input[type="file"]')
+                    .addEventListener("change", function () {
+                        if (this.files && this.files[0]) {
+                            let img = document.querySelector("img");
 
-                    for (let i = 1; i < tr.length; i++) {
-                        let td = tr[i].getElementsByTagName('td');
-                        let found = false;
-
-                        for (let j = 0; j < td.length; j++) {
-                            let cell = td[j];
-                            if (cell) {
-                                let textValue = cell.textContent || cell.innerText;
-                                if (textValue.toLowerCase().indexOf(filter) > -1) {
-                                    found = true;
-                                    break;
-                                }
-                            }
+                            img.onload = () => {
+                                URL.revokeObjectURL(img.src);
+                            };
+                            img.src = URL.createObjectURL(this.files[0]);
+                            console.log(this.files[0]);
+                            imagessss.style.display = "inline-block";
+                            subimage.style.display = "none";
+                            imagelabel.textContent = this.files[0].name;
                         }
 
-                        tr[i].style.display = found ? '' : 'none';
+                        const getfilename = (event) => {
+                            const files = event.target.files;
+                            const fileName = files[0].name;
+                            nameofFile = fileName;
+                            console.log("file name: ", getfilename);
+                        };
+                    });
+
+                document
+                    .getElementById("productForm")
+                    .addEventListener("submit", function (event) {
+                        event.preventDefault();
+
+                        const name = document.querySelector('input[name="name"]');
+                        const price = document.querySelector('input[name="price"]');
+                        const image = document.querySelector('input[name="image"]');
+                        const description = document.querySelector(
+                            'textarea[name="description"]'
+                        );
+                        const category = document.querySelector('select[name="category"]');
+
+                        const inputs = [name, price, image];
+                        inputs.forEach((input) => {
+                            input.classList.remove("is-invalid");
+                            const feedback = input.nextElementSibling;
+                            if (feedback && feedback.classList.contains("invalid-feedback")) {
+                                feedback.remove();
+                            }
+                        });
+                        let isValid = true;
+
+                        if (!name.value.trim()) {
+                            showError(name, "Product name is required");
+                            isValid = false;
+                        }
+
+                        if (!price.value.trim()) {
+                            showError(price, "Price is required");
+                            isValid = false;
+                        } else if (price.value <= 0) {
+                            showError(price, "Price must be greater than 0");
+                            isValid = false;
+                        }
+
+                        if (!image.files || !image.files[0]) {
+                            showError(image, "Please select an image");
+                            isValid = false;
+                        }
+
+                        if (!description.value.trim()) {
+                            showError(description, "Description is required");
+                            isValid = false;
+                        }
+
+                        if (!category.value.trim()) {
+                            showError(category, "Category is required");
+                            isValid = false;
+                        }
+
+                        if (isValid) {
+                            this.submit();
+                        }
+                    });
+
+                function showError(input, message) {
+                    input.classList.add("is-invalid");
+                    const errorDiv = document.createElement("div");
+                    errorDiv.className = "invalid-feedback";
+                    errorDiv.textContent = message;
+                    input.parentNode.insertBefore(errorDiv, input.nextSibling);
+                }
+
+                document.getElementById("images").onchange = function (evt) {
+                    const [file] = this.files;
+                    if (file) {
+                        document.getElementById("imagessss").src = URL.createObjectURL(file);
                     }
-                }
+                };
 
-                function setDeleteProductId(productId) {
-                    const form = document.getElementById('logout-form');
-                    form.action = `{{ url('deleteEachSpecialProduct') }}/${productId}`;
-                }
+                document.getElementById("images").addEventListener("change", function (event) {
+                    const image = document.getElementById("imagessss");
+                    const file = event.target.files[0];
 
-                document.addEventListener('DOMContentLoaded', function() {
-                    const alerts = document.querySelectorAll('.alert-dismissible');
-                    alerts.forEach(alert => {
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            image.src = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+
+                document.addEventListener("DOMContentLoaded", function () {
+                    const alerts = document.querySelectorAll(".alert-dismissible");
+                    alerts.forEach((alert) => {
                         setTimeout(() => {
-                            alert.classList.add('alert-fade-out');
+                            alert.classList.add("alert-fade-out");
                             setTimeout(() => {
                                 alert.remove();
                             }, 500);
@@ -470,33 +704,114 @@
                     });
                 });
 
-                function filterProducts(category, event) {
-                    document.querySelectorAll('nav .btn').forEach(btn => {
-                        btn.classList.remove('active');
-                    });
 
-                    event.target.classList.add('active');
 
-                    let table = document.getElementById('productTable');
-                    let tr = table.getElementsByTagName('tr');
 
-                    for (let i = 1; i < tr.length; i++) {
-                        let categoryCell = tr[i].getElementsByTagName('td')[4];
-                        if (categoryCell) {
-                            let categoryValue = categoryCell.textContent || categoryCell.innerText;
 
-                            if (category === 'all' || categoryValue.trim() === category) {
-                                tr[i].style.display = '';
-                            } else {
-                                tr[i].style.display = 'none';
-                            }
+
+
+
+        function editProduct(id, name, price, description) {
+            document.getElementById('updateForm').action = `/updateSpecialProduct/${id}`;
+            document.getElementById('editProductId').value = id;
+            document.getElementById('editName').value = name;
+            document.getElementById('editPrice').value = price;
+            document.getElementById('editDescription').value = description;
+        }
+
+        function searchProduct() {
+            let input = document.getElementById('search');
+            let filter = input.value.toLowerCase();
+            let table = document.getElementById('productTable');
+            let tr = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < tr.length; i++) {
+                let td = tr[i].getElementsByTagName('td');
+                let found = false;
+
+                for (let j = 0; j < td.length; j++) {
+                    let cell = td[j];
+                    if (cell) {
+                        let textValue = cell.textContent || cell.innerText;
+                        if (textValue.toLowerCase().indexOf(filter) > -1) {
+                            found = true;
+                            break;
                         }
                     }
                 }
-            </script>
 
-            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+                tr[i].style.display = found ? '' : 'none';
+            }
+        }
+
+        function setDeleteProductId(productId) {
+            const form = document.getElementById('logout-form');
+            form.action = `{{ url('deleteEachSpecialProduct') }}/${productId}`;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const alerts = document.querySelectorAll('.alert-dismissible');
+            alerts.forEach(alert => {
+                setTimeout(() => {
+                    alert.classList.add('alert-fade-out');
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 500);
+                }, 3000);
+            });
+        });
+
+        function filterProducts(category, event) {
+            document.querySelectorAll('nav .btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            event.target.classList.add('active');
+
+            let table = document.getElementById('productTable');
+            let tr = table.getElementsByTagName('tr');
+
+            for (let i = 1; i < tr.length; i++) {
+                let categoryCell = tr[i].getElementsByTagName('td')[4];
+                if (categoryCell) {
+                    let categoryValue = categoryCell.textContent || categoryCell.innerText;
+
+                    if (category === 'all' || categoryValue.trim() === category) {
+                        tr[i].style.display = '';
+                    } else {
+                        tr[i].style.display = 'none';
+                    }
+                }
+            }
+        }
+
+            document.getElementById('productForm').addEventListener('submit', (e) => {
+                const inputs = document.querySelectorAll('input[type="text"], input[type="number"], textarea');
+                inputs.forEach(input => {
+                    input.value = input.value.trim();
+                });
+            });
+
+            document.getElementById('updateForm').addEventListener('submit', (e) => {
+                const inputs = document.querySelectorAll('input[type="text"], input[type="number"], textarea');
+                inputs.forEach(input => {
+                    input.value = input.value.trim();
+                });
+            });
+
+
+
+
+
+
+
+
+
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 
 
 

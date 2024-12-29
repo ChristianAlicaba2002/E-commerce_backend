@@ -71,13 +71,17 @@
                         <h1 class="card-title text-center mb-4">Reset Password</h1>
                         <form action="/reset-password" method="POST">
                             @csrf
-                            <div class="text-center mb-3">
+                            <div class="mb-3 d-block">
                                 <label for="">Branch Name :</label>
-                                <strong>{{ $branchname }}</strong><br>
+                                <strong>{{ $branch_name }}</strong><br>
                                 <label for="">First Name :</label>
-                                <strong>{{ $firstname }}</strong><br>
+                                <strong>{{ $first_name }}</strong><br>
                                 <label for="">Last Name :</label>
-                                <strong>{{ $lastname }}</strong>
+                                <strong>{{ $last_name }}</strong><br>
+                                <label for="">Address :</label>
+                                <strong>{{ $address }}</strong><br>
+                                <label for="">Email :</label>
+                                <strong>{{ $email }}</strong>
                             </div>
 
                             {{-- @if (session('success'))
@@ -98,9 +102,11 @@
                                 </div>
                             @endif
 
-                            <input type="hidden" name="branchname" value="{{ $branchname }}">
-                            <input type="hidden" name="firstname" value="{{ $firstname }}">
-                            <input type="hidden" name="lastname" value="{{ $lastname }}">
+                            <input type="hidden" name="branch_name" value="{{ $branch_name }}">
+                            <input type="hidden" name="first_name" value="{{ $first_name }}">
+                            <input type="hidden" name="last_name" value="{{ $last_name }}">
+                            <input type="hidden" name="address" value="{{ $address }}">
+                            <input type="hidden" name="email" value="{{ $email }}">
                             <div class="mb-3">
                                 <label for="new_password" class="form-label">New Password</label>
                                 <div class="input-group">

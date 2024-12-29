@@ -18,6 +18,8 @@ return new class extends Migration
             $table->float('price');
             $table->string('image')->nullable();
             $table->string('description')->nullable();
+            $table->string('branch_id')->constrained();
+            $table->string('branch_name')->constrained();
             $table->timestamps();
         });
     }

@@ -15,8 +15,10 @@ class EloquentProductRepository implements ProductRepository
         $productModel->price = $product->getPrice();
         $productModel->description = $product->getDescription();
         $productModel->image = $product->getImage();
-        $productModel->created_at = $product->created_at();
-        $productModel->updated_at = $product->updated_at();
+        $productModel->branch_id = $product->getBranch_id();
+        $productModel->branch_name = $product->getBranch_name();
+        $productModel->created_at = $product->getCreatedAt();
+        $productModel->updated_at = $product->getUpdatedAt();
         $productModel->save();
     }
 
@@ -28,8 +30,10 @@ class EloquentProductRepository implements ProductRepository
         $productModel->price = $product->getPrice();
         $productModel->description = $product->getDescription();
         $productModel->image = $product->getImage();
-        $productModel->created_at = $product->created_at();
-        $productModel->updated_at = $product->updated_at();
+        $productModel->branch_id = $product->getBranch_id();
+        $productModel->branch_name = $product->getBranch_name();
+        $productModel->created_at = $product->getCreatedAt();
+        $productModel->updated_at = $product->getUpdatedAt();
         $productModel->save();
     }
 
@@ -51,6 +55,8 @@ class EloquentProductRepository implements ProductRepository
             $productModel->price,
             $productModel->image,
             $productModel->description,
+            $productModel->branch_id,
+            $productModel->branch_name,
             $productModel->created_at,
             $productModel->updated_at);
     }
@@ -63,6 +69,8 @@ class EloquentProductRepository implements ProductRepository
             price: $productModel->price,
             image: $productModel->image,
             description: $productModel->description,
+            branch_id: $productModel->branch_id,
+            branch_name: $productModel->branch_name,
             created_at: $productModel->created_at,
             updated_at: $productModel->updated_at,
         ))->toArray();
@@ -81,6 +89,8 @@ class EloquentProductRepository implements ProductRepository
             $productModel->price,
             $productModel->image,
             $productModel->description,
+            $productModel->branch_id,
+            $productModel->branch_name,
             $productModel->created_at,
             $productModel->updated_at);
     }
@@ -101,6 +111,8 @@ class EloquentProductRepository implements ProductRepository
                 $match->price,
                 $match->image,
                 $match->description,
+                $match->branch_id,
+                $match->branch_name,
                 $match->created_at,
                 $match->updated_at,
             ) : null,
@@ -112,6 +124,8 @@ class EloquentProductRepository implements ProductRepository
                         $product->price,
                         $product->image,
                         $product->description,
+                        $product->branch_id,
+                        $product->branch_name,
                         $product->created_at,
                         $product->updated_at,
                     );

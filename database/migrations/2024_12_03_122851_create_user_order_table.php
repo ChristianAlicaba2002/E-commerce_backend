@@ -25,6 +25,8 @@ return new class extends Migration
             $table->integer('total_price');
             $table->string('status');
             $table->string('tracking_number');
+            $table->string('branch_id')->constrained();
+            $table->string('branch_name')->constrained();
             $table->rememberToken();
             $table->timestamps();
         });

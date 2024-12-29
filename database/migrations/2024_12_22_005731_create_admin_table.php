@@ -11,15 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('branches', function (Blueprint $table) {
+        Schema::create('admin', function (Blueprint $table) {
             $table->id();
-            $table->string('branch_id');
-            $table->string('branch_name');
-            $table->string('first_name');
-            $table->string('last_name');
-            $table->string('address');
-            $table->string('phone_number');
-            $table->string('email');
+            $table->string('admin');
             $table->string('password');
             $table->timestamps();
         });
@@ -30,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('branches');
+        Schema::dropIfExists('admin');
     }
 };

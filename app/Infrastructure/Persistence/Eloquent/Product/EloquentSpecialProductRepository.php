@@ -16,6 +16,8 @@ class EloquentSpecialProductRepository implements SpecialRepository
         $SpecialProductModel->description = $SpecialProduct->getDescription();
         $SpecialProductModel->category = $SpecialProduct->getCategory();
         $SpecialProductModel->image = $SpecialProduct->getImage();
+        $SpecialProductModel->branch_id = $SpecialProduct->getBranch_id();
+        $SpecialProductModel->branch_name = $SpecialProduct->getBranch_name();
         $SpecialProductModel->created_at = $SpecialProduct->getCreated_at();
         $SpecialProductModel->updated_at = $SpecialProduct->getUpdated_at();
         $SpecialProductModel->save();
@@ -44,6 +46,8 @@ class EloquentSpecialProductRepository implements SpecialRepository
         $SpecialProductModel->description = $SpecialProduct->getDescription();
         $SpecialProductModel->category = $SpecialProduct->getCategory();
         $SpecialProductModel->image = $SpecialProduct->getImage();
+        $SpecialProductModel->branch_id = $SpecialProduct->getBranch_id();
+        $SpecialProductModel->branch_name = $SpecialProduct->getBranch_name();
         $SpecialProductModel->created_at = $SpecialProduct->getCreated_at();
         $SpecialProductModel->updated_at = $SpecialProduct->getUpdated_at();
         $SpecialProductModel->save();
@@ -68,6 +72,8 @@ class EloquentSpecialProductRepository implements SpecialRepository
             description: $SpecialProductModel->description,
             category: $SpecialProductModel->category,
             image: $SpecialProductModel->image,
+            branch_id: $SpecialProductModel->branch_id,
+            branch_name: $SpecialProductModel->branch_name,
             created_at: $SpecialProductModel->created_at,
             updated_at: $SpecialProductModel->updated_at
         );
@@ -82,6 +88,8 @@ class EloquentSpecialProductRepository implements SpecialRepository
             description: $SpecialProductModel->description,
             category: $SpecialProductModel->category,
             image: $SpecialProductModel->image,
+            branch_id: $SpecialProductModel->branch_id,
+            branch_name: $SpecialProductModel->branch_name,
             created_at: $SpecialProductModel->created_at,
             updated_at: $SpecialProductModel->updated_at,
         ))->toArray();
@@ -101,6 +109,8 @@ class EloquentSpecialProductRepository implements SpecialRepository
             description: $SpecialProductModel->description,
             category: $SpecialProductModel->category,
             image: $SpecialProductModel->image,
+            branch_name: $SpecialProductModel->branch_name,
+            branch_id: $SpecialProductModel->branch_id,
             created_at: $SpecialProductModel->created_at,
             updated_at: $SpecialProductModel->updated_at
         );
@@ -132,6 +142,8 @@ class EloquentSpecialProductRepository implements SpecialRepository
                 description: $match->description,
                 category: $match->category,
                 image: $match->image,
+                branch_name: $match->branch_name,
+                branch_id: $match->branch_id,
                 created_at: $match->created_at,
                 updated_at: $match->updated_at
             ) : null,
@@ -144,6 +156,8 @@ class EloquentSpecialProductRepository implements SpecialRepository
                         description: $product->description,
                         category: $product->category,
                         image: $product->image,
+                        branch_name: $product->branch_name,
+                        branch_id: $product->branch_id,
                         created_at: $product->created_at,
                         updated_at: $product->updated_at
                     );
@@ -163,6 +177,8 @@ class EloquentSpecialProductRepository implements SpecialRepository
                 description: $product->description,
                 category: $product->category,
                 image: $product->image,
+                branch_name: $product->branch_name,
+                branch_id: $product->branch_id,
                 created_at: $product->created_at,
                 updated_at: $product->updated_at
             ))->toArray();

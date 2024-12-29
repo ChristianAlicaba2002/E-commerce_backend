@@ -2,9 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\SuperAdmin;
-use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Admin;
 use Illuminate\Database\Seeder;
 
 class SuperAdminSeeder extends Seeder
@@ -15,9 +13,9 @@ class SuperAdminSeeder extends Seeder
     public function run(): void
     {
         //
-        User::create([
-            'admin' => 'SuperAdmin',
-            'password' => 'SuperAdmin12345',
+        Admin::create([
+            'admin' => 'admin',
+            'password' => 'admin12345',
         ]);
     }
 }

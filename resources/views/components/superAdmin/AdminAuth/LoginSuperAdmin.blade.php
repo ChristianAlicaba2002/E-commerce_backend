@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Admin </title>
+    <title>Admin </title>
     <link rel="shortcut icon" href="/storage/logo.png" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -56,16 +56,10 @@
 </head>
 
 <body>
-    @auth
+    @auth('admin')
         <div>
             @include('components.superAdmin.pages.dashboard')
             @yield('dashboard')
-            @if (session('access'))
-                <script>
-                    alert("{{ session('access') }}")
-                </script>
-            @endif
-
         </div>
     @else
         <div class="containerBackgound">
@@ -155,17 +149,11 @@
                                     </button>
                                 </div>
 
-                                <!-- <div class="mb-3 text-center">
-                                    <a href="/ForgotpassPage" class="text-danger text-decoration-none">
-                                        Forgot password?
+                                <div class="mb-3 text-center">
+                                    <a href="/" class="text-warning text-decoration-none">
+                                        <i class="fas fa-user-shield me-1"></i>Go to Branch Admin
                                     </a>
-                                </div> -->
-
-
-
-
-
-
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -194,6 +182,21 @@
             }
         }
 
+        function toggleConfirmPassword() {
+            const passwordInput = document.getElementById('confirm_password');
+            const passwordToggle = document.getElementById('toggleConfirmPassword');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                passwordToggle.classList.remove('fa-eye-slash');
+                passwordToggle.classList.add('fa-eye');
+            } else {
+                passwordInput.type = 'password';
+                passwordToggle.classList.remove('fa-eye');
+                passwordToggle.classList.add('fa-eye-slash');
+            }
+        }
+
         document.addEventListener("DOMContentLoaded", function() {
             const alerts = document.querySelectorAll(".alert-dismissible");
             alerts.forEach((alert) => {
@@ -205,6 +208,9 @@
                 }, 5000);
             });
         });
+
+
+
     </script>
 </body>
 

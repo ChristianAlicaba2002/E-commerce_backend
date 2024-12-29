@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Infrastructure\Persistence\Eloquent\Admin\BranchesModel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,108 +13,102 @@ use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
-    //
+    public function DisplayBranchDashboard()
+    {
+        $branches = DB::table('branches')->where('branch_id', Auth::guard('branches')->user()->branch_id)->first();
+
+        return view('components/branchAdmin/atoms/DisplayBranchesDashboard', compact('branches'));
+    }
 
     public function showLoginForm()
     {
         return view('admin.login');
     }
 
-    // public function register(Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'branchname' => 'required|string|in:Compostela Cebu,Liloan Cebu,Consolacion Cebu,Mandaue City,Lapu-Lapu City,Banilad City,Talisay City,Cebu City',
-    //         'firstname' => 'required|string',
-    //         'lastname' => 'required|string',
-    //         'address' => 'required|string|in:Compostela Cebu,Liloan Cebu,Consolacion Cebu,Mandaue City,Lapu-Lapu City,Banilad City,Talisay City,Cebu City',
-    //         'phone_number' => 'required|numeric',
-    //         'email' => 'required|email',
-    //         'password' => 'required|string|min:5|max:15',
-    //         'confirm_password' => 'required|string|same:password',
-    //     ]);
-
-    //     if ($request->password !== $request->confirm_password) {
-    //         return back()->with('error', 'Please match your password ');
-
-    //     }
-
-    //     if (!preg_match('/[A-Z]/', $request->password)) {
-    //         return back()->with('error', 'The password must contain at least one Uppercase letter.');
-    //     }
-
-    //     if (!preg_match('/[0-9]/', $request->password)) {
-    //         return back()->with('error', 'The password must contain at least one Number.');
-    //     }
-
-    //     if (Str()->length($request->password) < 5) {
-    //         return back()->with('error', 'The password must be at least 5 Characters long.');
-    //     }
-
-    //     if (DB::table('users')->where('branchname', $request->branchname)->exists()) {
-    //         return back()->with('error', 'The Branch name is already exist , please make a new one.');
-    //     }
-
-    //     $user = User::create([
-    //         'firstname' => 'required|string',
-    //         'lastname' => 'required|string',
-    //         'address' => 'required|string',
-    //         'phone_number' => 'required|numeric',
-    //         'email' => 'required|email',
-    //         'password' => Hash::make($request->password),
-    //     ]);
-
-    //     $token = $user->createToken('admin_user')->plainTextToken;
-
-    //     return redirect('/LoginPage')->with('success', 'Registered successfully!');
-    // }
-
-
     public function login(Request $request): RedirectResponse
     {
-        $credentials = $request->validate([
-            'email' => ['required', 'string'],
+        $validator = Validator::make($request->all(), [
+            'branch_name' => ['required', 'string'],
             'password' => ['required', 'string', 'min:5', 'max:15'],
         ]);
 
-
-        if (Auth::attempt($credentials)) {
+        if (Auth::guard('branches')->attempt($request->only(['branch_name', 'password']))) {
             $request->session()->regenerate();
+            $user = Auth::User();
 
-            return redirect('/LoginPage')->with('access', 'Welcome Back ' . $request->firstname);
-        } else {
-            return redirect('/LoginPage')->with('revoke', 'Account Admin not found');
+            return redirect('/');
         }
+
+        return redirect('/')->with('revoke', 'Account Branch not found');
+    }
+
+    public function updateBranchInformation(Request $request, $branch_id)
+    {
+        $branch = BranchesModel::find('branch_id', $branch_id);
+
+        $incomingDetails = Validator::make($request->all(), [
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'phone_number' => 'required|string',
+            'email' => 'required|email',
+            'status' => 'required|string',
+        ]);
+
+        if ($incomingDetails->fails()) {
+            return redirect('/DisplayBranchDashboard')->with('error', 'All fields are required');
+        }
+
+        BranchesModel::where('branch_id', $branch_id)->create([
+            'branch_name' => $branch->branch_name,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'address' => $branch->address,
+            'phone_number' => $request->phone_number,
+            'email' => $request->email,
+            'status' => $request->status,
+        ]);
+
+        return redirect('/DisplayBranchDashboard')->with('success', 'Branch status updated successfully');
     }
 
     public function forgotPassword(Request $request)
     {
         $incomingDetails = Validator::make($request->all(), [
-            'firstname' => 'required|string',
-            'lastname' => 'required|string',
+            // 'branch_name' => 'required|string',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
             'address' => 'required|string',
-            'phone_number' => 'required|numeric',
+            'email' => 'required|email',
         ]);
 
         if ($incomingDetails->fails()) {
             return redirect('/ForgotpassPage')->with('error', 'All fields are required');
         }
 
-        $user = User::where('firstname', $request->firstname)
-            ->where('lastname', $request->lastname)
-            ->where('address', $request->address)
-            ->where('phone_number', $request->phone_number)
-            ->first();
+        $user = BranchesModel::
+        // where('branch_name', $request->branch_name)
+            where('first_name', $request->first_name)
+                ->where('last_name', $request->last_name)
+                ->where('address', $request->address)
+                ->where('email', $request->email)
+                ->first();
 
         if (! $user) {
             return redirect('/ForgotpassPage')->with('error', 'Account not found');
         }
 
-        return redirect()->route('new.password.form', ['firstname' => $user->firstname, 'lastname' => $user->lastname , 'address' => $user->address , 'phone_number' => $user->phone_number]);
+        return redirect()->route('new.password.form', [
+            $user->branch_name,
+            'first_name' => $user->first_name,
+            'last_name' => $user->last_name,
+            'address' => $user->address,
+            'email' => $user->email,
+        ]);
     }
 
-    public function showNewPasswordForm($firstname, $lastname , $address , $phone_number)
+    public function showNewPasswordForm($branch_name, $first_name, $last_name, $address, $email)
     {
-        return view('atoms.NewPassword', ['firstname' => $firstname, 'lastname' => $lastname , 'phone_number' => $phone_number]);
+        return view('components.branchAdmin.atoms.NewPassword', compact('branch_name', 'first_name', 'last_name', 'address', 'email'));
     }
 
     public function resetPassword(Request $request)
@@ -129,20 +123,19 @@ class AdminController extends Controller
 
         }
 
-        if (!preg_match('/[A-Z]/', $request->new_password)) {
+        if (! preg_match('/[A-Z]/', $request->new_password)) {
             return back()->with('error', 'Password must contain at least one Uppercase letter.');
         }
 
-        if (!preg_match('/[0-9]/', $request->new_password)) {
+        if (! preg_match('/[0-9]/', $request->new_password)) {
             return back()->with('error', 'Password must contain at least one Number.');
         }
-
 
         if (Str()->length($request->new_password) < 5) {
             return back()->with('error', 'Password must be at least 5 characters long.');
         }
 
-        $user = User::where('branchname', $request->branchname)->first();
+        $user = BranchesModel::where('branch_name', $request->branch_name)->first();
 
         if (! $user) {
             return redirect('/ForgotpassPage')->with('error', 'User not found');
@@ -151,7 +144,7 @@ class AdminController extends Controller
         $user->password = Hash::make($request->new_password);
         $user->save();
 
-        return redirect('/LoginPage')->with('success', 'Please login with your new password.');
+        return redirect('/')->with('success', 'Please login with your new password.');
     }
 
     public function logout(Request $request)
