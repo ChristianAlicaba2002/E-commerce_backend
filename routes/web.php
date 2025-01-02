@@ -109,8 +109,6 @@ Route::post('/admin/logout', [AdminController::class, 'logout'])->name('admin.lo
 //This function for SuperAdmin
 Route::post('/superadmin/AdminAuth/login', [SuperAdminController::class, 'loginSuperAdmin'])->name('superadmin.login');
 Route::post('/superadmin/logout', [SuperAdminController::class, 'logoutSuperAdmin'])->name('SuperAdmin.logout');
-//This function Adding Branches
-Route::post('/branches', [BranchingController::class, 'AddBranch'])->name('Add.Branches');
 
 // This function is storing Data
 Route::post('/addDonMacProducts', [DonMacController::class, 'addDonMacProducts']);
@@ -134,6 +132,14 @@ Route::post('/confirmation', [AdminController::class, 'forgotPassword'])->name('
 //This function is for Reset Password
 Route::post('/reset-password', [AdminController::class, 'resetPassword'])->name('reset.password');
 
+//This function is for Displaying Branch Dashboard
 Route::get('/DisplayBranchDashboard{id}', [AdminController::class, 'DisplayBranchDashboard'])->name('DisplayBranchDashboard');
+
+//This function is for Displaying More Branch Information
 Route::get('/moreBranchInformation/{id}/{branch_name}/{first_name}/{last_name}/{address}/{phone_number}/{email}/{status}', [BranchingController::class, 'moreBranchInformation'])->name('moreBranchInformation');
-Route::post('/updateBranchInformation/{branch_id}', [AdminController::class, 'updateBranchInformation'])->name('updateBranchInformation');
+
+//This function Adding Branches
+Route::post('/branches', [BranchingController::class, 'AddBranch'])->name('Add.Branches');
+
+//This function is for Updating Branch Information
+Route::post('/updateBranchInformation/{id}', [AdminController::class, 'updateBranchInformation'])->name('updateBranchInformation');

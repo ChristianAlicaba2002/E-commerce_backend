@@ -19,15 +19,6 @@ class BranchingController extends Controller
         $this->registerBranch = $registerBranch;
     }
 
-    // public function getBranchDetails($id)
-    // {
-    //     $branches = DB::table('branches')->where('branch_id', $id)->first();
-    //     $specialProducts = DB::table('special_product')->where('branch_id', $id)->get();
-    //     $donMacProducts = DB::table('don_mac')->where('branch_id', $id)->get();
-
-    //     return view('components/superAdmin/pages/BranchDetails', compact('branches', 'specialProducts', 'donMacProducts'));
-    // }
-
     public function moreBranchInformation($branch_id, $branch_name, $first_name, $last_name, $address, $phone_number, $email, $status)
     {
 
@@ -106,18 +97,6 @@ class BranchingController extends Controller
 
         $id = $this->generateUniqueBranchID();
 
-        // $user = BranchesModel::create([
-        //     'branch_id' => $id,
-        //     'branch_name' => $request->branch_name,
-        //     'first_name' => $request->first_name,
-        //     'last_name' => $request->last_name,
-        //     'address' => $request->address,
-        //     'phone_number' => $request->phone_number,
-        //     'email' => $request->email,
-        //     'password' => Hash::make($request->password),
-        //     'status' => 'active',
-        // ]);
-
         $this->registerBranch->create(
             $id,
             $request->branch_name,
@@ -150,5 +129,55 @@ class BranchingController extends Controller
         $result = substr(bin2hex(random_bytes(ceil($length / 2))), 0, $length);
 
         return $result;
+    }
+
+    public function updateBranch(Request $request, $id)
+    {
+        $branch = DB::table('branches')->where('id', $id)->first();
+        if (! $branch) {
+            return redirect('/AllBranches')->with('error', 'Branch not found');
+        }
+
+        $validator = Validator::make($request->all(), [
+            'branch_id' => 'required|string',
+            'branch_name' => 'required|string',
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'address' => 'required|string',
+            'phone_number' => 'required|numeric',
+            'email' => 'required|email',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('/AllBranches')->with('error', $validator->errors()->first());
+        }
+
+        // Check for duplicates excluding current branch
+        if (DB::table('branches')
+            ->where('branch_id', '!=', $request->branch_id)
+            ->where(function ($query) use ($request) {
+                $query->where('branch_name', $request->branch_name)
+                    ->orWhere('email', $request->email)
+                    ->orWhere('phone_number', $request->phone_number)
+                    ->orWhere('address', $request->address);
+            })->exists()) {
+            return redirect('/AllBranches')->with('error', 'Branch name, email, phone number, or address is already in use');
+        }
+
+        $this->registerBranch->update(
+            $branch->id,
+            $request->branch_id,
+            $request->branch_name,
+            $request->first_name,
+            $request->last_name,
+            $request->address,
+            $request->phone_number,
+            $request->email,
+            $branch->status,
+            $branch->created_at,
+            Carbon::now()->toDateTimeString()
+        );
+
+        return redirect('/AllBranches')->with('success', 'Branch updated successfully');
     }
 }

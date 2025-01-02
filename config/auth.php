@@ -48,9 +48,9 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-        'api' => [
+        'UserRegister' => [
             'driver' => 'sanctum',
-            'provider' => 'user_register',
+            'provider' => 'UserRegister',
         ],
     ],
 
@@ -79,6 +79,10 @@ return [
         'admin' => [
             'driver' => 'eloquent',
             'model' => App\Models\Admin::class,
+        ],
+        'UserRegister' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\UserRegister::class,
         ],
     ],
 

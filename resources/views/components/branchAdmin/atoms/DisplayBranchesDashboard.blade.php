@@ -52,7 +52,7 @@
                         </div>
                     </div>
                 </div>
-                <button data-bs-toggle="modal"  data-bs-target="#updateBranchModal" onclick="EditInformation('{{$branches->branch_id}}' , '{{ $branches->branch_name }}' , '{{ $branches->first_name }}', '{{ $branches->last_name }}', '{{ $branches->address }}', '{{ $branches->phone_number }}', '{{ $branches->email }}', '{{ $branches->status }}')" type="button" class="btn btn-warning">
+                <button data-bs-toggle="modal"  data-bs-target="#updateBranchModal" onclick="EditInformation({{ $branches->id }} , '{{ $branches->branch_name }}' , '{{ $branches->first_name }}', '{{ $branches->last_name }}', '{{ $branches->address }}', '{{ $branches->phone_number }}', '{{ $branches->email }}')" type="button" class="btn btn-warning">
                     Update your Information
                 </button>
             </div>
@@ -84,7 +84,7 @@
                 <form id='updateForm' action='' method="post">
                     @csrf
                     <div class="modal-body">
-                        <input type="hidden" name="branch_id" id="branch_id" value="{{ $branches->branch_id }}">
+                        <input type="hidden" name="branch_id" id="branch_id">
                         <div class="mb-3">
                             <label for="branch_name" class="form-label">Branch Name</label>
                             <input style="cursor: not-allowed;" type="text" name="branch_name" id="branch_name" class="form-control" placeholder="Branch Name" readonly>
@@ -121,8 +121,9 @@
     </div>
 
     <script>
-        function EditInformation(branch_id, branch_name , first_name , last_name , address , phone_number , email , status){
-            document.getElementById('updateForm').action = `/updateBranchInformation/${branch_id}`
+        function EditInformation(id, branch_name , first_name , last_name , address , phone_number , email){
+            document.getElementById('updateForm').action = `/updateBranchInformation/${id}`
+            document.getElementById('branch_id').value = id;
             document.getElementById('branch_name').value = branch_name;
             document.getElementById('first_name').value = first_name;
             document.getElementById('last_name').value = last_name;
@@ -131,14 +132,14 @@
             document.getElementById('email').value = email;
         }
 
-        document.getElementById('updateBranchModal').addEventListener('submit' , (e) => {
-            e.preventDefault();
-            const inputs = document.querySelectorAll('input[type="text"], input[type="number"],input[type="email"], input[type="password"], textarea');
-            inputs.forEach(input => {
-                input.value = input.value.trim();
-            });
+        // document.getElementById('updateBranchModal').addEventListener('submit' , (e) => {
+        //     e.preventDefault();
+        //     const inputs = document.querySelectorAll('input[type="text"], input[type="number"],input[type="email"], input[type="password"], textarea');
+        //     inputs.forEach(input => {
+        //         input.value = input.value.trim();
+        //     });
 
-        })
+        // })
 
 
 

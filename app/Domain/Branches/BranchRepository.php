@@ -10,10 +10,7 @@ interface BranchRepository
 
     // public function delete(string $branch_id): void;
 
-    //
-    //     public function findByID(string $branch_id): ?Branch;
-    //
-    //     public function findByProductID(string $branch_id): ?Branch;
+    public function findByBranchID(string $branch_id): ?Branch;
 
     // public function findAll(): array;
 

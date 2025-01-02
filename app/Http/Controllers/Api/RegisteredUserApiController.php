@@ -6,10 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Infrastructure\Persistence\Eloquent\User\UserRegisterModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\DB;
-
 
 class RegisteredUserApiController extends Controller
 {
@@ -31,18 +30,23 @@ class RegisteredUserApiController extends Controller
             'birthYear' => 'required|numeric',
             'gender' => 'required|string',
             'email' => 'required|email|unique,user_register,email',
-            'password' => 'required|string|min:6',
-            'image' => 'nullable|image',
+            'password' => 'required|string',
         ]);
 
-    
-        $data = [];
-        if ($request->hasFile('image')) {
-            $image = $request->file('image');
-            $imageName = time().'.'.$image->getClientOriginalExtension();
-            $image->move(public_path('images'), $imageName);
-            $data['image'] = $imageName;
+        if (DB::table('user_register')->where('email', $request->email)->exists()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Email already exists',
+            ], 401);
         }
+
+        // $data = [];
+        // if ($request->hasFile('image')) {
+        //     $image = $request->file('image');
+        //     $imageName = time().'.'.$image->getClientOriginalExtension();
+        //     $image->move(public_path('images'), $imageName);
+        //     $data['image'] = $imageName;
+        // }
 
         $user = UserRegisterModel::create([
             'firstName' => $request->firstName,
@@ -53,14 +57,13 @@ class RegisteredUserApiController extends Controller
             'gender' => $request->gender,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'image' => $data['image']
         ]);
 
         return response()->json([
             'status' => true,
             'message' => 'Registration successful, you can now login',
             'token' => $user->createToken('auth_token')->plainTextToken,
-        ],200);
+        ], 200);
     }
 
     public function apiLogin(Request $request)
@@ -74,32 +77,27 @@ class RegisteredUserApiController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => 'Validation failed',
-                'errors' => $validator->errors()
+                'errors' => $validator->errors(),
             ], 401);
         }
 
-        if(!Auth::attempt($request->only(['email', 'password']))){
+        if (!Auth::guard('UserRegister')->attempt($request->only(['email', 'password']))) {
             return response()->json([
                 'status' => false,
                 'message' => 'Email or Password is incorrect',
             ], 422);
         }
 
-        $user = DB::table('user_register')
-        ->where('email' , $request->email)
-        ->where('password',$request->password)->first();
+        $user = UserRegisterModel::where('email', $request->email)->where('password', $request->password)->first();
 
-        if(Auth::attempt($request->only(['email', 'password']))){
+        if (Auth::guard('UserRegister')->attempt($request->only(['email', 'password']))) {
             return response()->json([
                 'status' => true,
                 'user' => $user,
-                'message' => 'Login successful' . $user->email,
+                'message' => 'Login successful'.$user->email,
                 'token' => $user->createToken('auth_token')->plainTextToken,
             ], 200);
         }
 
-       
     }
-
-        
 }
