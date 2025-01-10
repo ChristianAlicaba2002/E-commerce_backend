@@ -44,7 +44,11 @@ class AdminController extends Controller
 
     public function updateBranchInformation(Request $request, $branch_id)
     {
-        $branch = BranchesModel::find('branch_id', $branch_id);
+        $branch = BranchesModel::where('branch_id', $branch_id)->first();
+        
+        if (!$branch) {
+            return redirect('/DisplayBranchDashboard')->with('error', 'Branch not found');
+        }
 
         $incomingDetails = Validator::make($request->all(), [
             'first_name' => 'required|string',
@@ -58,11 +62,9 @@ class AdminController extends Controller
             return redirect('/DisplayBranchDashboard')->with('error', 'All fields are required');
         }
 
-        BranchesModel::where('branch_id', $branch_id)->create([
-            'branch_name' => $branch->branch_name,
+        $branch->update([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
-            'address' => $branch->address,
             'phone_number' => $request->phone_number,
             'email' => $request->email,
             'status' => $request->status,

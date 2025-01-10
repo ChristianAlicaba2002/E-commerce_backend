@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Infrastructure\Persistence\Eloquent\User\UserRegisterModel;
+use App\Models\UserRegister;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +29,7 @@ class RegisteredUserApiController extends Controller
             'birthDay' => 'required|numeric',
             'birthYear' => 'required|numeric',
             'gender' => 'required|string',
-            'email' => 'required|email|unique,user_register,email',
+            'email' => 'required|email',
             'password' => 'required|string',
         ]);
 
@@ -48,7 +48,7 @@ class RegisteredUserApiController extends Controller
         //     $data['image'] = $imageName;
         // }
 
-        $user = UserRegisterModel::create([
+        $user = UserRegister::create([
             'firstName' => $request->firstName,
             'lastName' => $request->lastName,
             'birthMonth' => $request->birthMonth,
@@ -70,7 +70,7 @@ class RegisteredUserApiController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
-            'password' => 'required',
+            'password' => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -78,26 +78,24 @@ class RegisteredUserApiController extends Controller
                 'status' => false,
                 'message' => 'Validation failed',
                 'errors' => $validator->errors(),
-            ], 401);
-        }
-
-        if (!Auth::guard('UserRegister')->attempt($request->only(['email', 'password']))) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Email or Password is incorrect',
             ], 422);
         }
 
-        $user = UserRegisterModel::where('email', $request->email)->where('password', $request->password)->first();
+        $user = UserRegister::where('email', $request->email)->first();
 
-        if (Auth::guard('UserRegister')->attempt($request->only(['email', 'password']))) {
+        if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
-                'status' => true,
-                'user' => $user,
-                'message' => 'Login successful'.$user->email,
-                'token' => $user->createToken('auth_token')->plainTextToken,
-            ], 200);
+                'status' => false,
+                'message' => 'Invalid credentials',
+            ], 401);
         }
+        $token = $user->createToken('auth_token')->plainTextToken;
 
+        return response()->json([
+            'status' => true,
+            'user' => $user,
+            'message' => 'Login successful',
+            'token' => $token,
+        ], 200);
     }
 }

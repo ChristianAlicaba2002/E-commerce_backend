@@ -37,6 +37,29 @@ class EloquentBranchRepository implements BranchRepository
         $BranchesModel->save();
     }
 
+    public function findByBranchID(string $branch_id): ?Branch
+    {
+        $branchModel = BranchesModel::where('branch_id', $branch_id)->first();
+        
+        if (!$branchModel) {
+            return null;
+        }
+
+        return new Branch(
+            $branchModel->branch_id,
+            $branchModel->branch_name,
+            $branchModel->first_name,
+            $branchModel->last_name,
+            $branchModel->address,
+            $branchModel->phone_number,
+            $branchModel->email,
+            $branchModel->password,
+            $branchModel->status,
+            $branchModel->created_at,
+            $branchModel->updated_at
+        );
+    }
+
     // public function delete(Branch $branch): void
     // {
     //     $BranchesModel = BranchesModel::find($branch->getBranch_id()) ?? new BranchesModel;

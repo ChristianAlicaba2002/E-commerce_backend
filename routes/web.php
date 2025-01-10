@@ -143,3 +143,9 @@ Route::post('/branches', [BranchingController::class, 'AddBranch'])->name('Add.B
 
 //This function is for Updating Branch Information
 Route::post('/updateBranchInformation/{id}', [AdminController::class, 'updateBranchInformation'])->name('updateBranchInformation');
+
+
+Route::get('/UserManagement', function () {
+    $users = DB::table('user_register')->get();
+    return view('components/superAdmin/pages/UserManagement', compact('users'));
+})->name('UserManagement');

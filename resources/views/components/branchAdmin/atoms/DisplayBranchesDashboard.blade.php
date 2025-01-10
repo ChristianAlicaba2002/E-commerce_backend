@@ -10,6 +10,20 @@
 </head>
 <body class="bg-light">
 
+
+    @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+    @endif
+
+
     <div class="container mt-5">
         <a href="{{'/DonMacAllProducts'}}" class="btn btn-link text-dark mb-3 ps-0">
             <i class="fa-solid fa-arrow-left me-2"></i>
@@ -58,18 +72,6 @@
             </div>
         </div>
     </div>
-
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div class="alert alert-danger">
-            {{ session('error') }}
-        </div>
-    @endif
 
 
 

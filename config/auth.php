@@ -1,5 +1,7 @@
 <?php
 
+// use App\Models\UserRegister;
+
 return [
 
     /*
@@ -36,6 +38,10 @@ return [
     */
 
     'guards' => [
+        'web' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
         'branches' => [
             'driver' => 'session',
             'provider' => 'branches',
@@ -43,12 +49,8 @@ return [
         'admin' => [
             'driver' => 'session',
             'provider' => 'admin',
-        ],
-        'web' => [
-            'driver' => 'session',
-            'provider' => 'users',
-        ],
-        'UserRegister' => [
+        ],   
+        'api' => [
             'driver' => 'sanctum',
             'provider' => 'UserRegister',
         ],

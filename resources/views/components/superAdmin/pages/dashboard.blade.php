@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <style>
+        body {
+            background-color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button {
             -webkit-appearance: none;
@@ -22,23 +29,28 @@
 <body>
     @section('dashboard')
         <div class="container-fluid py-4">
-            
             <div class="row mb-4">
                 <div class="col-12">
-                    <div class="d-block align-items-center">
-                        <h2 class="text-center">Branch Management</h2>  
-                        <form action="{{ route('SuperAdmin.logout') }}" method="post" class="">
-                            @csrf
-                            <button type="submit" class="btn btn-danger">
-                                <i class="fas fa-sign-out-alt me-2"></i>Logout
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h2 class="mb-0">Branch Management</h2>
+                        <div class="d-flex gap-2">
+                            <a href="{{ route('UserManagement') }}" class="p-2" style='text-decoration: none; background-color: blue; color: white; border-radius: 5px;'>
+                                <i class="fas fa-users me-2"></i>User Management
+                            </a>
+                            <button type="button" class="btn btn-warning p-2" data-bs-toggle="modal" data-bs-target="#addBranchModal">
+                                <i class="fas fa-plus-circle me-2"></i>Add Branch
                             </button>
-                        </form>
-                        <button type="button" class="btn btn-warning mt-2 mb-2" data-bs-toggle="modal" data-bs-target="#addBranchModal">
-                            <i class="fas fa-plus-circle me-2"></i>Add Branch
-                        </button>
+                            <form action="{{ route('SuperAdmin.logout') }}" method="post" class="d-inline">
+                                @csrf
+                                <button type="submit" class="btn btn-outline-danger p-2">
+                                    <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
+
             @if (session('success'))
                 <div class="alert alert-success py-2">
                     <i class="fas fa-check-circle me-2"></i>{{ session('success') }}
@@ -46,39 +58,53 @@
             @endif
 
             <div class="row mb-4">
-                <div class="d-flex overflow-auto pb-3" style="scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;">
-                    <div class="col-md-3 flex-shrink-0" style="min-width: 250px; scroll-snap-align: start; margin-right: 1rem;">
-                        <div class="card">
-                            <div class="card-body">
-                                <h6 class="card-title mb-3">Branch Statistics</h6>
-                                <canvas id="branchChart"></canvas>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-warning shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <h6 class="text-warning text-uppercase mb-2">Branch Statistics</h6>
+                                    <canvas id="branchChart"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-md-3 flex-shrink-0" style="min-width: 250px; scroll-snap-align: start; margin-right: 1rem;">
-                        <div class="card">
-                            <div class="card-body">
-                                <h6 class="card-title mb-3">Customer Statistics</h6>
-                                <canvas id="customerChart"></canvas>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-info shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <h6 class="text-info text-uppercase mb-2">Customer Statistics</h6>
+                                    <canvas id="customerChart"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-md-3 flex-shrink-0" style="min-width: 250px; scroll-snap-align: start; margin-right: 1rem;">
-                        <div class="card">
-                            <div class="card-body">
-                                <h6 class="card-title mb-3">Revenue Overview</h6>
-                                <canvas id="revenueChart"></canvas>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-success shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <h6 class="text-success text-uppercase mb-2">Revenue Overview</h6>
+                                    <canvas id="revenueChart"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col-md-3 flex-shrink-0" style="min-width: 250px; scroll-snap-align: start; margin-right: 1rem;">
-                        <div class="card">
-                            <div class="card-body">
-                                <h6 class="card-title mb-3">Orders Overview</h6>
-                                <canvas id="ordersChart"></canvas>
+                <div class="col-xl-3 col-md-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <h6 class="text-primary text-uppercase mb-2">Orders Overview</h6>
+                                    <canvas id="ordersChart"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -287,36 +313,42 @@
                 </div>
             </div>
 
-            <div class="card">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-warning">Branch List</h6>
+                </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-hover table-bordered text-center">
-                            <thead class="table-warning">
+                            <thead class="bg-light">
                                 <tr>
                                     <th>Branch Name</th>
-                                    <th>First Name</th>
-                                    <th>Last Name</th>
+                                    <th>Manager</th>
                                     <th>Address</th>
-                                    <th>Phone Number</th>
-                                    <th>Email</th>
+                                    <th>Contact</th>
                                     <th>Status</th>
-                                    <th>Other</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($branches as $branch)
                                 <tr>
-                                    <td>{{ $branch->branch_name }}</td>
-                                    <td>{{ $branch->first_name }}</td>
-                                    <td>{{ $branch->last_name }}</td>
+                                    <td class="fw-bold">{{ $branch->branch_name }}</td>
+                                    <td>{{ $branch->first_name }} {{ $branch->last_name }}</td>
                                     <td>{{ $branch->address }}</td>
-                                    <td>{{ $branch->phone_number }}</td>
-                                    <td>{{ $branch->email }}</td>
-                                    <td><i class="fa-solid fa-circle" style="color: #00ff04; margin-right: 5px;"></i>{{ $branch->status }}</td>
+                                    <td>
+                                        <div>{{ $branch->phone_number }}</div>
+                                        <div class="small text-muted">{{ $branch->email }}</div>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-success rounded-pill">
+                                            <i class="fas fa-circle me-1"></i>{{ $branch->status }}
+                                        </span>
+                                    </td>
                                     <td>
                                         <a href="{{ route('moreBranchInformation', ['id' => $branch->branch_id, 'branch_name' => $branch->branch_name, 'first_name' => $branch->first_name, 'last_name' => $branch->last_name, 'address' => $branch->address, 'phone_number' => $branch->phone_number, 'email' => $branch->email, 'status' => $branch->status]) }}" 
-                                           class="btn btn-warning btn-sm">
-                                            <i class="fas fa-info-circle me-1"></i>More
+                                           class="btn btn-sm btn-outline-warning">
+                                            <i class="fas fa-info-circle me-1"></i>Details
                                         </a>
                                     </td>
                                 </tr>
@@ -435,19 +467,6 @@
                 input.value = input.value.trim();
             });
         });
-
-
-
-
-
-
-
-
-
-
-
-
-
     </script>
 
 </body>
