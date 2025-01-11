@@ -86,7 +86,7 @@ class RegisteredUserApiController extends Controller
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json([
                 'status' => false,
-                'message' => 'Invalid credentials',
+                'message' => 'Email or Password is incorrect',
             ], 401);
         }
         $token = $user->createToken('auth_token')->plainTextToken;
