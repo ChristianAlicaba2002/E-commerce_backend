@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -82,8 +83,25 @@
         .products-card:hover {
             transform: translateY(-5px);
         }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
     </style>
 </head>
+
 <body>
     <div class="page-header">
         <div class="container">
@@ -110,7 +128,8 @@
                         </div>
                         <div class="mb-3">
                             <div class="info-label">Status</div>
-                            <span class="status-badge {{ $branches->status === 'Active' ? 'status-active' : 'status-inactive' }}">
+                            <span
+                                class="status-badge {{ $branches->status === 'Active' ? 'status-active' : 'status-inactive' }}">
                                 {{ $branches->status }}
                             </span>
                         </div>
@@ -139,10 +158,10 @@
                         <h2 class="card-title h4 mb-3">
                             <i class="fas fa-star me-2 text-warning"></i>Special Products
                         </h2>
-                        @if(count($specialProducts) === 0)
+                        @if (count($specialProducts) === 0)
                             <p class="text-muted mb-0">No special products available</p>
                         @else
-                            <p class="mb-0"><strong>Total Products:</strong> {{count($specialProducts)}}</p>
+                            <p class="mb-0"><strong>Total Products:</strong> {{ count($specialProducts) }}</p>
                         @endif
                     </div>
                 </div>
@@ -153,10 +172,10 @@
                         <h2 class="card-title h4 mb-3">
                             <i class="fas fa-coffee me-2 text-secondary"></i>Don Macchiatos
                         </h2>
-                        @if(count($donMacProducts) === 0)
+                        @if (count($donMacProducts) === 0)
                             <p class="text-muted mb-0">No Don Macchiatos products available</p>
                         @else
-                            <p class="mb-0"><strong>Total Products:</strong> {{count($donMacProducts)}}</p>
+                            <p class="mb-0"><strong>Total Products:</strong> {{ count($donMacProducts) }}</p>
                         @endif
                     </div>
                 </div>
@@ -164,4 +183,5 @@
         </div>
     </div>
 </body>
+
 </html>

@@ -4,6 +4,7 @@ namespace App\Infrastructure\Persistence\Eloquent\Admin;
 
 use App\Domain\Branches\Branch;
 use App\Domain\Branches\BranchRepository;
+use App\Infrastructure\Persistence\Eloquent\Admin\BranchesModel;
 
 class EloquentBranchRepository implements BranchRepository
 {
@@ -37,10 +38,10 @@ class EloquentBranchRepository implements BranchRepository
         $BranchesModel->save();
     }
 
-    public function findByBranchID(string $branch_id): ?Branch
+    public function findById(string $branch_id): ?Branch
     {
         $branchModel = BranchesModel::where('branch_id', $branch_id)->first();
-        
+
         if (!$branchModel) {
             return null;
         }
@@ -60,9 +61,8 @@ class EloquentBranchRepository implements BranchRepository
         );
     }
 
-    // public function delete(Branch $branch): void
-    // {
-    //     $BranchesModel = BranchesModel::find($branch->getBranch_id()) ?? new BranchesModel;
-    //     $BranchesModel->delete();
-    // }
+    public function delete(string $branch_id): void
+    {
+        BranchesModel::where('branch_id', $branch_id)->delete();
+    }
 }

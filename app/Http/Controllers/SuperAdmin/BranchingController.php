@@ -72,7 +72,6 @@ class BranchingController extends Controller
 
         if (! preg_match('/[0-9]/', $request->password)) {
             return redirect('/LoginSuperAdmin')->with('error', 'The password must contain at least one Number.');
-
         }
 
         if (Str()->length($request->password) < 5) {
@@ -160,7 +159,8 @@ class BranchingController extends Controller
                     ->orWhere('email', $request->email)
                     ->orWhere('phone_number', $request->phone_number)
                     ->orWhere('address', $request->address);
-            })->exists()) {
+            })->exists()
+        ) {
             return redirect('/AllBranches')->with('error', 'Branch name, email, phone number, or address is already in use');
         }
 

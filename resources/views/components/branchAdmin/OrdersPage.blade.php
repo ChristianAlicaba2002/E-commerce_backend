@@ -44,7 +44,7 @@
 
 <body>
     <div class="container mt-5 shadow-lg p-3 mb-5 bg-body rounded">
-    <a href="{{'/'}}" class="btn btn-link text-dark mb-3 ps-0">
+        <a href="{{ '/' }}" class="btn btn-link text-dark mb-3 ps-0">
             <i class="fa-solid fa-arrow-left me-2"></i>
             <span>Back to Home</span>
         </a>

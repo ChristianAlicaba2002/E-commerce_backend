@@ -1,12 +1,16 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\DonMacController;
+use App\Http\Controllers\Api\UserExportController;
 use App\Http\Controllers\Api\SpecialProductController;
+use App\Http\Controllers\SuperAdmin\BranchExportController;
 use App\Http\Controllers\SuperAdmin\BranchingController;
 use App\Http\Controllers\SuperAdmin\SuperAdminController;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Route;
+use App\Models\Exports\BranchExport;
 
 //Branch Admin Login Page
 Route::get('/', function () {
@@ -149,3 +153,14 @@ Route::get('/UserManagement', function () {
     $users = DB::table('user_register')->get();
     return view('components/superAdmin/pages/UserManagement', compact('users'));
 })->name('UserManagement');
+
+
+
+// Export to EXCEL
+Route::get('/export-users-excel', [UserExportController::class, 'UserexportToExcel'])->name('export.users.excel');
+Route::get('/export-branch-excel', [BranchExportController::class, 'BranchexportToExcel'])->name('export.branch.excel');
+
+
+//Download to PDF
+Route::get('/export-users-pdf', [UserExportController::class, 'exportPDF'])->name('export.users.pdf');
+Route::get('/export-branch-pdf', [BranchExportController::class, 'exportBranchPDF'])->name('export.branch.pdf');
