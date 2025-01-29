@@ -45,7 +45,6 @@ class RegisterBranch
     }
 
     public function update(
-        string $id,
         string $branch_id,
         string $branch_name,
         string $first_name,
@@ -53,17 +52,17 @@ class RegisterBranch
         string $address,
         string $phone_number,
         string $email,
+        string $password,
         string $status,
         string $created_at,
         string $updated_at
     ) {
-        $existingBranch = $this->branchRepository->findByBranchID($branch_id);
+        $existingBranch = $this->branchRepository->findById($branch_id);
         if (! $existingBranch) {
             throw new \Exception('Branch not found');
         }
 
         $UpdateBranches = new Branch(
-            $id,
             $branch_id,
             $branch_name,
             $first_name,
@@ -71,16 +70,23 @@ class RegisterBranch
             $address,
             $phone_number,
             $email,
+            $password,
             $status,
             $created_at,
             $updated_at
         );
 
         return $this->branchRepository->update($UpdateBranches);
+    }
 
-        // public function delete(Branch $branch)
-        // {
-        //     return $this->branchRepository->delete($branch);
-        // }
+    public function delete(string $branch_id)
+    {
+        return $this->branchRepository->delete($branch_id);
+    }
+
+
+    public function findById(String $branch_id)
+    {
+        return $this->branchRepository->findById($branch_id);
     }
 }

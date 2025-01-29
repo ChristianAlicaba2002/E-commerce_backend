@@ -119,8 +119,15 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .fade-in {
@@ -137,6 +144,16 @@
         </div>
     @else
         <div class="login-wrapper">
+            @if (session('revoke'))
+                <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050">
+                    @if (session('revoke'))
+                        <div class="alert alert-danger fade-in" role="alert">
+                            <i class="fas fa-exclamation-circle me-2"></i>
+                            {{ session('revoke') }}
+                        </div>
+                    @endif
+                </div>
+            @endif
             <div class="login-card fade-in">
                 <div class="text-center">
                     <img src="/storage/logo.png" alt="Don Macchiatos Logo" class="brand-logo">
@@ -152,15 +169,12 @@
                             <span class="input-group-text">
                                 <i class="fas fa-building"></i>
                             </span>
-                            <input type="text" 
-                                name="branch_name"
+                            <input type="text" name="branch_name"
                                 class="form-control @error('branch_name') is-invalid @enderror"
-                                placeholder="Search your branch"
-                                required 
-                                list="branchList">
+                                placeholder="Search your branch" required list="branchList">
                             <datalist id="branchList">
                                 @foreach ($branches as $branch)
-                                    @if($branch->branch_name == null)
+                                    @if ($branch->branch_name == 0)
                                         <option value="">No branches available</option>
                                     @endif
                                     <option value="{{ $branch->branch_name }}">
@@ -178,12 +192,8 @@
                             <span class="input-group-text">
                                 <i class="fas fa-lock"></i>
                             </span>
-                            <input type="password" 
-                                class="form-control @error('password') is-invalid @enderror"
-                                id="password" 
-                                name="password" 
-                                required 
-                                placeholder="Enter your password">
+                            <input type="password" class="form-control @error('password') is-invalid @enderror"
+                                id="password" name="password" required placeholder="Enter your password">
                             <button class="btn btn-outline-secondary" type="button" onclick="togglePassword()">
                                 <i class="fas fa-eye-slash" id="passwordToggle"></i>
                             </button>

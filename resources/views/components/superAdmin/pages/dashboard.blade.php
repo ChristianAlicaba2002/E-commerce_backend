@@ -13,6 +13,7 @@
             align-items: center;
             justify-content: center;
         }
+
         input[type="number"]::-webkit-inner-spin-button,
         input[type="number"]::-webkit-outer-spin-button {
             -webkit-appearance: none;
@@ -28,16 +29,24 @@
 
 <body>
     @section('dashboard')
+        @if (session('failedToExport'))
+            <script>
+                alert("{{ session('failedToExport') }}")
+            </script>
+        @endif
+
         <div class="container-fluid py-4">
             <div class="row mb-4">
                 <div class="col-12">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h2 class="mb-0">Branch Management</h2>
                         <div class="d-flex gap-2">
-                            <a href="{{ route('UserManagement') }}" class="p-2" style='text-decoration: none; background-color: blue; color: white; border-radius: 5px;'>
+                            <a href="{{ route('UserManagement') }}" class="p-2"
+                                style='text-decoration: none; background-color: blue; color: white; border-radius: 5px;'>
                                 <i class="fas fa-users me-2"></i>User Management
                             </a>
-                            <button type="button" class="btn btn-warning p-2" data-bs-toggle="modal" data-bs-target="#addBranchModal">
+                            <button type="button" class="btn btn-warning p-2" data-bs-toggle="modal"
+                                data-bs-target="#addBranchModal">
                                 <i class="fas fa-plus-circle me-2"></i>Add Branch
                             </button>
                             <form action="{{ route('SuperAdmin.logout') }}" method="post" class="d-inline">
@@ -111,7 +120,8 @@
                 </div>
             </div>
 
-            <div class="modal fade" id="addBranchModal" tabindex="-1" aria-labelledby="addBranchModalLabel" aria-hidden="true">
+            <div class="modal fade" id="addBranchModal" tabindex="-1" aria-labelledby="addBranchModalLabel"
+                aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header bg-warning text-dark">
@@ -128,7 +138,7 @@
                                     </div>
                                 @endif
 
-                                
+
                                 <div class="col-12">
                                     <div class="form-floating">
                                         <input type="search" class="form-control @error('branchname') is-invalid @enderror"
@@ -195,15 +205,16 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input type="text" class="form-control @error('firstname') is-invalid @enderror" 
-                                            id="firstname" name="first_name" required>
+                                        <input type="text"
+                                            class="form-control @error('firstname') is-invalid @enderror" id="firstname"
+                                            name="first_name" required>
                                         <label for="firstname">First Name</label>
                                     </div>
                                 </div>
 
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input type="text" class="form-control @error('lastname') is-invalid @enderror" 
+                                        <input type="text" class="form-control @error('lastname') is-invalid @enderror"
                                             id="lastname" name="last_name" required>
                                         <label for="lastname">Last Name</label>
                                     </div>
@@ -275,8 +286,11 @@
 
                                 <div class="col-md-6">
                                     <div class="form-floating">
-                                        <input type="number" class="form-control @error('phone_number') is-invalid @enderror"
-                                            id="phone_number" name="phone_number" maxlength="11" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" required>
+                                        <input type="number"
+                                            class="form-control @error('phone_number') is-invalid @enderror"
+                                            id="phone_number" name="phone_number" maxlength="11"
+                                            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                            required>
                                         <label for="phone_number">Phone Number</label>
                                     </div>
                                 </div>
@@ -291,10 +305,11 @@
 
                                 <div class="col-12">
                                     <div class="form-floating">
-                                        <input type="password" class="form-control @error('password') is-invalid @enderror"
-                                            id="password" name="password" required>
+                                        <input type="password"
+                                            class="form-control @error('password') is-invalid @enderror" id="password"
+                                            name="password" required>
                                         <label for="password">Password</label>
-                                        <button class="btn btn-link position-absolute end-0 top-50 translate-middle-y" 
+                                        <button class="btn btn-link position-absolute end-0 top-50 translate-middle-y"
                                             type="button" onclick="togglePassword()">
                                             <i class="fas fa-eye-slash" id="passwordToggle"></i>
                                         </button>
@@ -302,7 +317,8 @@
                                 </div>
 
                                 <div class="modal-footer px-0 pb-0">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cancel</button>
                                     <button type="submit" class="btn btn-warning">
                                         <i class="fas fa-save me-2"></i>Save Branch
                                     </button>
@@ -316,12 +332,22 @@
             <div class="card shadow mb-4">
                 <div class="card-header py-3 d-flex justify-content-between align-items-center">
                     <h6 class="m-0 font-weight-bold text-warning">Branch List</h6>
+                    <div class="col-md-8 text-end">
+                        <button class="btn btn-success me-2"
+                            onclick="window.location.href='{{ route('export.branch.excel') }}'">
+                            <i class="fas fa-file-excel me-1"></i> Export to Excel
+                        </button>
+                        <button class="btn btn-danger" onclick="window.location.href='{{ route('export.branch.pdf') }}'">
+                            <i class="fas fa-file-pdf me-1"></i> Export to PDF
+                        </button>
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-hover table-bordered text-center">
                             <thead class="bg-light">
                                 <tr>
+                                    <th>Branch ID</th>
                                     <th>Branch Name</th>
                                     <th>Manager</th>
                                     <th>Address</th>
@@ -332,26 +358,27 @@
                             </thead>
                             <tbody>
                                 @foreach ($branches as $branch)
-                                <tr>
-                                    <td class="fw-bold">{{ $branch->branch_name }}</td>
-                                    <td>{{ $branch->first_name }} {{ $branch->last_name }}</td>
-                                    <td>{{ $branch->address }}</td>
-                                    <td>
-                                        <div>{{ $branch->phone_number }}</div>
-                                        <div class="small text-muted">{{ $branch->email }}</div>
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-success rounded-pill">
-                                            <i class="fas fa-circle me-1"></i>{{ $branch->status }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <a href="{{ route('moreBranchInformation', ['id' => $branch->branch_id, 'branch_name' => $branch->branch_name, 'first_name' => $branch->first_name, 'last_name' => $branch->last_name, 'address' => $branch->address, 'phone_number' => $branch->phone_number, 'email' => $branch->email, 'status' => $branch->status]) }}" 
-                                           class="btn btn-sm btn-outline-warning">
-                                            <i class="fas fa-info-circle me-1"></i>Details
-                                        </a>
-                                    </td>
-                                </tr>
+                                    <tr>
+                                        <td class="fw-bold">{{ $branch->branch_id }}</td>
+                                        <td class="fw-bold">{{ $branch->branch_name }}</td>
+                                        <td>{{ $branch->first_name }} {{ $branch->last_name }}</td>
+                                        <td>{{ $branch->address }}</td>
+                                        <td>
+                                            <div>{{ $branch->phone_number }}</div>
+                                            <div class="small text-muted">{{ $branch->email }}</div>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-success rounded-pill">
+                                                <i class="fas fa-circle me-1"></i>{{ $branch->status }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('moreBranchInformation', ['id' => $branch->branch_id, 'branch_name' => $branch->branch_name, 'first_name' => $branch->first_name, 'last_name' => $branch->last_name, 'address' => $branch->address, 'phone_number' => $branch->phone_number, 'email' => $branch->email, 'status' => $branch->status]) }}"
+                                                class="btn btn-sm btn-outline-warning">
+                                                <i class="fas fa-info-circle me-1"></i>Details
+                                            </a>
+                                        </td>
+                                    </tr>
                                 @endforeach
                             </tbody>
                         </table>
@@ -359,7 +386,7 @@
                 </div>
             </div>
 
-           
+
         </div>
     @endsection
 
@@ -462,7 +489,9 @@
 
 
         document.getElementById('addBranchForm').addEventListener('submit', (e) => {
-            const inputs = document.querySelectorAll('input[type="text"], input[type="number"],input[type="email"], input[type="password"], textarea');
+            const inputs = document.querySelectorAll(
+                'input[type="text"], input[type="number"],input[type="email"], input[type="password"], textarea'
+            );
             inputs.forEach(input => {
                 input.value = input.value.trim();
             });

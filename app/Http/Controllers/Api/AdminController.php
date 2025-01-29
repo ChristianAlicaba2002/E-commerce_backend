@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Application\Branch\RegisterBranch;
 use App\Http\Controllers\Controller;
 use App\Infrastructure\Persistence\Eloquent\Admin\BranchesModel;
 use Illuminate\Http\RedirectResponse;
@@ -13,6 +14,14 @@ use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
+
+    protected RegisterBranch $registerBranch;
+
+    public function __construct(registerBranch $registerBranch)
+    {
+        return $this->registerBranch = $registerBranch;
+    }
+
     public function DisplayBranchDashboard()
     {
         $branches = DB::table('branches')->where('branch_id', Auth::guard('branches')->user()->branch_id)->first();
@@ -45,7 +54,7 @@ class AdminController extends Controller
     public function updateBranchInformation(Request $request, $branch_id)
     {
         $branch = BranchesModel::where('branch_id', $branch_id)->first();
-        
+
         if (!$branch) {
             return redirect('/DisplayBranchDashboard')->with('error', 'Branch not found');
         }
@@ -88,12 +97,12 @@ class AdminController extends Controller
         }
 
         $user = BranchesModel::
-        // where('branch_name', $request->branch_name)
+            // where('branch_name', $request->branch_name)
             where('first_name', $request->first_name)
-                ->where('last_name', $request->last_name)
-                ->where('address', $request->address)
-                ->where('email', $request->email)
-                ->first();
+            ->where('last_name', $request->last_name)
+            ->where('address', $request->address)
+            ->where('email', $request->email)
+            ->first();
 
         if (! $user) {
             return redirect('/ForgotpassPage')->with('error', 'Account not found');
@@ -122,7 +131,6 @@ class AdminController extends Controller
 
         if ($request->new_password !== $request->confirm_password) {
             return back()->with('error', 'Please match your password ');
-
         }
 
         if (! preg_match('/[A-Z]/', $request->new_password)) {

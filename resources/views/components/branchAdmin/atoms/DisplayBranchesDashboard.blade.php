@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,16 +9,35 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
+
+<style>
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .fade-in {
+        animation: fadeIn 0.3s ease-out;
+    }
+</style>
+
 <body class="bg-light">
 
 
-    @if(session('success'))
+    @if (session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
         </div>
     @endif
 
-    @if(session('error'))
+    @if (session('error'))
         <div class="alert alert-danger">
             {{ session('error') }}
         </div>
@@ -25,7 +45,7 @@
 
 
     <div class="container mt-5">
-        <a href="{{'/DonMacAllProducts'}}" class="btn btn-link text-dark mb-3 ps-0">
+        <a href="{{ '/DonMacAllProducts' }}" class="btn btn-link text-dark mb-3 ps-0">
             <i class="fa-solid fa-arrow-left me-2"></i>
             <span>Back to Products</span>
         </a>
@@ -38,7 +58,7 @@
                     <div class="col-12 mb-4">
                         <label class="text-muted">About This Branch</label>
                         <p class="lead">
-                            {{'Welcome to our ' . $branches->branch_name . ' branch! We are committed to serving the finest coffee and providing exceptional service to our valued customers in this location. Our dedicated team, led by ' . $branches->first_name . ' ' . $branches->last_name . ', ensures a warm and inviting atmosphere for every visitor.' }}
+                            {{ 'Welcome to ' . $branches->branch_name . ' branch! We are committed to serving the finest coffee and providing exceptional service to our valued customers in this location. Our dedicated team, led by ' . $branches->first_name . ' ' . $branches->last_name . ', ensures a warm and inviting atmosphere for every visitor.' }}
                         </p>
                     </div>
                     <div class="col-md-6">
@@ -66,7 +86,9 @@
                         </div>
                     </div>
                 </div>
-                <button data-bs-toggle="modal"  data-bs-target="#updateBranchModal" onclick="EditInformation({{ $branches->id }} , '{{ $branches->branch_name }}' , '{{ $branches->first_name }}', '{{ $branches->last_name }}', '{{ $branches->address }}', '{{ $branches->phone_number }}', '{{ $branches->email }}')" type="button" class="btn btn-warning">
+                <button data-bs-toggle="modal" data-bs-target="#updateBranchModal"
+                    onclick="EditInformation({{ $branches->id }} , '{{ $branches->branch_name }}' , '{{ $branches->first_name }}', '{{ $branches->last_name }}', '{{ $branches->address }}', '{{ $branches->phone_number }}', '{{ $branches->email }}')"
+                    type="button" class="btn btn-warning">
                     Update your Information
                 </button>
             </div>
@@ -89,28 +111,33 @@
                         <input type="hidden" name="branch_id" id="branch_id">
                         <div class="mb-3">
                             <label for="branch_name" class="form-label">Branch Name</label>
-                            <input style="cursor: not-allowed;" type="text" name="branch_name" id="branch_name" class="form-control" placeholder="Branch Name" readonly>
+                            <input style="cursor: not-allowed;" type="text" name="branch_name" id="branch_name"
+                                class="form-control" placeholder="Branch Name" readonly>
                         </div>
                         <div class="mb-3">
                             <label for="first_name" class="form-label">First Name</label>
-                            <input type="text" name="first_name" id="first_name" class="form-control" placeholder="First Name">
+                            <input type="text" name="first_name" id="first_name" class="form-control"
+                                placeholder="First Name">
                         </div>
                         <div class="mb-3">
                             <label for="last_name" class="form-label">Last Name</label>
-                            <input type="text" name="last_name" id="last_name" class="form-control" placeholder="Last Name">
+                            <input type="text" name="last_name" id="last_name" class="form-control"
+                                placeholder="Last Name">
                         </div>
                         <div class="mb-3">
                             <label for="address" class="form-label">Address</label>
-                            <input style="cursor: not-allowed;" type="text" name="address" id="address" class="form-control" placeholder="Address" readonly>
+                            <input style="cursor: not-allowed;" type="text" name="address" id="address"
+                                class="form-control" placeholder="Address" readonly>
                         </div>
                         <div class="mb-3">
                             <label for="phone_number" class="form-label">Phone Number</label>
-                            <input type="text" name="phone_number" id="phone_number" class="form-control" placeholder="Phone Number"
-                            maxlength="11">
+                            <input type="text" name="phone_number" id="phone_number" class="form-control"
+                                placeholder="Phone Number" maxlength="11">
                         </div>
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" name="email" id="email" class="form-control" placeholder="Email">
+                            <input type="email" name="email" id="email" class="form-control"
+                                placeholder="Email">
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -123,7 +150,7 @@
     </div>
 
     <script>
-        function EditInformation(id, branch_name , first_name , last_name , address , phone_number , email){
+        function EditInformation(id, branch_name, first_name, last_name, address, phone_number, email) {
             document.getElementById('updateForm').action = `/updateBranchInformation/${id}`
             document.getElementById('branch_id').value = id;
             document.getElementById('branch_name').value = branch_name;
@@ -142,9 +169,6 @@
         //     });
 
         // })
-
-
-
     </script>
 
 
@@ -153,4 +177,5 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
 </body>
+
 </html>
