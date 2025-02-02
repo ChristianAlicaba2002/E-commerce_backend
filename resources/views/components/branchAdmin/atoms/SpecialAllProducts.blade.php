@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
         integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <title>All Special Products - Admin</title>
+    <title>All Products - Admin</title>
 </head>
 <style>
     :root {
@@ -46,7 +46,7 @@
     }
 
     .sidebar-header {
-        padding: 20px;
+        padding: 15px;
         background: var(--primary-orange);
         text-align: center;
     }
@@ -203,54 +203,53 @@
         color: var(--primary-orange);
         margin-bottom: 0;
     }
+
+    .fa-trash {
+        color: rgb(255, 67, 67);
+    }
+
+    .fa-box-archive {
+        color: var(--primary-orange);
+    }
+
+    th,
+    td:nth-child(7),
+    td:nth-child(2),
+    td:nth-child(1) {
+        text-align: center;
+    }
 </style>
 
 <body>
 
     <nav class="sidebar">
         <div class="sidebar-header">
-            <h3><i class="fa-brands fa-product-hunt"></i>Special Products</h3>
+            <h3><i class="fa-brands fa-product-hunt"></i>Inventory</h3>
         </div>
         <div class="sidebar-menu">
             <a href="{{ '/' }}" class="menu-item">
                 <i class="fa-solid fa-arrow-left"></i>Back to Home
             </a>
-            <div class="dropdown">
-                <ul class="dropdown-menu" aria-labelledby="deletedDropdown">
-                    <li><a class="dropdown-item" href="{{ '/DonMacPage' }}">Don Macchiatos</a></li>
-                    <li><a class="dropdown-item" href="{{ '/SpecialProductPage' }}">Special Products</a></li>
-                </ul>
-            </div>
 
 
             <div class="dropdown">
-                <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button"
-                    data-bs-toggle="dropdown" aria-expanded="false">
+                <a href="#" class="menu-item " id="deletedDropdown" role="button">
                     <i class="fa-solid fa-shop"></i>Products
                 </a>
-                <ul class="dropdown-menu" aria-labelledby="deletedDropdown">
-                    <li><a class="dropdown-item" href="{{ '/DonMacAllProducts' }}">Don Macchiatos</a></li>
-                    <li><a class="dropdown-item" href="{{ '#' }}">Special Products</a></li>
-                </ul>
             </div>
-
-
 
 
             <div class="dropdown">
-                <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fa-solid fa-trash"></i>Deleted Items
+                <a href="/DeletedSpecialProducts" class="menu-item" id="deletedDropdown" role="button">
+                    <i class="fa-solid fa-box-archive"></i>Archive
                 </a>
-                <ul class="dropdown-menu" aria-labelledby="deletedDropdown">
-                    <li><a class="dropdown-item" href="{{ '/DeletedDonMacProducts' }}"> Don Macchiatos</a></li>
-                    <li><a class="dropdown-item" href="{{ '/DeletedSpecialProducts' }}"> Special Products</a></li>
-                </ul>
             </div>
 
-            <div style="position: absolute; bottom: 20px; width: 100%; text-align: center; color: white; padding: 15px; background-color: var(--darker-bg);">
+            <div
+                style="position: absolute; bottom: 20px; width: 100%; text-align: center; color: white; padding: 15px; background-color: var(--darker-bg);">
                 <i class="fas fa-store me-2"></i>
-                <a class=" text-white" href="{{ '/DisplayBranchDashboard' . Auth::guard('branches')->user()->branch_id }}">
+                <a class=" text-white"
+                    href="{{ '/DisplayBranchDashboard' . Auth::guard('branches')->user()->branch_id }}">
                     <strong>{{ Auth::guard('branches')->user()->branch_name }}</strong>
                 </a>
             </div>
@@ -307,17 +306,26 @@
             <input type="search" name="search" id="search" class="form-control mb-4" onkeyup="searchProduct()"
                 placeholder="Search for a product">
 
-            @if($products->isEmpty())
+            @if ($products->isEmpty())
                 <!-- <div class="alert alert-warning">Don't have any products</div> -->
             @else
-            
-            <nav>
-                <ul class="d-flex justify-content-center gap-4 list-unstyled">
-                    <li><button class="btn" onclick="filterProducts('all', event)">All</button></li>
-                    <li><button class="btn" onclick="filterProducts('Pizza', event)">Pizza</button></li>
-                    <li><button class="btn" onclick="filterProducts('Drink', event)">Drinks</button></li>
-                    <li><button class="btn" onclick="filterProducts('Dessert', event)">Desserts</button></li>
-                        <li><button class="btn" onclick="filterProducts('Combo', event)">Combo</button></li>
+                <nav>
+                    <ul class="d-flex justify-content-center gap-4 list-unstyled">
+                        <li>
+                            <button class="btn active" onclick="filterProducts('all', event)">
+                                All
+                            </button>
+                        </li>
+                        @php
+                            $categories = $products->pluck('category')->unique();
+                        @endphp
+                        @foreach ($categories as $category)
+                            <li>
+                                <button class="btn" onclick="filterProducts('{{ $category }}',event)">
+                                    {{ $category }}
+                                </button>
+                            </li>
+                        @endforeach
                     </ul>
                 </nav>
             @endif
@@ -336,8 +344,7 @@
                 @if (session('error'))
                     <div class="alert alert-danger custom-alert alert-dismissible fade show" role="alert">
                         <i class="fas fa-exclamation-circle me-2"></i>{{ session('error') }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"
-                            aria-label="Close"></button>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
 
@@ -375,12 +382,19 @@
                                         <button class="btn"
                                             onclick="editProduct({{ $product->id }}, '{{ $product->name }}', '{{ $product->price }}', '{{ addslashes($product->description) }}', '{{ $product->category }}')"
                                             popovertarget='my-popover'><i class="fa-solid fa-pen-to-square"
-                                                style="color: #2bff00; font-size: 1.3rem;"></i></button>
+                                                style="color: #2bff00; font-size: 1.3rem;"></i>
+                                        </button>
+
+                                        <button type="button" class="border-0 bg-transparent" data-bs-toggle="modal"
+                                            data-bs-target="#archiveModal"
+                                            onclick="setArchiveProductId({{ $product->id }})">
+                                            <i class="fa-solid fa-box-archive" style="font-size: 1.3rem"></i>
+                                        </button>
 
                                         <button type="button" class="border-0 bg-transparent" data-bs-toggle="modal"
                                             data-bs-target="#deleteModal"
                                             onclick="setDeleteProductId({{ $product->id }})">
-                                            <i class="fa-solid fa-trash" style="color: #ff0000; font-size: 1.3rem;"></i>
+                                            <i class="fa-solid fa-trash" style="font-size: 1.3rem"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -390,101 +404,146 @@
                 </table>
             @endif
 
-            <div class="modal fade" id="add-product-modal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title fw-bold" id="addProductModalLabel">Add New Product</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal fade" id="add-product-modal" tabindex="-1" aria-labelledby="addProductModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title fw-bold" id="addProductModalLabel">Add New Product</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-4">
+                            <form id="productForm" action="{{ route('addProducts') }}" method="post"
+                                enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name="branch_id"
+                                    value="{{ Auth::guard('branches')->user()->branch_id }}">
+                                <input type="hidden" name="branch_name"
+                                    value="{{ Auth::guard('branches')->user()->branch_name }}">
+
+                                <div class="mb-3">
+                                    <label class="form-label">Product Name</label>
+                                    <input type="text" name="name"
+                                        class="form-control @error('name') is-invalid @enderror"
+                                        placeholder="Enter product name" value="{{ old('name') }}">
+                                    @error('name')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
-                                <div class="modal-body p-4">
-                                    <form id="productForm" action="/addspecialproducts" method="post" enctype="multipart/form-data">
-                                        @csrf
-                                        <input type="hidden" name="branch_id" value="{{ Auth::guard('branches')->user()->branch_id }}">
-                                        <input type="hidden" name="branch_name" value="{{ Auth::guard('branches')->user()->branch_name }}">
-                                        
-                                        <div class="mb-3">
-                                            <label class="form-label">Product Name</label>
-                                            <input type="text" name="name" class="form-control @error('name') is-invalid @enderror"
-                                                placeholder="Enter product name" value="{{ old('name') }}">
-                                            @error('name')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-                                        <div class="mb-3">
-                                            <label class="form-label">Price</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text">₱</span>
-                                                <input type="number" name="price"
-                                                    class="form-control @error('price') is-invalid @enderror"
-                                                    placeholder="Enter price" value="{{ old('price') }}" min="1"
-                                                    max="99999"
-                                                    oninput="if(this.value.length > 5) this.value=this.value.slice(0,5)">
-                                            </div>
-                                            @error('price')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-
-
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Description</label>
-                                            <textarea name="description" class="form-control @error('description') is-invalid @enderror"
-                                                placeholder="Enter description" value="{{ old('description') }}"></textarea>
-                                            @error('description')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Category</label>
-                                            <select name="category"
-                                                class="form-control mb-1 @error('category') is-invalid @enderror">
-                                                <option value="">Select a category</option>
-                                                <option value="Pizza" {{ old('category') == 'Pizza' ? 'selected' : '' }}>
-                                                    Pizza</option>
-                                                <option value="Drink" {{ old('category') == 'Drink' ? 'selected' : '' }}>
-                                                    Drinks</option>
-                                                <option value="Dessert" {{ old('category') == 'Dessert' ? 'selected' : '' }}>
-                                                    Dessert</option>
-                                                <option value="Combo" {{ old('category') == 'Combo' ? 'selected' : '' }}>
-                                                    Combo</option>
-                                            </select>
-                                            @error('category')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                        </div>
-
-
-                                        <div class="mb-3">
-                                            <label class="form-label">Product Image</label>
-                                            <input type="file" id="images"
-                                                class="form-control @error('image') is-invalid @enderror" name="image">
-                                            @error('image')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
-                                            <div class="mt-3">
-                                                <img id="imagessss" class="img-preview img-fluid rounded"
-                                                    style="max-height: 100px;" src="" alt="">
-                                            </div>
-                                        </div>
-                                        <div class="d-flex justify-content-end gap-2 mt-4">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                            <button type="submit" class="btn btn-orange">
-                                                <i class="fas fa-plus me-2"></i>Add Product
-                                            </button>
-                                        </div>
-                                    </form>
+                                <div class="mb-3">
+                                    <label class="form-label">Price</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">₱</span>
+                                        <input type="number" name="price"
+                                            class="form-control @error('price') is-invalid @enderror"
+                                            placeholder="Enter price" value="{{ old('price') }}" min="1"
+                                            max="99999"
+                                            oninput="if(this.value.length > 5) this.value=this.value.slice(0,5)">
+                                    </div>
+                                    @error('price')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
                                 </div>
-                            </div>
+
+
+                                <div class="mb-3">
+                                    <label class="form-label">Description</label>
+                                    <textarea name="description" class="form-control @error('description') is-invalid @enderror"
+                                        placeholder="Enter description" value="{{ old('description') }}"></textarea>
+                                    @error('description')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+
+                                {{-- <div class="mb-3">
+                                    <label class="form-label">Category</label>
+                                    <select name="category"
+                                        class="form-control mb-1 @error('category') is-invalid @enderror">
+                                        <option value="">Select a category</option>
+                                        <option value="Pizza" {{ old('category') == 'Pizza' ? 'selected' : '' }}>
+                                            Pizza</option>
+                                        <option value="Drink" {{ old('category') == 'Drink' ? 'selected' : '' }}>
+                                            Drinks</option>
+                                        <option value="Dessert" {{ old('category') == 'Dessert' ? 'selected' : '' }}>
+                                            Dessert</option>
+                                        <option value="Combo" {{ old('category') == 'Combo' ? 'selected' : '' }}>
+                                            Combo</option>
+                                    </select>
+                                    @error('category')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div> --}}
+
+
+                                <div class="mb-3">
+                                    <label class="form-label">Category</label>
+                                    <input type="text" name="category"
+                                        class="form-control @error('category') is-invalid @enderror"
+                                        placeholder="Enter Category" value="{{ old('category') }}">
+                                    @error('category')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+
+                                <div class="mb-3">
+                                    <label class="form-label">Product Image</label>
+                                    <input type="file" id="images"
+                                        class="form-control @error('image') is-invalid @enderror" name="image">
+                                    @error('image')
+                                        <div class="invalid-feedback">{{ $message }}</div>
+                                    @enderror
+                                    <div class="mt-3">
+                                        <img id="imagessss" class="img-preview img-fluid rounded"
+                                            style="max-height: 100px;" src="" alt="">
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-end gap-2 mt-4">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-orange">
+                                        <i class="fas fa-plus me-2"></i>Add Product
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
+                </div>
+            </div>
 
 
 
         </div>
+
+        {{-- ArchiveButton --}}
+        <div class="modal fade" id="archiveModal" tabindex="-1" aria-labelledby="deleteModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to <span style="color: rgb(255, 140, 0)">Archive</span> this product?
+                    </div>
+                    <div class="modal-footer">
+                        <form id="archive-form" action="" method="POST" style="display: inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-warning">Archive</button>
+                        </form>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        {{-- DeleteButton --}}
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel"
             aria-hidden="true">
             <div class="modal-dialog">
@@ -495,20 +554,20 @@
                             aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        Are you sure you want to <span style="color: red">delete</span> this product?
+                        Are you sure you want to <span style="color: red">Delete</span> this product?
                     </div>
                     <div class="modal-footer">
-                        <form id="logout-form" action="" method="POST" style="display: inline;">
+                        <form id="delete-form" action="" method="POST" style="display: inline;">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger">Delete</button>
                         </form>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-
                     </div>
                 </div>
             </div>
         </div>
+
 
         <div class="popover-form" id="my-popover" popover>
             <div class="modal-dialog">
@@ -578,131 +637,129 @@
 
 
     <script>
+        const imagessss = document.getElementById("imagessss");
+        const message = document.getElementById("message");
 
+        let nameofFile = "";
+        document
+            .querySelector('input[type="file"]')
+            .addEventListener("change", function() {
+                if (this.files && this.files[0]) {
+                    let img = document.querySelector("img");
 
-                const imagessss = document.getElementById("imagessss");
-                const message = document.getElementById("message");
-
-                let nameofFile = "";
-                document
-                    .querySelector('input[type="file"]')
-                    .addEventListener("change", function () {
-                        if (this.files && this.files[0]) {
-                            let img = document.querySelector("img");
-
-                            img.onload = () => {
-                                URL.revokeObjectURL(img.src);
-                            };
-                            img.src = URL.createObjectURL(this.files[0]);
-                            console.log(this.files[0]);
-                            imagessss.style.display = "inline-block";
-                            subimage.style.display = "none";
-                            imagelabel.textContent = this.files[0].name;
-                        }
-
-                        const getfilename = (event) => {
-                            const files = event.target.files;
-                            const fileName = files[0].name;
-                            nameofFile = fileName;
-                            console.log("file name: ", getfilename);
-                        };
-                    });
-
-                document
-                    .getElementById("productForm")
-                    .addEventListener("submit", function (event) {
-                        event.preventDefault();
-
-                        const name = document.querySelector('input[name="name"]');
-                        const price = document.querySelector('input[name="price"]');
-                        const image = document.querySelector('input[name="image"]');
-                        const description = document.querySelector(
-                            'textarea[name="description"]'
-                        );
-                        const category = document.querySelector('select[name="category"]');
-
-                        const inputs = [name, price, image];
-                        inputs.forEach((input) => {
-                            input.classList.remove("is-invalid");
-                            const feedback = input.nextElementSibling;
-                            if (feedback && feedback.classList.contains("invalid-feedback")) {
-                                feedback.remove();
-                            }
-                        });
-                        let isValid = true;
-
-                        if (!name.value.trim()) {
-                            showError(name, "Product name is required");
-                            isValid = false;
-                        }
-
-                        if (!price.value.trim()) {
-                            showError(price, "Price is required");
-                            isValid = false;
-                        } else if (price.value <= 0) {
-                            showError(price, "Price must be greater than 0");
-                            isValid = false;
-                        }
-
-                        if (!image.files || !image.files[0]) {
-                            showError(image, "Please select an image");
-                            isValid = false;
-                        }
-
-                        if (!description.value.trim()) {
-                            showError(description, "Description is required");
-                            isValid = false;
-                        }
-
-                        if (!category.value.trim()) {
-                            showError(category, "Category is required");
-                            isValid = false;
-                        }
-
-                        if (isValid) {
-                            this.submit();
-                        }
-                    });
-
-                function showError(input, message) {
-                    input.classList.add("is-invalid");
-                    const errorDiv = document.createElement("div");
-                    errorDiv.className = "invalid-feedback";
-                    errorDiv.textContent = message;
-                    input.parentNode.insertBefore(errorDiv, input.nextSibling);
+                    img.onload = () => {
+                        URL.revokeObjectURL(img.src);
+                    };
+                    img.src = URL.createObjectURL(this.files[0]);
+                    console.log(this.files[0]);
+                    imagessss.style.display = "inline-block";
+                    subimage.style.display = "none";
+                    imagelabel.textContent = this.files[0].name;
                 }
 
-                document.getElementById("images").onchange = function (evt) {
-                    const [file] = this.files;
-                    if (file) {
-                        document.getElementById("imagessss").src = URL.createObjectURL(file);
-                    }
+                const getfilename = (event) => {
+                    const files = event.target.files;
+                    const fileName = files[0].name;
+                    nameofFile = fileName;
+                    console.log("file name: ", getfilename);
                 };
+            });
 
-                document.getElementById("images").addEventListener("change", function (event) {
-                    const image = document.getElementById("imagessss");
-                    const file = event.target.files[0];
+        document
+            .getElementById("productForm")
+            .addEventListener("submit", function(event) {
+                event.preventDefault();
 
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function (e) {
-                            image.src = e.target.result;
-                        };
-                        reader.readAsDataURL(file);
+                const name = document.querySelector('input[name="name"]');
+                const price = document.querySelector('input[name="price"]');
+                const image = document.querySelector('input[name="image"]');
+                const description = document.querySelector(
+                    'textarea[name="description"]'
+                );
+                const category = document.querySelector('input[name="category"]');
+
+                const inputs = [name, price, image];
+                inputs.forEach((input) => {
+                    input.classList.remove("is-invalid");
+                    const feedback = input.nextElementSibling;
+                    if (feedback && feedback.classList.contains("invalid-feedback")) {
+                        feedback.remove();
                     }
                 });
+                let isValid = true;
 
-                document.addEventListener("DOMContentLoaded", function () {
-                    const alerts = document.querySelectorAll(".alert-dismissible");
-                    alerts.forEach((alert) => {
-                        setTimeout(() => {
-                            alert.classList.add("alert-fade-out");
-                            setTimeout(() => {
-                                alert.remove();
-                            }, 500);
-                        }, 3000);
-                    });
-                });
+                if (!name.value.trim()) {
+                    showError(name, "Product name is required");
+                    isValid = false;
+                }
+
+                if (!price.value.trim()) {
+                    showError(price, "Price is required");
+                    isValid = false;
+                } else if (price.value <= 0) {
+                    showError(price, "Price must be greater than 0");
+                    isValid = false;
+                }
+
+                if (!image.files || !image.files[0]) {
+                    showError(image, "Please select an image");
+                    isValid = false;
+                }
+
+                if (!description.value.trim()) {
+                    showError(description, "Description is required");
+                    isValid = false;
+                }
+
+                if (!category.value.trim()) {
+                    showError(category, "Category is required");
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    this.submit();
+                }
+            });
+
+        function showError(input, message) {
+            input.classList.add("is-invalid");
+            const errorDiv = document.createElement("div");
+            errorDiv.className = "invalid-feedback";
+            errorDiv.textContent = message;
+            input.parentNode.insertBefore(errorDiv, input.nextSibling);
+        }
+
+        document.getElementById("images").onchange = function(evt) {
+            const [file] = this.files;
+            if (file) {
+                document.getElementById("imagessss").src = URL.createObjectURL(file);
+            }
+        };
+
+        document.getElementById("images").addEventListener("change", function(event) {
+            const image = document.getElementById("imagessss");
+            const file = event.target.files[0];
+
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    image.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+            const alerts = document.querySelectorAll(".alert-dismissible");
+            alerts.forEach((alert) => {
+                setTimeout(() => {
+                    alert.classList.add("alert-fade-out");
+                    setTimeout(() => {
+                        alert.remove();
+                    }, 500);
+                }, 3000);
+            });
+        });
 
 
 
@@ -744,10 +801,17 @@
             }
         }
 
-        function setDeleteProductId(productId) {
-            const form = document.getElementById('logout-form');
-            form.action = `{{ url('deleteEachSpecialProduct') }}/${productId}`;
+        function setArchiveProductId(productId) {
+            const form = document.getElementById('archive-form');
+            form.action = `{{ url('archiveEachProduct') }}/${productId}`;
         }
+
+        function setDeleteProductId(productId) {
+            const form = document.getElementById('delete-form');
+            form.action = `{{ url('deletedEachProduct') }}/${productId}`;
+        }
+
+
 
         document.addEventListener('DOMContentLoaded', function() {
             const alerts = document.querySelectorAll('.alert-dismissible');
@@ -760,6 +824,7 @@
                 }, 3000);
             });
         });
+
 
         function filterProducts(category, event) {
             document.querySelectorAll('nav .btn').forEach(btn => {
@@ -785,29 +850,19 @@
             }
         }
 
-            document.getElementById('productForm').addEventListener('submit', (e) => {
-                const inputs = document.querySelectorAll('input[type="text"], input[type="number"], textarea');
-                inputs.forEach(input => {
-                    input.value = input.value.trim();
-                });
+        document.getElementById('productForm').addEventListener('submit', (e) => {
+            const inputs = document.querySelectorAll('input[type="text"], input[type="number"], textarea');
+            inputs.forEach(input => {
+                input.value = input.value.trim();
             });
+        });
 
-            document.getElementById('updateForm').addEventListener('submit', (e) => {
-                const inputs = document.querySelectorAll('input[type="text"], input[type="number"], textarea');
-                inputs.forEach(input => {
-                    input.value = input.value.trim();
-                });
+        document.getElementById('updateForm').addEventListener('submit', (e) => {
+            const inputs = document.querySelectorAll('input[type="text"], input[type="number"], textarea');
+            inputs.forEach(input => {
+                input.value = input.value.trim();
             });
-
-
-
-
-
-
-
-
-
-
+        });
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>

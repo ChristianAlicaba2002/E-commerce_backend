@@ -13,11 +13,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::get('/storage/{imageName}', function ($imageName) {
-    return response()->file(public_path('images/'.$imageName));
+    return response()->file(public_path('images/' . $imageName));
 });
-
-/**This function is for API Don Macchiatos */
-Route::get('allDonMacProduct', [DonMacController::class, 'getAllDonMacProduct']);
 
 /**This function is for API Special Product */
 Route::get('AllSpecialProduct', [SpecialProductController::class, 'getAllSpecialProduct']);
@@ -33,15 +30,5 @@ Route::get('TrackingNumber', [UserOrderController::class, 'GetUserOrder']);
 Route::get('AllUserOrderApi', [UserOrderController::class, 'GetUserOrderApi']);
 Route::post('/updateOrderStatus', [UserOrderController::class, 'updateStatus']);
 
-// // Don Macchiatos
-// // User Order API
-// Route::post('donMacOrder', [UserOrderDonmacController::class, 'store'])->name('api.user-order.store');
-
-// Route::get('donMacTrackingNumber', [UserOrderDonmacController::class, 'GetUserOrder']);
-
-// Route::get('DonMacAllUserOrderApi', [UserOrderDonmacController::class, 'GetUserOrderApi']);
-
-// // Update Order Status API
-// Route::post('/updateOrderStatus', [UserOrderDonmacController::class, 'updateStatus']);
 
 Route::get('AllBranch', [BranchingController::class, 'getAllBranch']);

@@ -96,7 +96,6 @@
 
     <body>
         @section('content')
-        
             <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="{{ '/' }}">
@@ -108,13 +107,14 @@
                     </button>
                     <div class="collapse navbar-collapse" id="navbarNav">
                         <div class="navbar-nav ms-auto">
-                            <a class="nav-link" href="{{ 'DonMacAllProducts' }}">Dashboard</a>
+                            <a class="nav-link" href="{{ 'AllSpecialProducts' }}">Dashboard</a>
                             <a class="nav-link" href="{{ 'OrdersPage' }}">Orders</a>
                         </div>
 
                     </div>
                     <button type="button" class="btn " data-bs-toggle="modal" data-bs-target="#logoutModal">
-                        <i class="fa-solid fa-right-from-bracket" style="color: #ff0000; font-size: 1.5rem; margin-right: 10px; margin-top: 5px"></i>
+                        <i class="fa-solid fa-right-from-bracket"
+                            style="color: #ff0000; font-size: 1.5rem; margin-right: 10px; margin-top: 5px"></i>
                     </button>
 
                 </div>
@@ -145,7 +145,8 @@
 
             <section class="hero-section">
                 <div class="container text-center">
-                <h1 class="mb-4" data-aos="fade-down">{{ Auth::guard('branches')->user()->branch_name }} <i class="fa-solid fa-house"></i></h1>
+                    <h1 class="mb-4" data-aos="fade-down">{{ Auth::guard('branches')->user()->branch_name }} <i
+                            class="fa-solid fa-house"></i></h1>
                     <h1 class="display-1 mb-4" data-aos="fade-down">Don Macchiatos</h1>
                     <p class="lead mb-4" data-aos="fade-up" data-aos-delay="200">
                         Crafting Perfect Moments, One Cup at a Time

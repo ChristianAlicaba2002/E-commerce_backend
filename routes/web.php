@@ -36,19 +36,19 @@ Route::get('/BranchAdminLoginPage', function () {
     return view('components/branchAdmin/AuthPage/LoginPage');
 })->name('BranchAdminLoginPage');
 
-//All Don Mac Products
-Route::get('/DonMacAllProducts', function () {
-    $products = DB::table('don_mac')->where('branch_id', Auth::guard('branches')->user()->branch_id)->get();
-    $bestSeller = DB::table('user_order')->get();
-    $customers = DB::table('user_order')->get();
-    $quantity = DB::table('user_order')->sum('quantity');
+// //All Don Mac Products
+// Route::get('/DonMacAllProducts', function () {
+//     $products = DB::table('don_mac')->where('branch_id', Auth::guard('branches')->user()->branch_id)->get();
+//     $bestSeller = DB::table('user_order')->get();
+//     $customers = DB::table('user_order')->get();
+//     $quantity = DB::table('user_order')->sum('quantity');
 
-    return view('components/branchAdmin/atoms/DonMacAllProducts', compact('products', 'bestSeller', 'customers', 'quantity'));
-})->name('DonMacAllProducts');
+//     return view('components/branchAdmin/atoms/DonMacAllProducts', compact('products', 'bestSeller', 'customers', 'quantity'));
+// })->name('DonMacAllProducts');
 
 //All Special Products
 Route::get('/AllSpecialProducts', function () {
-    $products = DB::table('special_product')->where('branch_id', Auth::guard('branches')->user()->branch_id)->get();
+    $products = DB::table('products')->where('branch_id', Auth::guard('branches')->user()->branch_id)->get();
     $bestSeller = DB::table('user_order')->get();
     $customers = DB::table('user_order')->get();
     $quantity = DB::table('user_order')->sum('quantity');
@@ -65,28 +65,14 @@ Route::get('/OrdersPage', function () {
 
 //Update Special Product
 Route::get('/updateSpecialProduct/{id}', function () {
-    $products = DB::table('special_product')->get();
+    $products = DB::table('products')->get();
 
     return view('components/branchAdmin/atoms/SpecialAllProducts', compact('products'));
 })->name('updateSpecialProduct');
 
-//Update Don Mac Product
-Route::get('/updateDonMacProduct/{id}', function ($id) {
-    $product = DB::table('don_mac')->get();
-
-    return view('components/branchAdmin/DonMacAllProducts', compact('product'));
-})->name('updateDonMacProduct');
-
-//Deleted Don Mac Products
-Route::get('/DeletedDonMacProducts', function () {
-    $products = DB::table('deleted_donmac')->get();
-
-    return view('components/branchAdmin/DeletedPage/DeletedDonMacProducts', compact('products'));
-})->name('DeletedDonMacProducts');
-
 //Deleted Special Products
 Route::get('/DeletedSpecialProducts', function () {
-    $products = DB::table('deleted_special')->get();
+    $products = DB::table('deleted_products')->get();
 
     return view('components/branchAdmin/DeletedPage/DeletedSpecialProducts', compact('products'));
 })->name('DeletedSpecialProducts');
@@ -115,20 +101,19 @@ Route::post('/superadmin/AdminAuth/login', [SuperAdminController::class, 'loginS
 Route::post('/superadmin/logout', [SuperAdminController::class, 'logoutSuperAdmin'])->name('SuperAdmin.logout');
 
 // This function is storing Data
-Route::post('/addDonMacProducts', [DonMacController::class, 'addDonMacProducts']);
-Route::post('/addspecialproducts', [SpecialProductController::class, 'addSpecialProducts']);
+Route::post('/addspecialproducts', [SpecialProductController::class, 'addSpecialProducts'])->name('addProducts');
 
 //This function is updating Data
 Route::put('/updateSpecialProduct/{id}', [SpecialProductController::class, 'updateSpecialProduct'])->name('updateSpecialProduct');
-Route::put('/updateDonMacchiatosProduct/{id}', [DonMacController::class, 'updateDonMacchiatosProduct'])->name('updateDonMacchiatosProduct');
 
 //This function is Deleting Data
-Route::delete('/deleteEachSpecialProduct/{id}', [SpecialProductController::class, 'deleteEachSpecialProduct'])->name('deleteEachSpecialProduct');
-Route::delete('/deleteEachDonmacchiatosProduct/{id}', [DonMacController::class, 'deleteEachDonmacProduct'])->name('deleteEachDonmacchiatosProduct');
+Route::delete('/archiveEachProduct/{id}', [SpecialProductController::class, 'archiveEachProduct'])->name('archiveEachProduct');
+
+Route::delete('/deletedEachProduct/{id}', [SpecialProductController::class, 'deletedEachProduct'])->name('deletedEachProduct');
+
 
 // This funciton is Restoring Data
 Route::post('/restoringSpecialData{id}', [SpecialProductController::class, 'RestoringSpecialProduct']);
-Route::post('/restoringDonmacData{id}', [DonMacController::class, 'restoringDonmacData']);
 
 //This function is for Forgot password
 Route::post('/confirmation', [AdminController::class, 'forgotPassword'])->name('confirmation');

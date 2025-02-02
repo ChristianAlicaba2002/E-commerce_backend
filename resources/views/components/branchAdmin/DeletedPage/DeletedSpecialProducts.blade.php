@@ -46,6 +46,7 @@
         padding: 20px;
         background: var(--primary-orange);
         text-align: center;
+        display: flex;
     }
 
     .sidebar-menu {
@@ -127,45 +128,47 @@
     .dropdown-item:hover {
         background-color: rgba(255, 255, 255, 0.386);
     }
+
+    .fa-trash {
+        color: rgb(255, 67, 67);
+    }
+
+    .fa-box-archive {
+        color: var(--primary-orange);
+    }
 </style>
 
 <body>
 
     <nav class="sidebar">
         <div class="sidebar-header">
-            <h3><i class="fas fa-coffee me-2"></i>Deleted Items</h3>
+            <h5 style="text-align: center; width:100%">Archived Items</h5>
         </div>
         <div class="sidebar-menu">
             <a href="{{ '/' }}" class="menu-item">
                 <i class="fa-solid fa-arrow-left"></i>Back to Home
             </a>
-        
+
 
             <div class="dropdown">
-                <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button"
-                    data-bs-toggle="dropdown" aria-expanded="false">
+                <a href="{{ '/AllSpecialProducts' }}" class="menu-item" id="deletedDropdown" role="button">
                     <i class="fa-solid fa-shop"></i>Products
                 </a>
-                <ul class="dropdown-menu" aria-labelledby="deletedDropdown">
-                    <li><a class="dropdown-item" href="{{ '/DonMacAllProducts' }}">Don Macchiatos</a></li>
-                    <li><a class="dropdown-item" href="{{ '/AllSpecialProducts' }}">Special Products</a></li>
-                </ul>
             </div>
+
 
             <div class="dropdown">
-                <a href="#" class="menu-item dropdown-toggle" id="deletedDropdown" role="button"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fa-solid fa-trash"></i>Deleted Items
+                <a href="/DeletedSpecialProducts" class="menu-item" id="deletedDropdown" role="button">
+                    <i class="fa-solid fa-box-archive"></i>Archive
                 </a>
-                <ul class="dropdown-menu" aria-labelledby="deletedDropdown">
-                    <li><a class="dropdown-item" href="{{ '/DeletedDonMacProducts' }}">Don Macchiatos</a></li>
-                    <li><a class="dropdown-item" href="{{ '/DeletedSpecialProducts' }}">Special Products</a></li>
-                </ul>
             </div>
 
-            <div style="position: absolute; bottom: 20px; width: 100%; text-align: center; color: white; padding: 15px; background-color: var(--darker-bg);">
+
+            <div
+                style="position: absolute; bottom: 20px; width: 100%; text-align: center; color: white; padding: 15px; background-color: var(--darker-bg);">
                 <i class="fas fa-store me-2"></i>
-                <a class="text-white" href="{{ '/DisplayBranchDashboard' . Auth::guard('branches')->user()->branch_id }}">
+                <a class="text-white"
+                    href="{{ '/DisplayBranchDashboard' . Auth::guard('branches')->user()->branch_id }}">
                     <strong>{{ Auth::guard('branches')->user()->branch_name }}</strong>
                 </a>
             </div>
@@ -174,14 +177,14 @@
 
     <div class="main-content">
         <div class="table-container">
-            <h2 class="">Deleted Special Items</h2>
+            <h2 class="">Archived Items</h2>
             @isset($products)
                 <h6>Total Products: {{ count($products) }}</h6>
             @endisset
             <input type="search" name="search" id="search" class="form-control mb-4" onkeyup="searchProduct()"
                 placeholder="Search for a product">
             @if ($products->isEmpty())
-                <div class="alert alert-warning">No products deleted yet.</div>
+                <div class="alert alert-warning">No products archived yet.</div>
             @else
                 @if (session('success'))
                     <div class="alert alert-success custom-alert alert-dismissible fade show" role="alert">
