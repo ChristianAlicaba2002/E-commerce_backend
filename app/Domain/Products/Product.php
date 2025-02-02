@@ -10,18 +10,18 @@ class Product
         private ?float $price,
         private ?string $image,
         private ?string $description,
+        private ?string $category,
         private ?string $branch_id,
         private ?string $branch_name,
         private ?string $created_at,
-        private ?string $updated_at
-
+        private ?string $updated_at,
     ) {
-
         $this->product_id = $product_id;
         $this->name = $name;
         $this->price = $price;
         $this->image = $image;
         $this->description = $description;
+        $this->category = $category;
         $this->branch_id = $branch_id;
         $this->branch_name = $branch_name;
         $this->created_at = $created_at;
@@ -36,8 +36,9 @@ class Product
             'price' => $this->price,
             'image' => $this->image,
             'description' => $this->description,
-            'branch_id' => $this->branch_id,
+            'category' => $this->category,
             'branch_name' => $this->branch_name,
+            'branch_id' => $this->branch_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
@@ -58,19 +59,19 @@ class Product
         return $this->price;
     }
 
-    public function getImage()
-    {
-        return $this->image;
-    }
-
     public function getDescription()
     {
         return $this->description;
     }
 
-    public function getBranch_id()
+    public function getImage()
     {
-        return $this->branch_id;
+        return $this->image;
+    }
+
+    public function getCategory()
+    {
+        return $this->category;
     }
 
     public function getBranch_name()
@@ -78,12 +79,17 @@ class Product
         return $this->branch_name;
     }
 
-    public function getCreatedAt()
+    public function getBranch_id()
+    {
+        return $this->branch_id;
+    }
+
+    public function getCreated_at()
     {
         return $this->created_at;
     }
 
-    public function getUpdatedAt()
+    public function getUpdated_at()
     {
         return $this->updated_at;
     }

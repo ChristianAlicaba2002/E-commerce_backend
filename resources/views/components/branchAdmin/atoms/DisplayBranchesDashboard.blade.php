@@ -45,7 +45,7 @@
 
 
     <div class="container mt-5">
-        <a href="{{ '/DonMacAllProducts' }}" class="btn btn-link text-dark mb-3 ps-0">
+        <a href="{{ '/AllSpecialProducts' }}" class="btn btn-link text-dark mb-3 ps-0">
             <i class="fa-solid fa-arrow-left me-2"></i>
             <span>Back to Products</span>
         </a>

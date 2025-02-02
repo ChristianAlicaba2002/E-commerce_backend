@@ -23,7 +23,7 @@ class SpecialProductController extends Controller
      * **/
     public function getAllSpecialProduct()
     {
-        $products = DB::table('special_product')->get();
+        $products = DB::table('products')->get();
 
         return response()->json(compact('products'), 200);
     }
@@ -39,7 +39,7 @@ class SpecialProductController extends Controller
             'name' => 'required|string',
             'price' => 'required|numeric',
             'description' => 'required|string',
-            'category' => 'required|in:Pizza,Drink,Dessert,Combo',
+            'category' => 'required|string',
             'image' => 'nullable|image',
             'branch_id' => 'required|string',
             'branch_name' => 'required|string',
@@ -49,7 +49,7 @@ class SpecialProductController extends Controller
             return redirect('/AllSpecialProducts')->with('error', 'All fields are required');
         }
 
-        if (DB::table('special_product')->where('name', $request->name)->exists()) {
+        if (DB::table('products')->where('name', $request->name)->exists()) {
             return redirect('/AllSpecialProducts')->with('error', 'Product name already exists');
         }
 
@@ -61,7 +61,7 @@ class SpecialProductController extends Controller
             $image = $request->file(key: 'image');
             $destinationPath = 'images';
 
-            $imageName = time().'.'.$image->getClientOriginalExtension();
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
             $data['image'] = $imageName;
         } else {
@@ -152,7 +152,7 @@ class SpecialProductController extends Controller
 
     public function updateSpecialProduct(Request $request, $product_id)
     {
-        $product = DB::table('special_product')->where('id', $product_id)->first();
+        $product = DB::table('products')->where('id', $product_id)->first();
         if (! $product) {
             return redirect('/AllSpecialProducts')->with('error', 'product not found');
         }
@@ -172,7 +172,7 @@ class SpecialProductController extends Controller
             $image = $request->file(key: 'image');
             $destinationPath = 'images';
 
-            $imageName = time().'.'.$image->getClientOriginalExtension();
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
             $image->move($destinationPath, $imageName);
             $data['image'] = $imageName; // Store the image name in the data array
         } else {
@@ -188,27 +188,26 @@ class SpecialProductController extends Controller
             $price,
             $imageName,
             $request->description,
-            $request->branch_id,
-            $request->branch_name,
             $product->category,
+            $product->branch_id,
+            $product->branch_name,
             $product->created_at,
             Carbon::now()->toDateTimeString() // Changed to toDateTimeString() for consistency
         );
 
         return redirect('/AllSpecialProducts')->with('success', 'Product updated successfully');
-
     }
 
-    public function deleteEachSpecialProduct($id)
+    public function archiveEachProduct($id)
     {
-        $product = DB::table('special_product')->where('id', $id)->first();
+        $product = DB::table('products')->where('id', $id)->first();
         if (! $product) {
             return redirect('/AllSpecialProducts')->with('error', 'Product not found');
         }
 
-        DB::table('special_product')->where('id', $id)->delete();
+        DB::table('products')->where('id', $id)->delete();
 
-        DB::table('deleted_special')->insert([
+        DB::table('deleted_products')->insert([
             'product_id' => $product->product_id,
             'name' => $product->name,
             'price' => $product->price,
@@ -221,20 +220,20 @@ class SpecialProductController extends Controller
             'updated_at' => Carbon::now()->toDateTimeLocalString(), // Ensure only month, day, and year are included // Updated to include only month, day, and year
         ]);
 
-        return redirect('/AllSpecialProducts')->with('success', 'Product deleted successfully');
+        return redirect('/AllSpecialProducts')->with('success', 'Product archive successfully');
     }
 
     public function RestoringSpecialProduct($id)
     {
-        $product = DB::table('deleted_special')->where('id', $id)->first();
+        $product = DB::table('deleted_products')->where('id', $id)->first();
 
         if (! $product) {
             return redirect('/DeletedSpecialProducts')->with('error', 'Product not found');
         }
 
-        DB::table('deleted_special')->where('id', $id)->delete();
+        DB::table('deleted_products')->where('id', $id)->delete();
 
-        DB::table('special_product')->insert([
+        DB::table('products')->insert([
             'product_id' => $product->product_id, // Use the correct property
             'name' => $product->name,
             'price' => $product->price,
@@ -248,5 +247,17 @@ class SpecialProductController extends Controller
         ]);
 
         return redirect('/DeletedSpecialProducts')->with('success', 'Product restore successfully');
+    }
+
+    public function deletedEachProduct($id)
+    {
+        $product = DB::table('products')->where('id', $id)->first();
+        if (! $product) {
+            return redirect('/AllSpecialProducts')->with('error', 'Product not found');
+        }
+
+        DB::table('products')->where('id', $id)->delete();
+
+        return redirect('/AllSpecialProducts')->with('success', 'Product deleted successfully');
     }
 }
