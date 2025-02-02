@@ -5,9 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Display Branches Dashboard</title>
-    <link rel="shortcut icon" href="/storage/logo.png" type="image/x-icon">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 
 <style>
@@ -45,9 +45,9 @@
 
 
     <div class="container mt-5">
-        <a href="{{ '/AllSpecialProducts' }}" class="btn btn-link text-dark mb-3 ps-0">
-            <i class="fa-solid fa-arrow-left me-2"></i>
-            <span>Back to Products</span>
+        <a href="{{ '/AllSpecialProducts' }}" class="btn btn-warning text-dark mb-3 ps-0">
+            <i class="fa-solid me-2"></i>
+            Back to Dashboard
         </a>
         <div class="card shadow">
             <div class="card-header bg-warning text-black">
@@ -160,22 +160,12 @@
             document.getElementById('phone_number').value = phone_number;
             document.getElementById('email').value = email;
         }
-
-        // document.getElementById('updateBranchModal').addEventListener('submit' , (e) => {
-        //     e.preventDefault();
-        //     const inputs = document.querySelectorAll('input[type="text"], input[type="number"],input[type="email"], input[type="password"], textarea');
-        //     inputs.forEach(input => {
-        //         input.value = input.value.trim();
-        //     });
-
-        // })
     </script>
 
 
 
-
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 </body>
 
 </html>

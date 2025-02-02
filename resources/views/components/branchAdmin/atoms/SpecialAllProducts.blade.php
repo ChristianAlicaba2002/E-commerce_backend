@@ -379,7 +379,7 @@
                                     <td>{{ $product->category }}</td>
                                     <td class="description">{{ $product->description }}</td>
                                     <td>
-                                        <button class="btn"
+                                        <button class="btn" title="Edit Product"
                                             onclick="editProduct({{ $product->id }}, '{{ $product->name }}', '{{ $product->price }}', '{{ addslashes($product->description) }}', '{{ $product->category }}')"
                                             popovertarget='my-popover'><i class="fa-solid fa-pen-to-square"
                                                 style="color: #2bff00; font-size: 1.3rem;"></i>
@@ -387,13 +387,13 @@
 
                                         <button type="button" class="border-0 bg-transparent" data-bs-toggle="modal"
                                             data-bs-target="#archiveModal"
-                                            onclick="setArchiveProductId({{ $product->id }})">
+                                            onclick="setArchiveProductId({{ $product->id }})" title="Archive Product">
                                             <i class="fa-solid fa-box-archive" style="font-size: 1.3rem"></i>
                                         </button>
 
                                         <button type="button" class="border-0 bg-transparent" data-bs-toggle="modal"
                                             data-bs-target="#deleteModal"
-                                            onclick="setDeleteProductId({{ $product->id }})">
+                                            onclick="setDeleteProductId({{ $product->id }})" title="Delete Product">
                                             <i class="fa-solid fa-trash" style="font-size: 1.3rem"></i>
                                         </button>
                                     </td>

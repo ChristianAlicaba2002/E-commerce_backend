@@ -7,10 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="shortcut icon" href="/storage/logo.png" type="image/x-icon">
     <title>Orders Management</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css"
-        integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         .bg-orange {
             background-color: orange;
@@ -44,9 +43,9 @@
 
 <body>
     <div class="container mt-5 shadow-lg p-3 mb-5 bg-body rounded">
-        <a href="{{ '/' }}" class="btn btn-link text-dark mb-3 ps-0">
-            <i class="fa-solid fa-arrow-left me-2"></i>
-            <span>Back to Home</span>
+        <a href="{{ '/' }}" class="btn btn-warning text-dark mb-3 ps-0">
+            <i class="fa-solid me-2"></i>
+            Back to Dashboard
         </a>
         <div class="row mb-4">
             <div class="col text-center">
@@ -105,9 +104,8 @@
             </table>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 
     <!-- Add this search functionality -->
     <script>
